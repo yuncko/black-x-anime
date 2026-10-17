@@ -64,7 +64,7 @@ export default function Community({ onOpenAuth }) {
   const [submitting, setSubmitting] = useState(false);
 
   // Real voice recording via microphone
-  const voiceRecorder = useVoiceRecorder();
+  const voiceRecorder = useVoiceRecorder(lang);
   const [attachedVoiceUrl, setAttachedVoiceUrl] = useState(null);
   const [attachedVoiceDuration, setAttachedVoiceDuration] = useState(0);
 
@@ -571,11 +571,12 @@ export default function Community({ onOpenAuth }) {
                     if (voiceRecorder.isRecording) {
                       voiceRecorder.stopRecording();
                     } else {
-                      try {
-                        await voiceRecorder.startRecording();
+                      // startRecording never fakes a clip: when the microphone is refused it says why.
+                      const started = await voiceRecorder.startRecording();
+                      if (started?.ok) {
                         pushToast(lang === 'ar' ? '🎙️ بدأ تسجيل صوتك من المايكروفون...' : '🎙️ Recording voice note from mic...', 'info');
-                      } catch (err) {
-                        pushToast(lang === 'ar' ? 'يرجى السماح بالوصول إلى المايكروفون لتسجيل الصوت' : 'Please allow microphone access to record voice', 'error');
+                      } else {
+                        pushToast(started?.error || (lang === 'ar' ? 'يرجى السماح بالوصول إلى المايكروفون لتسجيل الصوت' : 'Please allow microphone access to record voice'), 'error');
                       }
                     }
                   }}

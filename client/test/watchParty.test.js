@@ -3,7 +3,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  CHAT_ACTIVE_POLL_MS,
+  CHAT_HIDDEN_POLL_MS,
+  CHAT_QUIET_POLL_MS,
   CHAT_MAX,
+  PARTY_HIDDEN_POLL_MS,
+  PARTY_PAUSED_POLL_MS,
+  PARTY_POLL_MS,
   DRIFT_PLAYING_SEC,
   ROOM_STALE_MS,
   appendMessages,
@@ -17,6 +23,7 @@ import {
   parseRoom,
   partyDisplayName,
   partyLink,
+  partyPollPlan,
   roomDocId,
   roomIsOver,
   sameContent,
@@ -195,4 +202,53 @@ test('transport: two people sending at the same moment both land in the chat', a
   // the request body only has the fields the rules accept
   const stored = fs.docs.get('wp_bxchat12_chat');
   assert.deepEqual(Object.keys(stored.fields).sort(), ['json', 'updatedAt']);
+});
+
+test('polling: fewer Firestore reads when nothing happens, same speed while the host plays', () => {
+  const now = 10_000_000;
+  // a guest right after joining: room + chat now, back in 2.5 s
+  let p = partyPollPlan({ role: 'guest', chatActiveAt: now, lastRoomAt: 0, lastChatAt: 0, now });
+  assert.deepEqual([p.room, p.chat, p.delay], [true, true, PARTY_POLL_MS]);
+  // quiet chat (nothing said for over a minute): the chat is read every 7.5 s, the room still every 2.5 s
+  p = partyPollPlan({ role: 'guest', chatActiveAt: now - 120_000, lastRoomAt: now - PARTY_POLL_MS, lastChatAt: now - PARTY_POLL_MS, now });
+  assert.equal(p.room, true);
+  assert.equal(p.chat, false);
+  p = partyPollPlan({ role: 'guest', chatActiveAt: now - 120_000, lastRoomAt: now - PARTY_POLL_MS, lastChatAt: now - CHAT_QUIET_POLL_MS, now });
+  assert.equal(p.chat, true);
+  // host paused: the room is read every 4 s
+  p = partyPollPlan({ role: 'guest', roomPaused: true, chatActiveAt: now - 120_000, lastRoomAt: now - PARTY_POLL_MS, lastChatAt: now, now });
+  assert.equal(p.room, false);
+  assert.equal(p.delay, PARTY_PAUSED_POLL_MS - PARTY_POLL_MS);
+  // the host never reads the room (it writes it), only the chat
+  p = partyPollPlan({ role: 'host', chatActiveAt: now - 120_000, lastChatAt: now - 1000, now });
+  assert.equal(p.room, false);
+  assert.equal(p.chat, false);
+  assert.equal(p.delay, CHAT_QUIET_POLL_MS - 1000);
+  // background tab: 15 s room / 30 s chat
+  p = partyPollPlan({ role: 'guest', hidden: true, chatActiveAt: now, lastRoomAt: now - 5000, lastChatAt: now - 5000, now });
+  assert.equal(p.room, false);
+  assert.equal(p.chat, false);
+  assert.equal(p.delay, PARTY_HIDDEN_POLL_MS - 5000);
+  assert.ok(CHAT_HIDDEN_POLL_MS > PARTY_HIDDEN_POLL_MS && CHAT_ACTIVE_POLL_MS === PARTY_POLL_MS);
+  // never a busy loop
+  p = partyPollPlan({ role: 'guest', chatActiveAt: now, lastRoomAt: now, lastChatAt: now, now });
+  assert.ok(p.delay >= 500);
+
+  // reads per hour for a guest whose host plays, chat quiet: v18.0 = 2 docs / 2.5 s = 2,880
+  let reads = 0;
+  let lastRoomAt = 0;
+  let lastChatAt = 0;
+  for (let t = now; t < now + 3_600_000; ) {
+    const plan = partyPollPlan({ role: 'guest', chatActiveAt: now - 120_000, lastRoomAt, lastChatAt, now: t });
+    if (plan.room) {
+      reads += 1;
+      lastRoomAt = t;
+    }
+    if (plan.chat) {
+      reads += 1;
+      lastChatAt = t;
+    }
+    t += partyPollPlan({ role: 'guest', chatActiveAt: now - 120_000, lastRoomAt, lastChatAt, now: t }).delay;
+  }
+  assert.ok(reads <= 2000, `reads per hour ${reads}`);
 });

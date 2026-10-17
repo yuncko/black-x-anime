@@ -205,6 +205,23 @@ function userFromRequest(req) {
   }
 }
 
+/**
+ * The verified claims ({ id, username, role }) of the website session token, without looking the
+ * user up in SQLite. On Vercel SQLite is per-instance /tmp, so a valid token can reach an instance
+ * that never saw the user; callers that only need "who is this" (rankings votes) use this.
+ */
+export function sessionClaimsFromRequest(req) {
+  if (authDisabledByConfiguration) return null;
+  const token = req.cookies?.[COOKIE_NAME] || (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+  if (!token) return null;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    return payload && typeof payload === 'object' && payload.id ? payload : null;
+  } catch {
+    return null;
+  }
+}
+
 export function optionalAuth(req, _res, next) {
   req.user = userFromRequest(req);
   next();

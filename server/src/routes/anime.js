@@ -1,6 +1,8 @@
 import { Router } from 'express';
-import { db, getAnimeRow, parseAnimeRow, saveCommunityRating, getAnimeCommunityStats } from '../db.js';
-import { optionalAuth } from '../auth.js';
+import { db, getAnimeRow, parseAnimeRow } from '../db.js';
+import { optionalAuth, sessionClaimsFromRequest, verifyFirebaseGoogleIdToken } from '../auth.js';
+import { verifyApkToken } from '../services/apkAccounts.js';
+import { castRankingVote, loadRankingVotes, statsFor, voterKey } from '../services/rankingVotes.js';
 import {
   fetchTrending, fetchTopRanked, fetchSeason, fetchSchedule, fetchAnime, fetchSearch, currentSeasonInfo
 } from '../anilist.js';
@@ -12,9 +14,17 @@ router.get('/rankings', async (req, res) => {
     const list = await fetchTopRanked(15);
     // The ranking is AniList's (its average score, 0–100). BLACK X members' own votes are added
     // as they are: their real count and average, nothing when nobody voted yet. No invented
-    // vote totals or star breakdowns (only the count and the average are stored).
+    // vote totals or star breakdowns. Votes: settings/ranking_votes (services/rankingVotes.js);
+    // when Firestore cannot be read the list still comes, without member votes.
+    // The same answer for everyone (no req.user here): cached on the CDN (publicCacheRoutes).
+    let votesDoc = null;
+    try {
+      votesDoc = await loadRankingVotes();
+    } catch (err) {
+      console.warn('[anime/rankings] votes unavailable:', err.message);
+    }
     const rankings = list.map((item, index) => {
-      const stats = getAnimeCommunityStats(item.id);
+      const stats = votesDoc ? statsFor(votesDoc, item.id) : { votes: 0, avgScore: null };
       const votes = Number(stats.votes) || 0;
       return {
         ...item,
@@ -32,19 +42,56 @@ router.get('/rankings', async (req, res) => {
   }
 });
 
+/**
+ * Who is voting: a website account (cookie / bearer JWT), an app session (APK / app interface
+ * token) or a Google sign-in (Firebase ID token). Returns `u:<username>` / `e:<email>` or ''.
+ */
+async function rankingVoterIdentity(req) {
+  if (req.user?.username) return `u:${String(req.user.username).trim().toLowerCase()}`;
+  if (req.user?.email) return `e:${String(req.user.email).trim().toLowerCase()}`;
+  const session = sessionClaimsFromRequest(req); // valid website token, user unknown to this instance
+  if (session?.username) return `u:${String(session.username).trim().toLowerCase()}`;
+  const token = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+  if (!token) return '';
+  const claims = verifyApkToken(token);
+  if (claims) {
+    if (claims.u) return `u:${String(claims.u).trim().toLowerCase()}`;
+    if (claims.e) return `e:${String(claims.e).trim().toLowerCase()}`;
+    return '';
+  }
+  if (token.length > 100) {
+    try {
+      const identity = await verifyFirebaseGoogleIdToken(token);
+      if (identity?.email) return `e:${String(identity.email).trim().toLowerCase()}`;
+    } catch {
+      /* certificates unreachable: treated as signed out */
+    }
+  }
+  return '';
+}
+
 router.post('/rankings/rate', optionalAuth, async (req, res) => {
   try {
-    const { animeId, score, review } = req.body;
-    if (!animeId || typeof score !== 'number' || score < 1 || score > 10) {
+    const { animeId, score } = req.body || {};
+    const id = Number(animeId);
+    if (!Number.isInteger(id) || id <= 0 || typeof score !== 'number' || score < 1 || score > 10) {
       return res.status(400).json({ error: 'invalid_rating', message: 'Score must be between 1 and 10' });
     }
-    const userId = req.user?.id || null;
-    saveCommunityRating(Number(animeId), userId, Number(score), review || '');
-    const stats = getAnimeCommunityStats(Number(animeId));
+    // One vote per account (up to 2026-10-17 a vote without an account was a new row each time).
+    const identity = await rankingVoterIdentity(req);
+    if (!identity) return res.status(401).json({ error: 'auth_required', message: 'Sign in to rate' });
+    const top = await fetchTopRanked(15).catch(() => []);
+    if (!top.some((item) => Number(item.id) === id)) {
+      return res.status(400).json({ error: 'not_ranked', message: 'Only titles on the rankings can be rated' });
+    }
+    const stats = await castRankingVote(id, voterKey(identity), score, { keepIds: top.map((item) => item.id) });
     res.json({ ok: true, stats });
   } catch (err) {
     console.error('[anime/rankings/rate]', err.message);
-    res.status(500).json({ error: 'server_error', message: err.message });
+    if (err.message === 'title_full' || err.message === 'too_many_titles' || err.message === 'votes_full') {
+      return res.status(409).json({ error: err.message, message: 'Voting is full for this title' });
+    }
+    res.status(503).json({ error: 'votes_unavailable', message: 'Could not save the vote, try again later' });
   }
 });
 

@@ -5716,8 +5716,7 @@ body {
 /* Monochrome Pitch-Black Glassy 3D Badges */
 .wit-badge,
 .wit-badge--status,
-.wit-badge--type,
-.wit-ep-card__vip {
+.wit-badge--type {
   position: absolute;
   z-index: 4;
   font-size: 0.64rem;
@@ -5738,8 +5737,7 @@ body {
   inset-inline-end: 7px;
 }
 
-.wit-badge--type,
-.wit-ep-card__vip {
+.wit-badge--type {
   top: 7px;
   inset-inline-start: 7px;
 }
@@ -6063,8 +6061,7 @@ body {
   }
 
   .wit-badge,
-  .wit-ep-card__num,
-  .wit-ep-card__vip {
+  .wit-ep-card__num {
     font-size: 0.55rem !important;
     padding: 0.1rem 0.32rem !important;
   }
@@ -8050,8 +8047,7 @@ body {
 
 /* slothUI Pro Capsule Badges on Cards */
 .wit-badge,
-.wit-ep-card__num,
-.wit-ep-card__vip {
+.wit-ep-card__num {
   border-radius: 999px !important;
   font-weight: 900 !important;
   backdrop-filter: blur(12px) !important;
@@ -8064,8 +8060,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.26) !important;
 }
 
-.wit-badge--type,
-.wit-ep-card__vip {
+.wit-badge--type {
   background: #ffffff !important;
   color: #000000 !important;
   border: none !important;

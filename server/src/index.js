@@ -19,6 +19,7 @@ import supportRoutes from './routes/support.routes.js';
 import mangaNovelRoutes from './routes/mangaNovel.routes.js';
 import { animeScraperRouter } from './routes/animeScraper.routes.js';
 import apkAppRoutes from './routes/apkApp.js';
+import telemetryRoutes from './routes/telemetry.js';
 import { optionalAuth, isAuthConfigured } from './auth.js';
 import { db } from './db.js';
 import { cdnCacheMiddleware } from './lib/cdnCache.js';
@@ -178,6 +179,7 @@ app.get('/api/proxy-image', async (req, res) => {
 });
 
 app.use('/api/app', apkAppRoutes); // BLACK X APK v16+: config, accounts, sync, VIP, developer tools
+app.use('/api/telemetry', telemetryRoutes); // anonymous crash reports (developer panel «الأخطاء»)
 app.use('/api/auth', authRoutes);
 app.use('/api/anime', animeRoutes);
 app.use('/api/stream', streamingRoutes);

@@ -809,12 +809,235 @@ textarea.bxp-input {
   text-align: center;
 }
 
-/* developer panel (kept as one page) */
-.bxp-dev {
-  padding: 1rem;
+/* developer panel (profile/DeveloperPanel.jsx): same cards, rows and fields as the rest of the hub */
+.bxp-dev-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 14px;
+  padding: 6px;
   border-radius: 18px;
   background: var(--bx-surface);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+.bxp-dev-stats > button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 60px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.bx-app .bxp-dev-stats > button:active:not(:disabled) {
+  transform: none;
+  background: rgba(255, 255, 255, 0.06);
+}
+.bxp-dev-stats > button + button::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 24%;
+  bottom: 24%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.bxp-dev-stats strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.4em;
+  font-size: var(--bx-fs-lg);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.bxp-dev-stats span {
+  max-width: 100%;
+  color: var(--bx-text-3);
+  font-size: var(--bx-fs-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* five tabs: scroll sideways on narrow phones instead of squeezing the labels */
+.bxp-dev-tabs {
+  margin: 0 0 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bxp-dev-tabs::-webkit-scrollbar {
+  display: none;
+}
+.bxp-dev-tabs .bxp-seg.is-block {
+  min-width: 100%;
+  width: max-content;
+}
+.bxp-dev-tabs .bxp-seg.is-block button {
+  flex: 1 0 auto;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  white-space: nowrap;
+}
+.bxp-dev-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+}
+.bxp-dev-form + .bxp-dev-form,
+.bxp-row + .bxp-dev-form,
+.bxp-list > .bxp-row + .bxp-dev-form {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.bxp-dev-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.bxp-dev-form select.bxp-input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: 34px;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.7) 50%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.7) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  font-size: var(--bx-fs-md);
+}
+[dir='rtl'] .bxp-dev-form select.bxp-input {
+  background-position: 18px 50%, 13px 50%;
+}
+.bxp-dev-form select.bxp-input option {
+  background: #111111;
+  color: #ffffff;
+}
+.bxp-dev-search {
+  flex-direction: row;
+  align-items: center;
+}
+.bxp-dev-search .bxp-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.bxp-dev-search .bx-btn {
+  flex: none;
+}
+.bxp-dev-mono {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+.bxp-dev-code .bxp-row-hit,
+.bxp-dev-request .bxp-row-hit {
+  min-height: 60px;
+}
+.bxp-dev-request .bxp-row-hit {
+  cursor: default;
+}
+.bxp-dev-request .bxp-row-hit:active {
+  background: none;
+}
+.bxp-dev-request .bxp-row-label {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.bxp-dev-done {
+  color: #ffffff;
+}
+.bxp-dev-confirm {
+  padding: 4px 14px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.bxp-dev-confirm p {
+  margin: 10px 0 10px;
+  color: var(--bx-text-2);
+  font-size: var(--bx-fs-sm);
+  line-height: 1.6;
+}
+.bxp-dev-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+.bxp-dev-toolbar .bxp-group-title {
+  margin: 0;
+}
+.bxp-dev-error + .bxp-dev-error {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.bxp-dev-error .bxp-row-label {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+  text-align: left;
+}
+.bxp-dev-error.is-open .bxp-row-label {
+  -webkit-line-clamp: unset;
+}
+.bxp-dev-error .bxp-row-sub {
+  text-align: left;
+}
+.bxp-dev-stack {
+  padding: 0 14px 14px;
+}
+.bxp-dev-stack pre {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  max-height: 220px;
+  overflow: auto;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--bx-text-2);
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.bxp-dev-stack p {
+  margin: 0 0 4px;
+  color: var(--bx-text-3);
+  font-size: var(--bx-fs-xs);
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.bxp-devpanel > .bxp-hint {
+  margin: 0 4px 1.25rem;
+}
+
+/* sign-in consent line (links to the legal pages) */
+.bxp-consent {
+  margin-top: -4px;
+}
+.bxp-link {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.bx-app button.bxp-link:active:not(:disabled) {
+  transform: none;
+  opacity: 0.7;
 }
 
 /* sign-out confirmation */

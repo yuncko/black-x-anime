@@ -14,6 +14,8 @@
  *   /show/SLUG                 title page
  *   /watch/SLUG/EP[?party=C]   player (party: join that watch party)
  *   /rankings                  rankings (profile page, website only)
+ *   /privacy, /terms           privacy policy / terms of use (profile pages 'policy' / 'terms';
+ *                              /profile/privacy is the privacy & security settings page)
  *
  * Pure functions only (no window access) so they can be unit-tested in Node.
  */
@@ -46,7 +48,10 @@ export const LINKABLE_PROFILE_PAGES = Object.freeze([
   // website only (2026-10-17)
   'rankings',
   'wrapped',
-  'apkperks'
+  'apkperks',
+  // legal pages (2026-10-17)
+  'policy',
+  'terms'
 ]);
 
 function safeDecode(value) {
@@ -105,6 +110,8 @@ export function parseWebLocation(pathname = '/', search = '') {
   }
   if (head === 'rankings' || head === 'ranking') return { kind: 'profile', page: 'rankings' };
   if (head === 'wrapped') return { kind: 'profile', page: 'wrapped' };
+  if (head === 'privacy' || head === 'privacy-policy') return { kind: 'profile', page: 'policy' };
+  if (head === 'terms' || head === 'tos') return { kind: 'profile', page: 'terms' };
   if (head === 'trending' || head === 'catalog' || head === 'search') {
     return { kind: 'tab', tab: 'catalog', ...(query ? { query } : {}) };
   }
@@ -161,6 +168,8 @@ export function webUrlFor(state = {}) {
     if (!page) return '/profile';
     if (page === 'library') return '/mylist';
     if (page === 'rankings') return '/rankings';
+    if (page === 'policy') return '/privacy';
+    if (page === 'terms') return '/terms';
     return `/profile/${enc(page)}`;
   }
   if (tab === 'catalog') {

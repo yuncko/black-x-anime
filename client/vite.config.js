@@ -56,8 +56,14 @@ function apkEntry() {
   };
 }
 
+// Which deploy a crash report came from (client/src/errorReporter.js): the commit on Vercel.
+const BX_BUILD = String(process.env.VERCEL_GIT_COMMIT_SHA || process.env.BX_BUILD_ID || '').slice(0, 12);
+
 export default defineConfig({
   root: __dirname,
+  define: {
+    'import.meta.env.VITE_BX_BUILD': JSON.stringify(BX_BUILD)
+  },
   plugins: [apkEntry(), rootLabPreview(resolve(__dirname, '..')), react()],
   server: {
     host: '0.0.0.0',

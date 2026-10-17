@@ -31,7 +31,7 @@ export const CDN_CACHE_PROFILES = Object.freeze({
 });
 
 export const PUBLIC_CACHE_ROUTES = Object.freeze([
-  { pattern: /^\/api\/anime\/(?:trending|season|schedule)$/, profile: 'catalog' },
+  { pattern: /^\/api\/anime\/(?:trending|season|schedule|rankings)$/, profile: 'catalog' },
   { pattern: /^\/api\/anime\/search$/, profile: 'search' },
   { pattern: /^\/api\/stream\/latest$/, profile: 'feed' },
   { pattern: /^\/api\/stream\/catalog$/, profile: 'catalog' },

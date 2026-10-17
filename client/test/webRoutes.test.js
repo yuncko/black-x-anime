@@ -13,6 +13,11 @@ test('computer-website paths open the matching app page', () => {
   // rankings is a page of the app interface since 2026-10-17 (website only)
   assert.deepEqual(parseWebLocation('/rankings'), { kind: 'profile', page: 'rankings' });
   assert.deepEqual(parseWebLocation('/wrapped'), { kind: 'profile', page: 'wrapped' });
+  // legal pages (2026-10-17): /privacy is the policy, /profile/privacy the settings page
+  assert.deepEqual(parseWebLocation('/privacy'), { kind: 'profile', page: 'policy' });
+  assert.deepEqual(parseWebLocation('/terms'), { kind: 'profile', page: 'terms' });
+  assert.deepEqual(parseWebLocation('/profile/privacy'), { kind: 'profile', page: 'privacy' });
+  assert.deepEqual(parseWebLocation('/profile/policy'), { kind: 'profile', page: 'policy' });
   assert.deepEqual(parseWebLocation('/discover'), { kind: 'tab', tab: 'schedule' });
   assert.deepEqual(parseWebLocation('/schedule'), { kind: 'tab', tab: 'schedule' });
   assert.deepEqual(parseWebLocation('/browse'), { kind: 'tab', tab: 'manga' });
@@ -86,4 +91,7 @@ test('watch party links: ?party= is read and written back on the player address'
   assert.equal(webUrlFor({ show: { slug: 'aw-one-piece' }, episode: null, party: 'BX7K2M9Q' }), '/show/aw-one-piece');
   assert.equal(webUrlFor({ tab: 'profile', profilePage: 'rankings' }), '/rankings');
   assert.equal(webUrlFor({ tab: 'profile', profilePage: 'wrapped' }), '/profile/wrapped');
+  assert.equal(webUrlFor({ tab: 'profile', profilePage: 'policy' }), '/privacy');
+  assert.equal(webUrlFor({ tab: 'profile', profilePage: 'terms' }), '/terms');
+  assert.equal(webUrlFor({ tab: 'profile', profilePage: 'privacy' }), '/profile/privacy');
 });

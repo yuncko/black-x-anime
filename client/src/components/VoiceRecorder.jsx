@@ -1,90 +1,54 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-/**
- * Creates an authentic audio clip synthesized via Web Audio API
- * when microphone permission is denied or running in an iframe without mic rights.
- */
-function createSyntheticVoiceBlob(durationSec = 3) {
-  try {
-    const sampleRate = 22050;
-    const numSamples = Math.floor(sampleRate * durationSec);
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate });
-    const buffer = audioCtx.createBuffer(1, numSamples, sampleRate);
-    const data = buffer.getChannelData(0);
+const MIC_ERRORS = {
+  insecure: ['تسجيل الصوت محتاج اتصال آمن (https)', 'Voice notes need a secure (https) page'],
+  blocked: ['المايك مقفول للموقع ده — اسمح بالمايك من إعدادات المتصفح وجرب تاني', 'The microphone is blocked — allow it in the browser settings and try again'],
+  missing: ['مفيش مايك متوصل بالجهاز ده', 'No microphone was found on this device'],
+  busy: ['المايك مستخدم في برنامج تاني — اقفله وجرب تاني', 'The microphone is used by another app — close it and try again'],
+  unsupported: ['المتصفح ده مش بيدعم تسجيل الصوت', 'This browser cannot record voice notes'],
+  other: ['تعذر الوصول إلى الميكروفون', 'Could not use the microphone']
+};
 
-    // Generate speech-like harmonic vocal formant sound waves
-    const baseFreqs = [240, 320, 280, 350, 420];
-    for (let i = 0; i < numSamples; i++) {
-      const t = i / sampleRate;
-      const freqIdx = Math.floor((t * 2.5) % baseFreqs.length);
-      const f = baseFreqs[freqIdx];
-      // Vocal cord pulsation + harmonic formants + smooth envelope
-      const env = Math.sin((Math.PI * i) / numSamples);
-      const tone1 = Math.sin(2 * Math.PI * f * t) * 0.4;
-      const tone2 = Math.sin(4 * Math.PI * f * t) * 0.2;
-      const tone3 = Math.sin(6 * Math.PI * f * t) * 0.1;
-      const noise = (Math.random() - 0.5) * 0.04;
-      data[i] = (tone1 + tone2 + tone3 + noise) * env;
-    }
-
-    // Convert AudioBuffer to standard WAV Blob
-    const wavBuffer = new ArrayBuffer(44 + numSamples * 2);
-    const view = new DataView(wavBuffer);
-
-    // RIFF identifier
-    const writeString = (offset, string) => {
-      for (let i = 0; i < string.length; i++) {
-        view.setUint8(offset + i, string.charCodeAt(i));
-      }
-    };
-
-    writeString(0, 'RIFF');
-    view.setUint32(4, 36 + numSamples * 2, true);
-    writeString(8, 'WAVE');
-    writeString(12, 'fmt ');
-    view.setUint32(16, 16, true); // SubChunk1Size (16 for PCM)
-    view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
-    view.setUint16(22, 1, true); // NumChannels (1 mono)
-    view.setUint32(24, sampleRate, true); // SampleRate
-    view.setUint32(28, sampleRate * 2, true); // ByteRate
-    view.setUint16(32, 2, true); // BlockAlign
-    view.setUint16(34, 16, true); // BitsPerSample
-    writeString(36, 'data');
-    view.setUint32(40, numSamples * 2, true);
-
-    // Write PCM 16-bit samples
-    let offset = 44;
-    for (let i = 0; i < numSamples; i++) {
-      const s = Math.max(-1, Math.min(1, data[i]));
-      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-      offset += 2;
-    }
-
-    return new Blob([view], { type: 'audio/wav' });
-  } catch (e) {
-    return null;
-  }
+/** Why the microphone could not be used, in the visitor's language. */
+function micErrorMessage(err, lang) {
+  const name = err && err.name;
+  let kind = 'other';
+  if (typeof window !== 'undefined' && window.isSecureContext === false) kind = 'insecure';
+  else if (err === 'unsupported') kind = 'unsupported';
+  else if (name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError') kind = 'blocked';
+  else if (name === 'NotFoundError' || name === 'DevicesNotFoundError' || name === 'OverconstrainedError') kind = 'missing';
+  else if (name === 'NotReadableError' || name === 'TrackStartError' || name === 'AbortError') kind = 'busy';
+  return MIC_ERRORS[kind][lang === 'en' ? 1 : 0];
 }
 
 /**
- * Custom Hook for Real Microphone Audio Recording using MediaRecorder API
- * with graceful fallback if the iframe/browser denies microphone permissions.
+ * Real microphone recording with the MediaRecorder API.
+ * When the browser refuses the microphone (permission, no device, no support), nothing is
+ * recorded and `error` says why — there is no made-up clip (the old fallback generated a tone
+ * and attached it as if it were the user's voice).
  */
-export function useVoiceRecorder() {
+export function useVoiceRecorder(lang = 'ar') {
   const [isRecording, setIsRecording] = useState(false);
   const [recordSec, setRecordSec] = useState(0);
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
   const [error, setError] = useState(null);
-  const [isFallbackMode, setIsFallbackMode] = useState(false);
 
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
   const chunksRef = useRef([]);
   const timerRef = useRef(null);
-  const isFallbackRef = useRef(false);
   const recordSecRef = useRef(0);
+  const cancelledRef = useRef(false);
 
+  const releaseStream = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+  };
+
+  /** Resolves { ok: true } when recording started, { error } otherwise (never throws). */
   const startRecording = async () => {
     setError(null);
     setAudioUrl(null);
@@ -92,32 +56,18 @@ export function useVoiceRecorder() {
     setRecordSec(0);
     recordSecRef.current = 0;
     chunksRef.current = [];
-    isFallbackRef.current = false;
-    setIsFallbackMode(false);
+    cancelledRef.current = false;
+
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+      const msg = micErrorMessage('unsupported', lang);
+      setError(msg);
+      return { error: msg };
+    }
 
     try {
-      if (!navigator?.mediaDevices?.getUserMedia) {
-        throw new Error('تسجيل الصوت غير مدعوم في هذا المتصفح');
-      }
-
-      let stream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      } catch (micErr) {
-        // If Permission denied or not allowed in iframe, activate graceful synthetic voice note
-        isFallbackRef.current = true;
-        setIsFallbackMode(true);
-        setIsRecording(true);
-        timerRef.current = setInterval(() => {
-          recordSecRef.current += 1;
-          setRecordSec(recordSecRef.current);
-        }, 1000);
-        return { fallback: true };
-      }
-
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      // Select supported mimeType
       const mimeTypes = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/wav'];
       let selectedMime = '';
       for (const m of mimeTypes) {
@@ -127,47 +77,37 @@ export function useVoiceRecorder() {
         }
       }
 
-      const options = selectedMime ? { mimeType: selectedMime } : {};
-      const recorder = new MediaRecorder(stream, options);
+      const recorder = new MediaRecorder(stream, selectedMime ? { mimeType: selectedMime } : {});
       mediaRecorderRef.current = recorder;
 
       recorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) {
-          chunksRef.current.push(e.data);
-        }
+        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
       };
 
       recorder.onstop = () => {
-        const mime = recorder.mimeType || 'audio/webm';
-        const blob = new Blob(chunksRef.current, { type: mime });
+        releaseStream(); // turns the browser's microphone indicator off
+        // cancelled: the last chunk arrives after cancel, so the flag decides, not the chunk count
+        if (cancelledRef.current || !chunksRef.current.length) return;
+        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' });
         setAudioBlob(blob);
-
         const reader = new FileReader();
+        reader.onloadend = () => setAudioUrl(reader.result);
         reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          setAudioUrl(reader.result);
-        };
-
-        // Stop all tracks to turn off microphone indicator
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach((track) => track.stop());
-          streamRef.current = null;
-        }
       };
 
       recorder.start(250); // collect chunks every 250ms
       setIsRecording(true);
-
       timerRef.current = setInterval(() => {
         recordSecRef.current += 1;
         setRecordSec(recordSecRef.current);
       }, 1000);
-
-      return { fallback: false };
+      return { ok: true };
     } catch (err) {
-      setError(err.message || 'تعذر الوصول إلى الميكروفون');
+      releaseStream();
+      const msg = micErrorMessage(err, lang);
+      setError(msg);
       setIsRecording(false);
-      return { error: err.message };
+      return { error: msg };
     }
   };
 
@@ -176,26 +116,10 @@ export function useVoiceRecorder() {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-
-    if (isFallbackRef.current) {
-      // Create synthesized voice recording with authentic sound
-      const dur = Math.max(2, recordSecRef.current || 3);
-      const syntheticBlob = createSyntheticVoiceBlob(dur);
-      if (syntheticBlob) {
-        setAudioBlob(syntheticBlob);
-        const reader = new FileReader();
-        reader.readAsDataURL(syntheticBlob);
-        reader.onloadend = () => {
-          setAudioUrl(reader.result);
-        };
-      }
-      setIsRecording(false);
-      isFallbackRef.current = false;
-      return;
-    }
-
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
+    } else {
+      releaseStream();
     }
     setIsRecording(false);
   };
@@ -205,15 +129,12 @@ export function useVoiceRecorder() {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+    cancelledRef.current = true;
+    chunksRef.current = [];
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
     }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-    chunksRef.current = [];
-    isFallbackRef.current = false;
+    releaseStream();
     setIsRecording(false);
     setRecordSec(0);
     recordSecRef.current = 0;
@@ -236,7 +157,6 @@ export function useVoiceRecorder() {
     audioUrl,
     audioBlob,
     error,
-    isFallbackMode,
     startRecording,
     stopRecording,
     cancelRecording

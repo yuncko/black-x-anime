@@ -32,7 +32,7 @@ export function Modal({ title, sub, onClose, children, wide = false }) {
 
 export function AuthModal({ initialMode = 'login', onClose }) {
   const { t, lang } = useI18n();
-  const { login, register, loginWithGoogle, loginAsDeveloper } = useAuth();
+  const { login, register, loginWithGoogle } = useAuth();
   const [mode, setMode] = useState(initialMode);
   const [form, setForm] = useState({ username: '', email: '', password: '', displayName: '' });
   const [error, setError] = useState('');
@@ -192,6 +192,17 @@ export function AuthModal({ initialMode = 'login', onClose }) {
             {mode === 'login' ? t('auth.register') : t('auth.login')}
           </button>
         </div>
+        <p style={{ textAlign: 'center', marginTop: '0.85rem', marginBottom: 0, color: 'var(--ink-dim)', fontSize: '0.82rem', lineHeight: 1.6 }}>
+          {lang === 'ar' ? 'لما تدخل أو تعمل حساب تبقى موافق على ' : 'By signing in or creating an account you agree to the '}
+          <a href="/terms" target="_blank" rel="noopener" style={{ color: '#ffffff', textDecoration: 'underline' }}>
+            {lang === 'ar' ? 'شروط الاستخدام' : 'Terms of use'}
+          </a>
+          {lang === 'ar' ? ' و' : ' and the '}
+          <a href="/privacy" target="_blank" rel="noopener" style={{ color: '#ffffff', textDecoration: 'underline' }}>
+            {lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy policy'}
+          </a>
+          .
+        </p>
       </form>
     </Modal>
   );

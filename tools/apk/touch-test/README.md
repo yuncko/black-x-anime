@@ -57,7 +57,7 @@ ONLY=links,back bash tools/apk/touch-test/run-web.sh    # some scenarios
 DIST=/path/to/website/build bash tools/apk/touch-test/run-web.sh
 ```
 
-`web-suite.mjs` (239 checks) opens the **website build** with the same mocks (`openWeb()` in `lib.mjs`:
+`web-suite.mjs` (269 checks) opens the **website build** with the same mocks (`openWeb()` in `lib.mjs`:
 the site's same-origin `/api/*` goes to the mock, Google Fonts are answered with the bundled fonts so
 Arabic renders in screenshots). A 412×915 touch phone with a phone browser user agent, or a 1440×900
 computer with a mouse; since 2026-10-17 both get the app interface. Scenarios: `boot` (phone and
@@ -87,19 +87,34 @@ centred dialogs, the title page next to the rail, the player capped to the scree
 →, M, F and a mouse click, the classic-website link) and `bundle` (what only the website has: the mouse
 preview card and its buttons, middle click / Ctrl+click → new tab, Ctrl+K and «/» quick search,
 «?» shortcuts, cinema mode beside / under the video with its button and «T», `/rankings` with
-BLACK X votes only where someone voted and a row that opens the title or the search, «ملخصك» from
+BLACK X votes only where someone voted (shown out of 10: the API's `communityScore` is 0–100, so the mock
+sends 85 for an 8.5 average) and a row that opens the title or the search, «ملخصك» from
 seeded positions and its image, the empty state, and a watch party between TWO browsers sharing the
 Firestore mock: room by code, the invite link in the address bar, the guest following the host's
 position and pause, chat, two messages at once, reactions, the people line, the host ending it, only
-`json` + `updatedAt` stored; the classic «ملخص 2026» card). `openWeb(browser, { route, phone, seed, ctx, ui })`:
+`json` + `updatedAt` stored; the classic «ملخص 2026» card) and `closeout` (2026-10-17: two browsers posting
+and liking the same post at the same moment — both posts and both likes survive, the older post is kept —;
+`/privacy` and `/terms` in Arabic with their tab titles, the profile's «عن BLACK X» rows, `/profile/privacy`
+still the settings page, the consent line on the sign-in page, the classic `/privacy` page and its footer
+links; the developer panel (4 stats, 5 tabs, codes, members' requests, crash reports with their count and
+the phase-2 status from `/api/health`) and no developer row for a normal visitor; one anonymous crash report
+with the page path only, nothing more for the same error or for network drops; `robots.txt`, `sitemap.xml`
+and a title per tab). `openWeb(browser, { route, phone, seed, ctx, ui })`:
 `seed` is written to localStorage, which every page of one browser shares, so seed `blackx.vipTier`
 explicitly; `ui: 'site'` stores the classic-pages choice; `ctx` patches the mock (`episodeDelayMs` holds
 `/api/stream/episode` back, `communityPosts` replaces the seeded feed, `extraSlots` adds AniList air
 times, `fs` / `fsTimes` share Firestore documents between pages or browsers, `recordOpen` makes
-`window.open` record the address instead of opening a tab); a seeded `blackx_token` signs the classic
+`window.open` record the address instead of opening a tab, `developer: true` lets a seeded session open
+the mocked `/api/app/admin/*` (otherwise 403), `firestoreAuth` is what `/api/health` reports (default
+`api_key`), crash reports posted to `/api/telemetry/error` are collected in `ctx.telemetry`); a seeded `blackx_token` signs the classic
 computer pages in through the mocked `/api/auth/me`. The Firestore mock gives every write a new
 `updateTime` and enforces `currentDocument.exists` / `currentDocument.updateTime` like the real API.
 Extra browser contexts crash the single-process test Chromium, so a second person is a second
-`launch()`.
+`launch()`. Because localStorage is shared, a scenario that seeds a session or the classic-pages choice
+clears it afterwards (`clearStorage` in `closeout`: open `/__blank`, clear both storages) so the next page
+starts as a fresh visitor. An error thrown by code that `page.evaluate` runs reaches `window.onerror` as a
+muted «Script error.» (which the crash reporter ignores); to simulate a real crash add a `<script>`
+element to the page instead. The test server sends `.txt` / `.xml` without a known type (a browser page
+would download them), so the suite reads `robots.txt` and `sitemap.xml` with Node's `fetch`.
 Headless Chrome reports no hover/fine pointer (and CDP cannot emulate them), which is why the rail
 arrows key off a real mouse movement (`html.bx-has-mouse`, `ScrollRow.jsx`).

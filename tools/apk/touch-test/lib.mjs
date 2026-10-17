@@ -365,7 +365,8 @@ function api(req, url, ctx) {
       score: 90 - i,
       rank: i + 1,
       scoreTen: Number(((90 - i) / 10).toFixed(1)),
-      communityScore: i === 1 ? 8.5 : null,
+      // like the live API: members' average on the 0–100 scale (an 8.5 average → 85)
+      communityScore: i === 1 ? 85 : null,
       votesCount: i === 1 ? 4 : 0
     }));
     // a title only AniList has: the page must search for it instead of opening something else
@@ -404,6 +405,36 @@ function api(req, url, ctx) {
     return json(req, { ok: true });
   }
   if (p === '/api/app/state') return auth ? json(req, { ok: true, state: safeJson(req.postData()) }) : json(req, { error: 'auth_required' }, 401);
+  // Crash reports (client/src/errorReporter.js): recorded in ctx.telemetry.
+  if (p === '/api/telemetry/error' && method === 'POST') {
+    (ctx.telemetry || (ctx.telemetry = [])).push(safeJson(req.postData()) || {});
+    return req.respond({ status: 204, headers: CORS, body: '' });
+  }
+  if (p === '/api/health') return json(req, { ok: true, name: 'BLACK X API', database: 'ok', authentication: 'ok', firestoreAuth: ctx.firestoreAuth || 'api_key', time: new Date().toISOString() });
+  // Developer panel (client/src/mobile/profile/DeveloperPanel.jsx): only for a developer session.
+  if (p.startsWith('/api/app/admin/')) {
+    if (!auth || !ctx.developer) return json(req, { error: 'forbidden' }, 403);
+    if (p === '/api/app/admin/vip') {
+      return json(req, {
+        enforced: false,
+        codes: [{ code: 'BX-MON-TEST-CODE', tier: 'vip_monarch', durationDays: 30, usedCount: 0, maxUses: 1 }],
+        userRequests: [{ id: 'req_1', type: 'issue', text: 'الحلقة 3 مش شغالة', author: 'Sara', username: 'sara', createdAt: new Date().toISOString() }],
+        broadcastMsg: '',
+        pinnedRec: null
+      });
+    }
+    if (p === '/api/app/admin/errors') {
+      const day = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const at = new Date().toISOString();
+      return json(req, {
+        days: [
+          { day, dropped: 0, entries: [{ fp: 'abc123', message: "Cannot read properties of undefined (reading 'slug')", stack: 'TypeError: x\n    at openShow (https://black-x-anime.me/assets/index.js:1:2)', kind: 'error', path: '/watch/aw-x/3', platform: 'web', build: 'abc1234', ua: 'Mozilla/5.0', count: 3, firstAt: at, lastAt: at }] },
+          { day: '20000101', dropped: 0, entries: [] }
+        ]
+      });
+    }
+    return json(req, { ok: true });
+  }
   if (p === '/api/stream/sources') return json(req, { sources: [{ id: 'witanime' }, { id: 'anime3rb' }, { id: 'english' }] });
   if (p === '/api/stream/stats') return json(req, { animeTotal: ANIME.length + HIDDEN_ANIME.length });
   if ((m = p.match(/^\/api\/stream\/show\/([^/]+)$/))) {

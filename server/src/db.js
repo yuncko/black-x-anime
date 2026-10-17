@@ -496,29 +496,5 @@ export function parseAnimeRow(row) {
   };
 }
 
-export function saveCommunityRating(animeId, userId, score, review = '') {
-  const stmt = db.prepare(`
-    INSERT INTO community_ratings (anime_id, user_id, score, review, created_at)
-    VALUES (?, ?, ?, ?, datetime('now'))
-    ON CONFLICT(anime_id, user_id) DO UPDATE SET
-      score = excluded.score,
-      review = excluded.review,
-      created_at = datetime('now')
-  `);
-  return stmt.run(animeId, userId || null, score, review);
-}
-
-export function getAnimeCommunityStats(animeId) {
-  const row = db.prepare(`
-    SELECT
-      COUNT(*) AS total_votes,
-      AVG(score) AS avg_score
-    FROM community_ratings
-    WHERE anime_id = ?
-  `).get(animeId);
-
-  return {
-    votes: row?.total_votes || 0,
-    avgScore: row?.avg_score ? Number(row.avg_score.toFixed(1)) : null
-  };
-}
+// Rankings votes moved to Firestore on 2026-10-17 (services/rankingVotes.js); the old
+// community_ratings table above is no longer read or written.

@@ -24,9 +24,7 @@ export function I18nProvider({ children }) {
     const dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
-    document.title = lang === 'ar'
-      ? 'BLACK X — محرّك تتبّع الأنمي والتوقعات'
-      : 'BLACK X — Anime Tracker & Prediction Engine';
+    document.title = lang === 'ar' ? 'BLACK X — أنمي ومانجا' : 'BLACK X — Anime & Manga';
   }, [lang]);
 
   const t = useCallback(

@@ -98,7 +98,8 @@ export default function RankingsPage({ isRtl, dataSaver, loadRankings, onOpenRan
                   ) : null}
                   {m.votesCount > 0 && m.communityScore ? (
                     <span>
-                      {m.communityScore}
+                      {/* the API sends members' average on AniList's 0–100 scale (8.5 → 85) */}
+                      {(Number(m.communityScore) / 10).toFixed(1)}
                       <small>{isRtl ? `${m.votesCount} صوت على BLACK X` : `${m.votesCount} BLACK X votes`}</small>
                     </span>
                   ) : null}

@@ -3,8 +3,6 @@ import {
   DRIFT_PLAYING_SEC,
   HOST_HEARTBEAT_MS,
   HOST_PAUSED_HEARTBEAT_MS,
-  PARTY_HIDDEN_POLL_MS,
-  PARTY_POLL_MS,
   appendMessages,
   expectedPosition,
   makeMessage,
@@ -12,6 +10,7 @@ import {
   normalizeRoomCode,
   parseRoom,
   partyLink,
+  partyPollPlan,
   roomIsOver,
   sameContent,
   syncAction
@@ -25,10 +24,12 @@ const HOST_AWAY_MS = 75000;
  *
  *  - host: writes the room whenever their video plays / pauses / seeks / changes speed, when
  *    they switch episode, and every 10 s while playing (30 s paused) so guests stay aligned;
- *  - guest: reads the room every 2.5 s (8 s in a background tab), opens the host's episode
+ *  - guest: reads the room every 2.5 s while the host plays (4 s paused, 15 s in a background
+ *    tab — partyPollPlan), opens the host's episode
  *    (`onNavigate`) and keeps its video within 2.5 s of the host. A guest who pauses or seeks
  *    on their own is "detached" until they press «ارجع للحفلة» or play again;
- *  - everyone: the chat document is read on the same timer; sending appends with a
+ *  - everyone: the chat document is read every 2.5 s for a minute after anything was said,
+ *    every 7.5 s when it is quiet (30 s in a background tab); sending appends with a
  *    precondition (no lost messages).
  *
  * Media events do not bubble, but a capturing listener on `document` still sees them, so the
@@ -55,6 +56,7 @@ export default function useWatchParty({ transport, videoRef, member, current, on
   const syncingUntilRef = useRef(0);
   const navigatingRef = useRef('');
   const pushTimerRef = useRef(0);
+  const chatActiveAtRef = useRef(0); // last time something was said / sent (chat polling speed)
   const notifyRef = useRef(notify);
   notifyRef.current = notify;
   const navigateRef = useRef(onNavigate);
@@ -261,6 +263,7 @@ export default function useWatchParty({ transport, videoRef, member, current, on
       const v = videoRef.current;
       const msg = makeMessage({ uid: me.uid, name: me.name, text, kind, pos: v ? Number(v.currentTime) : null });
       if (!msg.text) return false;
+      chatActiveAtRef.current = Date.now();
       setMessages((prev) => appendMessages(prev, [{ ...msg, pending: true }]));
       setLastReadAt(Date.now());
       try {
@@ -302,15 +305,32 @@ export default function useWatchParty({ transport, videoRef, member, current, on
   const markRead = useCallback(() => setLastReadAt(Date.now()), []);
 
   /* ------------------------------------------------------------- timers */
-  // Read the room (guests) and the chat (everyone).
+  // Read the room (guests) and the chat (everyone), each on its own interval (partyPollPlan).
   useEffect(() => {
     if (!code || status === 'ended') return undefined;
     let stop = false;
     let timer = 0;
+    let running = false;
+    let lastRoomAt = 0;
+    let lastChatAt = 0;
+    let lastChatKey = '';
+    chatActiveAtRef.current = Date.now(); // just joined / started: people say hi
+    const isHidden = () => typeof document !== 'undefined' && document.hidden;
     const tick = async () => {
-      if (stop) return;
+      if (stop || running) return;
+      running = true;
+      const plan = partyPollPlan({
+        role: live.current.role,
+        hidden: isHidden(),
+        roomPaused: Boolean(live.current.room?.paused),
+        chatActiveAt: chatActiveAtRef.current,
+        lastRoomAt,
+        lastChatAt,
+        now: Date.now()
+      });
       try {
-        if (live.current.role === 'guest') {
+        if (live.current.role === 'guest' && plan.room) {
+          lastRoomAt = Date.now();
           const r = await transport.readRoom(code);
           if (stop) return;
           if (r && (r.seq !== lastSeqRef.current || r.updatedAt !== live.current.room?.updatedAt)) {
@@ -337,17 +357,43 @@ export default function useWatchParty({ transport, videoRef, member, current, on
             setHostAway(true);
           }
         }
-        const list = await transport.readChat(code);
-        if (!stop) setMessages((prev) => appendMessages(list, prev.filter((m) => m.pending || m.failed)));
+        if (plan.chat) {
+          lastChatAt = Date.now();
+          const list = await transport.readChat(code);
+          const last = list.length ? list[list.length - 1] : null;
+          const key = last ? `${list.length}:${last.id || last.at || ''}` : '0';
+          if (lastChatKey && key !== lastChatKey) chatActiveAtRef.current = Date.now();
+          lastChatKey = key;
+          if (!stop) setMessages((prev) => appendMessages(list, prev.filter((m) => m.pending || m.failed)));
+        }
       } catch {
         /* offline for a moment: keep trying */
       }
-      if (!stop) timer = setTimeout(tick, typeof document !== 'undefined' && document.hidden ? PARTY_HIDDEN_POLL_MS : PARTY_POLL_MS);
+      running = false;
+      if (stop) return;
+      const next = partyPollPlan({
+        role: live.current.role,
+        hidden: isHidden(),
+        roomPaused: Boolean(live.current.room?.paused),
+        chatActiveAt: chatActiveAtRef.current,
+        lastRoomAt,
+        lastChatAt,
+        now: Date.now()
+      });
+      timer = setTimeout(tick, next.delay);
     };
+    // Back from a background tab: catch up now instead of after the 15 s background interval.
+    const onVisible = () => {
+      if (isHidden() || stop || running) return;
+      clearTimeout(timer);
+      timer = setTimeout(tick, 50);
+    };
+    if (typeof document !== 'undefined') document.addEventListener('visibilitychange', onVisible);
     timer = setTimeout(tick, 700);
     return () => {
       stop = true;
       clearTimeout(timer);
+      if (typeof document !== 'undefined') document.removeEventListener('visibilitychange', onVisible);
     };
   }, [code, status, transport, say]);
 

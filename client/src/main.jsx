@@ -1,6 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { decideWebUi } from './webUi.js';
+import { installErrorReporter, reportClientError } from './errorReporter.js';
+
+// Anonymous crash reports → the developer panel's «الأخطاء» tab (errorReporter.js).
+installErrorReporter({ endpoint: '/api/telemetry/error', platform: 'web', build: import.meta.env.VITE_BX_BUILD || '' });
 
 // Unregister any injected proxy service worker (_service-worker.js on *.ai.studio)
 // that intercepts <video> Range requests and breaks video streaming
@@ -23,7 +27,8 @@ if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
 
 const root = createRoot(document.getElementById('root'));
 
-function showBootError() {
+function showBootError(err) {
+  if (err) reportClientError(err, { kind: 'error' });
   root.render(
     <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#000', color: '#fff', fontFamily: 'system-ui, sans-serif', textAlign: 'center', padding: '1.5rem' }}>
       <div>

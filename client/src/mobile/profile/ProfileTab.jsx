@@ -9,6 +9,7 @@ import { ChoiceRow, Empty, Field, GoogleMark, Group, Row, Segmented, SegmentedRo
 import RankingsPage from '../RankingsPage.jsx';
 import WrappedPage from '../WrappedPage.jsx';
 import PlatformPerks from '../PlatformPerks.jsx';
+import LegalDoc from '../../legal/LegalDoc.jsx';
 import './profile.css';
 
 /**
@@ -39,6 +40,9 @@ export const PROFILE_PAGES = {
   backup: { ar: 'نسخة احتياطية', en: 'Backup' },
   signin: { ar: 'تسجيل الدخول', en: 'Sign in' },
   developer: { ar: 'لوحة المطور', en: 'Developer' },
+  // legal (2026-10-17; links /privacy and /terms — 'privacy' above is the settings page)
+  policy: { ar: 'سياسة الخصوصية', en: 'Privacy policy' },
+  terms: { ar: 'شروط الاستخدام', en: 'Terms of use' },
   // website only (2026-10-17)
   rankings: { ar: 'الترتيب', en: 'Rankings' },
   wrapped: { ar: 'ملخصك', en: 'Your year' },
@@ -519,6 +523,11 @@ function RootPage(props) {
         )}
       </Group>
 
+      <Group title={isRtl ? 'عن BLACK X' : 'About'}>
+        <Row icon="file" label={isRtl ? 'سياسة الخصوصية' : 'Privacy policy'} onClick={() => onOpenPage('policy')} />
+        <Row icon="scroll" label={isRtl ? 'شروط الاستخدام' : 'Terms of use'} onClick={() => onOpenPage('terms')} />
+      </Group>
+
       {isDeveloper ? (
         <Group title={isRtl ? 'المطور' : 'Developer'}>
           <Row icon="wrench" label={isRtl ? 'لوحة المطور' : 'Developer panel'} badge={devBadge || null} onClick={() => onOpenPage('developer')} />
@@ -880,7 +889,7 @@ function TitlesPage({ isRtl, account, library, settings }) {
   );
 }
 
-function SignInPage({ isRtl, auth }) {
+function SignInPage({ isRtl, auth, onOpenPage }) {
   const register = auth.mode === 'register';
   return (
     <form className="bxp-form" onSubmit={auth.onSubmit}>
@@ -922,6 +931,17 @@ function SignInPage({ isRtl, auth }) {
         {register ? (isRtl ? 'إنشاء الحساب' : 'Create account') : isRtl ? 'دخول' : 'Sign in'}
       </button>
       <p className="bxp-hint">{isRtl ? 'نفس حسابك على موقع BLACK X — قائمتك وسجلك بيتزامنوا بين الاتنين.' : 'The same account as the BLACK X website — your list and history sync between both.'}</p>
+      <p className="bxp-hint bxp-consent">
+        {isRtl ? 'لما تدخل أو تعمل حساب تبقى موافق على ' : 'By signing in or creating an account you agree to the '}
+        <button type="button" className="bxp-link" onClick={() => onOpenPage('terms')}>
+          {isRtl ? 'شروط الاستخدام' : 'Terms of use'}
+        </button>
+        {isRtl ? ' و' : ' and the '}
+        <button type="button" className="bxp-link" onClick={() => onOpenPage('policy')}>
+          {isRtl ? 'سياسة الخصوصية' : 'Privacy policy'}
+        </button>
+        .
+      </p>
     </form>
   );
 }
@@ -1178,6 +1198,27 @@ export default function ProfileTab(props) {
     case 'developer':
       body = devPanel || null;
       break;
+    case 'policy':
+    case 'terms': {
+      const other = page === 'policy' ? 'terms' : 'policy';
+      body = (
+        <LegalDoc
+          id={page}
+          lang={props.isRtl ? 'ar' : 'en'}
+          showTitle={false}
+          footer={
+            <Group>
+              <Row
+                icon={other === 'terms' ? 'scroll' : 'file'}
+                label={profilePageTitle(other, props.isRtl)}
+                onClick={() => props.onOpenPage(other)}
+              />
+            </Group>
+          }
+        />
+      );
+      break;
+    }
     case 'rankings':
       body = <RankingsPage isRtl={props.isRtl} dataSaver={props.dataSaver} loadRankings={props.extras?.loadRankings} onOpenRanked={props.extras?.onOpenRanked} />;
       break;

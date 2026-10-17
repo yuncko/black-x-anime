@@ -31,7 +31,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/((?!api/|assets/|favicon\\.png|blackx-logo\\.png).*)",
+      "source": "/((?!api/|assets/|favicon\\.png|blackx-logo\\.png|robots\\.txt|sitemap\\.xml).*)",
       "destination": "/index.html"
     }
   ]

@@ -3,6 +3,7 @@ import BlackXSplashVortex from '../components/BlackXSplashVortex.jsx';
 import { BX_APK_VERSION } from './bxServers.js';
 import { SPLASH_SEEN_KEY, SPLASH_SOUND_KEY } from './splashPrefs.js';
 import { seedWebLanguage } from './webApp.js';
+import { reportClientError } from '../errorReporter.js';
 import './apkBase.css';
 
 const MobileApkApp = lazy(() => import('./MobileApkApp.jsx'));
@@ -19,6 +20,7 @@ class ApkErrorBoundary extends React.Component {
 
   componentDidCatch(error, info) {
     console.error('[BLACK X APK]', error, info);
+    reportClientError(error, { kind: 'react', componentStack: info?.componentStack || '' });
   }
 
   render() {

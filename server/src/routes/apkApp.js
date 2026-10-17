@@ -42,6 +42,7 @@ import {
 } from '../services/apkAccounts.js';
 import { verifyFirebaseGoogleIdToken, DEVELOPER_EMAIL, isAuthConfigured } from '../auth.js';
 import { getSkipTimes } from '../services/aniskip.js';
+import { readErrorLog } from '../services/errorLog.js';
 
 const router = Router();
 export const GLOBAL_DOC_ID = 'global_vip_system';
@@ -743,6 +744,16 @@ router.post('/admin/users/vip', requireDeveloper, async (req, res) => {
     res.json({ ok: true, user: publicAccount(result.data) });
   } catch (err) {
     sendFailure(res, err, 'admin-user-vip');
+  }
+});
+
+// Crash reports of the last days (services/errorLog.js), for the developer panel's «الأخطاء» tab.
+router.get('/admin/errors', requireDeveloper, async (req, res) => {
+  try {
+    const days = Math.max(1, Math.min(7, Number(req.query.days) || 3));
+    res.json({ days: await readErrorLog(days) });
+  } catch (err) {
+    sendFailure(res, err, 'admin-errors');
   }
 });
 

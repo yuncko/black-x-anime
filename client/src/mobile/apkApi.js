@@ -191,6 +191,8 @@ export const adminPin = (pinnedRec) => apkRequest('POST', '/api/app/admin/pin', 
 export const adminDeleteRequest = (id) => apkRequest('DELETE', `/api/app/admin/requests/${encodeURIComponent(id)}`, { auth: true });
 export const adminSetUserVip = (target, tier, days) => apkRequest('POST', '/api/app/admin/users/vip', { auth: true, body: { target, tier, days } });
 export const adminInspectUser = (q) => apkRequest('GET', `/api/app/admin/users/inspect?q=${encodeURIComponent(q)}`, { auth: true });
+/** Crash reports of the last `days` days (newest first), see server/src/services/errorLog.js. */
+export const adminGetErrors = (days = 3) => apkRequest('GET', `/api/app/admin/errors?days=${encodeURIComponent(days)}`, { auth: true });
 
 /* ------------------------------------------------------------------ skip times */
 

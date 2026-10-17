@@ -1,0 +1,74 @@
+/* Privacy policy / terms (LegalDoc.jsx): plain, readable, monochrome, both UIs. */
+.bx-legal {
+  max-width: 46rem;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.9688rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.bx-legal-title {
+  margin: 0 0 0.35rem;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.bx-legal-updated {
+  margin: 0 0 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8125rem;
+}
+.bx-legal-intro {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bx-legal-section {
+  margin: 0 0 1.25rem;
+}
+.bx-legal-section h2 {
+  margin: 0 0 0.4rem;
+  color: #ffffff;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+.bx-legal-section p {
+  margin: 0;
+}
+.bx-legal-section ul {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.bx-legal-section li + li {
+  margin-top: 0.35rem;
+}
+.bx-legal-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+/* inside the app interface's profile pages */
+.bxp .bx-legal {
+  padding: 0 4px 1rem;
+}
+/* classic website page */
+.bx-legal-page {
+  min-height: 70vh;
+  padding: 6.5rem 1.25rem 3rem;
+  background: #000000;
+}
+.bx-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+.bx-legal-links a {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

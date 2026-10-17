@@ -15,8 +15,17 @@
  * Pure helpers + a transport built on an injected fetch, so Node tests can run all of it.
  */
 
+/** Guests read the room this often while the host plays (seek / pause show up within it). */
 export const PARTY_POLL_MS = 2500;
-export const PARTY_HIDDEN_POLL_MS = 8000;
+/** …while the host is paused (only a "play" can come next). */
+export const PARTY_PAUSED_POLL_MS = 4000;
+/** …in a background tab (room and chat). Was 8 s for both up to v18.0. */
+export const PARTY_HIDDEN_POLL_MS = 15000;
+/** The chat is read every 2.5 s for a minute after anything was said, else every 7.5 s. */
+export const CHAT_ACTIVE_POLL_MS = 2500;
+export const CHAT_QUIET_POLL_MS = 7500;
+export const CHAT_HIDDEN_POLL_MS = 30000;
+export const CHAT_ACTIVE_WINDOW_MS = 60000;
 export const HOST_HEARTBEAT_MS = 10000;
 export const HOST_PAUSED_HEARTBEAT_MS = 30000;
 export const DRIFT_PLAYING_SEC = 2.5;
@@ -177,6 +186,26 @@ export function membersFromChat(messages) {
     map.set(m.uid, { uid: m.uid, name: m.name || (prev && prev.name) || '', present });
   }
   return [...map.values()];
+}
+
+/**
+ * What to read on this tick and when to come back (Firestore bills every document read, and the
+ * free quota is 50k reads a day: v18.0 read 2 documents every 2.5 s per guest, ~2,900 an hour).
+ * Guests read the room on its own interval (playing 2.5 s, paused 4 s, background 15 s); everyone
+ * reads the chat every 2.5 s while people talk and every 7.5 s when it is quiet (30 s background).
+ * `lastRoomAt` / `lastChatAt` = when each was last read, `chatActiveAt` = when something was last
+ * said / sent / joined.
+ */
+export function partyPollPlan({ role, hidden = false, roomPaused = false, chatActiveAt = 0, lastRoomAt = 0, lastChatAt = 0, now = Date.now() } = {}) {
+  const slack = 200;
+  const guest = role === 'guest';
+  const roomMs = hidden ? PARTY_HIDDEN_POLL_MS : roomPaused ? PARTY_PAUSED_POLL_MS : PARTY_POLL_MS;
+  const chatMs = hidden ? CHAT_HIDDEN_POLL_MS : now - chatActiveAt < CHAT_ACTIVE_WINDOW_MS ? CHAT_ACTIVE_POLL_MS : CHAT_QUIET_POLL_MS;
+  const room = guest && now - lastRoomAt >= roomMs - slack;
+  const chat = now - lastChatAt >= chatMs - slack;
+  const nextRoom = guest ? (room ? now : lastRoomAt) + roomMs : Infinity;
+  const nextChat = (chat ? now : lastChatAt) + chatMs;
+  return { room, chat, delay: Math.max(500, Math.min(nextRoom, nextChat) - now) };
 }
 
 export function relativeTime(at, now, isRtl = true) {

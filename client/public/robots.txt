@@ -1,0 +1,10 @@
+# BLACK X — https://black-x-anime.me
+# The player and the reader pages start video / image streams through the server, and /api is
+# data for the app: crawling them costs server time and adds nothing to search results.
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /watch/
+Disallow: /*chapter=
+
+Sitemap: https://black-x-anime.me/sitemap.xml

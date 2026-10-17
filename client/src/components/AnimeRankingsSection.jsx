@@ -194,7 +194,16 @@ export default function AnimeRankingsSection({ onOpenAuth }) {
         setRateModalItem(null);
       }
     } catch (err) {
-      pushToast(err.message || 'Failed to submit rating', 'error');
+      // One vote per account, saved on the server (settings/ranking_votes).
+      if (err?.status === 401) {
+        setRateModalItem(null);
+        pushToast(lang === 'ar' ? 'سجّل دخولك الأول عشان تقيّم' : 'Sign in to rate', 'info');
+        onOpenAuth?.('login');
+      } else if (err?.code === 'network') {
+        pushToast(lang === 'ar' ? 'مفيش اتصال — جرّب تاني' : 'No connection — try again', 'error');
+      } else {
+        pushToast(lang === 'ar' ? 'التقييم ما اتحفظش — جرّب كمان شوية' : 'Your rating was not saved — try again later', 'error');
+      }
     } finally {
       setRatingSubmitting(false);
     }

@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar.jsx';
+import { Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import Backdrop, { Toasts } from './components/Backdrop.jsx';
 import { AuthModal } from './components/Modals.jsx';
 import { useI18n } from './i18n/I18nProvider.jsx';
@@ -13,6 +12,7 @@ const MyList = React.lazy(() => import('./pages/MyList.jsx'));
 const ProfileDashboard = React.lazy(() => import('./pages/ProfileDashboard.jsx'));
 const Rankings = React.lazy(() => import('./pages/Rankings.jsx'));
 const Community = React.lazy(() => import('./pages/Community.jsx'));
+const LegalPage = React.lazy(() => import('./pages/LegalPage.jsx'));
 const AnimeDiscover = React.lazy(() => import('./components/AnimeDiscover.jsx'));
 const MobileApkApp = React.lazy(() => import('./mobile/MobileApkApp.jsx'));
 import BlackXSplashVortex from './components/BlackXSplashVortex.jsx';
@@ -22,6 +22,7 @@ import { api, isNativeApk } from './api.js';
 import BxIcon from './components/BxIcon.jsx';
 import { useAnimeCatalogTotal, formatCount } from './hooks/useCatalogStats.js';
 import { switchWebUi } from './webUi.js';
+import { reportClientError } from './errorReporter.js';
 import { ANILIST_EXCLUSION_ARGS, hasBlockedGenre } from '../../shared/contentFilter.js';
 
 function serverFourSearchItems(animeData, mangaData, query) {
@@ -1051,6 +1052,14 @@ function Footer() {
         <div style={{ marginTop: '0.35rem', opacity: 0.68, fontSize: '0.82rem' }}>
           © {new Date().getFullYear()} · {footerText?.notice || t('footer.rights')}
         </div>
+        <nav aria-label={lang === 'ar' ? 'صفحات قانونية' : 'Legal pages'} style={{ marginTop: '0.6rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1.1rem', fontSize: '0.86rem' }}>
+          <Link to="/privacy" style={{ color: '#ffffff', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+            {lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy policy'}
+          </Link>
+          <Link to="/terms" style={{ color: '#ffffff', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+            {lang === 'ar' ? 'شروط الاستخدام' : 'Terms of use'}
+          </Link>
+        </nav>
         <button
           type="button"
           onClick={() => switchWebUi('app')}
@@ -1084,6 +1093,7 @@ class MobileErrorBoundary extends React.Component {
   }
   componentDidCatch(error, info) {
     console.error('[MobileApkApp ErrorBoundary]', error, info);
+    reportClientError(error, { kind: 'react', componentStack: info?.componentStack || '' });
   }
   render() {
     if (this.state.hasError) {
@@ -1337,6 +1347,8 @@ export default function App() {
                 <Route path="/browse" element={<Browse />} />
                 <Route path="/community" element={<Community onOpenAuth={openAuth} />} />
                 <Route path="/rankings" element={<Rankings onOpenAuth={openAuth} />} />
+                <Route path="/privacy" element={<LegalPage id="policy" />} />
+                <Route path="/terms" element={<LegalPage id="terms" />} />
                 <Route path="/show/:slug" element={<ShowDetail onOpenAuth={openAuth} />} />
                 <Route path="/watch/:slug/:ep" element={<Watch onOpenAuth={openAuth} />} />
                 <Route path="/mylist" element={<MyList onOpenAuth={openAuth} />} />
