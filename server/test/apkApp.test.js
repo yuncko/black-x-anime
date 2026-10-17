@@ -435,7 +435,8 @@ test('account deletion: password check, then posts / likes / votes / requests an
 
   assert.equal((await call('POST', '/api/app/account/delete', { body: { confirm: 'sara_99', password: 'secret12' } })).status, 401, 'needs a session');
   assert.equal((await call('POST', '/api/app/account/delete', { token, body: { confirm: 'someone', password: 'secret12' } })).body.error, 'confirm_mismatch');
-  assert.equal((await call('POST', '/api/app/account/delete', { token, body: { confirm: 'sara_99', password: 'wrong' } })).body.error, 'bad_password');
+  const wrong = await call('POST', '/api/app/account/delete', { token, body: { confirm: 'sara_99', password: 'wrong' } });
+  assert.deepEqual([wrong.status, wrong.body.error], [403, 'bad_password'], 'not 401: the app signs out on 401');
   assert.ok(getJson('user_sara_99').passBcrypt, 'nothing deleted after a refused request');
 
   const del = await call('POST', '/api/app/account/delete', { token, body: { confirm: 'SARA_99', password: 'secret12' } });

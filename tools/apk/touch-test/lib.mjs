@@ -410,7 +410,7 @@ function api(req, url, ctx) {
     if (!auth) return json(req, { error: 'auth_required' }, 401);
     const body = safeJson(req.postData()) || {};
     (ctx.accountDeletes || (ctx.accountDeletes = [])).push(body);
-    if (ctx.deletePassword && body.password !== ctx.deletePassword) return json(req, { error: 'bad_password' }, 401);
+    if (ctx.deletePassword && body.password !== ctx.deletePassword) return json(req, { error: 'bad_password' }, 403);
     return json(req, { ok: true, removed: false, posts: 1, replies: 0, likes: 2, votes: 0, requests: 0 });
   }
   // Crash reports (client/src/errorReporter.js): recorded in ctx.telemetry.

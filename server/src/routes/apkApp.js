@@ -700,7 +700,8 @@ router.post('/account/delete', requireAccount, async (req, res) => {
   const hasPassword = /^\$2[aby]\$/.test(String(data.passBcrypt || '')) || /^[a-f0-9]{64}$/i.test(String(data.passSha256 || ''));
   if (hasPassword && !data.isGoogleAccount) {
     const check = await verifyCloudPassword(data, typeof req.body?.password === 'string' ? req.body.password : '');
-    if (!check.ok) return res.status(401).json({ error: 'bad_password' });
+    // 403, not 401: the session is fine (the app signs out on any 401 from a signed-in request).
+    if (!check.ok) return res.status(403).json({ error: 'bad_password' });
   }
   const email = normalizeEmail(data.email);
   const summary = { ok: true, removed: true, posts: 0, replies: 0, likes: 0, votes: 0, requests: 0 };

@@ -28,6 +28,9 @@
 تقييمات صفحة الترتيب (`settings/ranking_votes`) وتقارير الأخطاء (`settings/error_log_*`)
 بيكتبهم السيرفر بس، فبعد المرحلة 2 محتاجين مفتاح الخدمة (الخطوة 1) عشان يشتغلوا.
 
+مسح الحساب من جوه التطبيق شغال من غير المرحلة 2: بيفضّي مستند الحساب من أي بيانات شخصية. ومع مفتاح
+الخدمة (الخطوة 1) بيمسح المستند نفسه كمان.
+
 **الرجوع في حالة مشكلة:** انشر محتوى `firestore.rules` (المرحلة 1) تاني من نفس صفحة Rules.
 
 ---
@@ -62,5 +65,7 @@ timed comments, reviews and the community feed keep working everywhere.
 Rankings votes (`settings/ranking_votes`) and crash reports (`settings/error_log_*`) are
 written by the server only, so after step 5 they need the service account from step 1.
 Step 2 can also be checked in the app: developer panel → «الأخطاء» → «حماية الحسابات (المرحلة 2)».
+Account deletion works without phase 2: the account documents are emptied (a tombstone with nothing
+personal); with the service account from step 1 they are deleted as well.
 
 Rollback: re-publish `firestore.rules` (phase 1) in the console.
