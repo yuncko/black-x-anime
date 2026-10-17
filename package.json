@@ -20,7 +20,7 @@
     "lab": "vite --config client/vite.config.js --open /zellige-3d-lab.html",
     "check:ornaments": "node tools/ornament-node-smoke.mjs",
     "test:aniproject": "node --test server/test/aniproject.test.js",
-    "test:servers": "node --test server/test/crossSourceMatch.test.js server/test/cdnCache.test.js server/test/apkApp.test.js server/test/hiddenTitles.test.js server/test/streamEpisodeVip.test.js server/test/animeSchedule.test.js client/test/mobileServers.test.js client/test/webRoutes.test.js client/test/showStatus.test.js client/test/airingSchedule.test.js client/test/downloadQuality.test.js client/test/webUi.test.js client/test/watchParty.test.js client/test/wrappedStats.test.js client/test/nativeAlarms.test.js client/test/sharedLists.test.js client/test/errorReporter.test.js client/test/pageMeta.test.js server/test/rankingVotes.test.js server/test/telemetry.test.js"
+    "test:servers": "node --test server/test/crossSourceMatch.test.js server/test/cdnCache.test.js server/test/apkApp.test.js server/test/hiddenTitles.test.js server/test/streamEpisodeVip.test.js server/test/animeSchedule.test.js client/test/mobileServers.test.js client/test/webRoutes.test.js client/test/showStatus.test.js client/test/airingSchedule.test.js client/test/downloadQuality.test.js client/test/webUi.test.js client/test/watchParty.test.js client/test/wrappedStats.test.js client/test/nativeAlarms.test.js client/test/sharedLists.test.js client/test/errorReporter.test.js client/test/pageMeta.test.js server/test/rankingVotes.test.js server/test/telemetry.test.js server/test/sameOrigin.test.js client/test/publicSite.test.js"
   },
   "dependencies": {
     "@prisma/client": "6.19.2",

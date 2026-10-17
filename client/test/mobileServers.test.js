@@ -248,16 +248,17 @@ test('inside the APK a CORS/network failure is retried through the native HTTP b
   };
   try {
     const { bxApiBase: base, fetchAnimeCatalogTotal } = await import('../src/mobile/bxServers.js');
-    assert.equal(base(), 'https://black-x-anime.me');
+    // the APK calls the public site it was built for (shared/publicSite.js; black-x-anime.me until v18.0)
+    assert.equal(base(), 'https://black-x-anime.ai.studio');
     await withFetch(
       () => {
         throw new TypeError('Failed to fetch');
       },
       async (calls) => {
         assert.equal(await fetchAnimeCatalogTotal(), 7003);
-        assert.equal(calls[0].url, 'https://black-x-anime.me/api/stream/stats');
+        assert.equal(calls[0].url, 'https://black-x-anime.ai.studio/api/stream/stats');
         assert.equal(nativeCalls.length, 1);
-        assert.equal(nativeCalls[0].url, 'https://black-x-anime.me/api/stream/stats');
+        assert.equal(nativeCalls[0].url, 'https://black-x-anime.ai.studio/api/stream/stats');
         assert.equal(nativeCalls[0].method, 'GET');
       }
     );

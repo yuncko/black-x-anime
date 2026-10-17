@@ -92,6 +92,36 @@ export async function mergeCloudLibraryToLocal(userRow, cloudData = null) {
   }
 }
 
+/**
+ * True when `cloud` is the empty record of an account deleted AFTER this local (SQLite) row was
+ * created — the person deleted the account in the app; the row must not bring it back. A row
+ * created after the deletion is a new sign-up with the same name or e-mail.
+ */
+export function isStaleAfterDeletion(userRow, cloud) {
+  if (!userRow || !cloud || cloud.deleted !== true) return false;
+  const deletedAt = Date.parse(String(cloud.deletedAt || ''));
+  // SQLite datetime('now') is UTC without a zone: "2026-10-17 18:04:05".
+  const createdAt = Date.parse(`${String(userRow.created_at || '').trim().replace(' ', 'T')}Z`);
+  if (!Number.isFinite(deletedAt) || !Number.isFinite(createdAt)) return true;
+  return createdAt <= deletedAt;
+}
+
+/** Removes a local row of a deleted account (favorites/progress cascade). Returns true if removed. */
+export async function dropLocalUserIfDeleted(userRow, cloud) {
+  if (!userRow?.id) return false;
+  let record = cloud;
+  if (record === undefined) {
+    record = (userRow.email ? await fetchUserFromCloud(userRow.email) : null) || (await fetchUserFromCloud(userRow.username));
+  }
+  if (!isStaleAfterDeletion(userRow, record)) return false;
+  try {
+    db.prepare('DELETE FROM users WHERE id = ?').run(userRow.id);
+  } catch (err) {
+    console.warn('[cloudSync.dropLocalUserIfDeleted]', err.message);
+  }
+  return true;
+}
+
 export async function syncUserToCloud(userRow, rawPassword = null) {
   if (!userRow || !userRow.username) return;
   const pub = publicUser(userRow);
@@ -100,10 +130,15 @@ export async function syncUserToCloud(userRow, rawPassword = null) {
   let existingCloud = null;
   try {
     existingCloud = (await fetchUserFromCloud(userRow.email)) || (await fetchUserFromCloud(userRow.username));
-    if (existingCloud) {
+    if (existingCloud && existingCloud.deleted !== true) {
       await mergeCloudLibraryToLocal(userRow, existingCloud);
     }
   } catch (_) {}
+  if (existingCloud?.deleted === true) {
+    // Deleted in the app: never write it back from an old local copy.
+    if (await dropLocalUserIfDeleted(userRow, existingCloud)) return;
+    existingCloud = null; // signed up again after deleting: start from nothing
+  }
 
   // Read merged favorites and watch progress from SQLite (`favorites` & `progress` tables)
   let favorites = [];

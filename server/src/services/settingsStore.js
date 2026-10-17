@@ -142,6 +142,21 @@ export async function writeSettingsDoc(id, data, { extraFields = {}, rawFields =
 }
 
 /**
+ * Deletes settings/{id}. Phase-1 rules refuse deletes made with the public API key, so this
+ * only works with FIREBASE_SERVICE_ACCOUNT (IAM) — callers erase the content first and treat
+ * `{ ok: false, denied: true }` as "emptied but still there". `precondition` as in writes.
+ */
+export async function deleteSettingsDoc(id, { precondition = null } = {}) {
+  let query = '';
+  if (precondition?.updateTime) query = `&currentDocument.updateTime=${encodeURIComponent(precondition.updateTime)}`;
+  const { res, data: body } = await request(id, { method: 'DELETE', query });
+  if (res.ok || res.status === 404) return { ok: true, denied: false, conflict: false };
+  if (res.status === 403 || String(body?.error?.status || '') === 'PERMISSION_DENIED') return { ok: false, denied: true, conflict: false };
+  if (precondition && isConflict(res, body)) return { ok: false, denied: false, conflict: true };
+  throw new SettingsStoreError(`firestore_delete_failed (${res.status} ${body?.error?.status || ''})`.trim(), res.status);
+}
+
+/**
  * Read-modify-write with optimistic concurrency. `mutate(current, meta)` gets
  * the parsed document (or null) and returns the next document, or undefined to
  * skip the write (the current value is returned). `extraFields(next)` adds the

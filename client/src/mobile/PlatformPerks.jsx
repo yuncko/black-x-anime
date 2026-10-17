@@ -1,6 +1,7 @@
 import React from 'react';
 import BxIcon from './BxIcon.jsx';
 import { copyText } from './PartyPanel.jsx';
+import { PUBLIC_SITE_ORIGIN } from '../../../shared/publicSite.js';
 
 /**
  * What only the APK or only the website has (2026-10-17). Every line is a feature that
@@ -91,7 +92,8 @@ export const WEB_PERKS = [
   }
 ];
 
-export default function PlatformPerks({ variant, isRtl, apkUrl = '/BLACK-X-Mobile-120Hz.apk', siteUrl = 'https://black-x-anime.me', onToast }) {
+export default function PlatformPerks({ variant, isRtl, apkUrl = '/BLACK-X-Mobile-120Hz.apk', siteUrl = PUBLIC_SITE_ORIGIN, onToast }) {
+  const siteHost = String(siteUrl).replace(/^https?:\/\//, '').replace(/\/+$/, '');
   const apk = variant === 'apk';
   const perks = apk ? APK_PERKS : WEB_PERKS;
   return (
@@ -139,7 +141,11 @@ export default function PlatformPerks({ variant, isRtl, apkUrl = '/BLACK-X-Mobil
             <BxIcon name="copy" />
             {isRtl ? 'انسخ لينك الموقع' : 'Copy the website address'}
           </button>
-          <p className="bx-perks-note">{isRtl ? 'افتح black-x-anime.me من أي متصفح بنفس حسابك.' : 'Open black-x-anime.me in any browser with the same account.'}</p>
+          <p className="bx-perks-note">
+            {isRtl ? 'افتح ' : 'Open '}
+            <bdi dir="ltr">{siteHost}</bdi>
+            {isRtl ? ' من أي متصفح بنفس حسابك.' : ' in any browser with the same account.'}
+          </p>
         </>
       )}
     </div>

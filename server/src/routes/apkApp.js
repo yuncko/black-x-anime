@@ -15,6 +15,7 @@ import {
   readSettingsDoc,
   writeSettingsDoc,
   updateSettingsDoc,
+  deleteSettingsDoc,
   cleanDocKey,
   SettingsStoreError
 } from '../services/settingsStore.js';
@@ -38,11 +39,14 @@ import {
   signApkToken,
   verifyApkToken,
   randomId,
-  generateVipCode
+  generateVipCode,
+  isDeletedAccount,
+  accountTombstone
 } from '../services/apkAccounts.js';
 import { verifyFirebaseGoogleIdToken, DEVELOPER_EMAIL, isAuthConfigured } from '../auth.js';
 import { getSkipTimes } from '../services/aniskip.js';
 import { readErrorLog } from '../services/errorLog.js';
+import { removeVoterVotes, voterKey } from '../services/rankingVotes.js';
 
 const router = Router();
 export const GLOBAL_DOC_ID = 'global_vip_system';
@@ -114,14 +118,15 @@ async function writeMirrors(data, primaryKey) {
     if (key === primaryKey) continue;
     try {
       const current = await readSettingsDoc(key);
-      // Never overwrite a different person's document that happens to share a key.
-      if (current.exists && current.data) {
+      // Never overwrite a different person's document that happens to share a key (a deleted
+      // account's empty document is free again).
+      if (current.exists && current.data && !isDeletedAccount(current.data)) {
         const sameUser =
           (current.data.username && normalizeUsername(current.data.username) === normalizeUsername(data.username)) ||
           (current.data.email && normalizeEmail(current.data.email) === normalizeEmail(data.email));
         if (!sameUser) continue;
       }
-      await writeSettingsDoc(key, data, { extraFields: identityFields(data), rawFields: current.rawFields });
+      await writeSettingsDoc(key, data, { extraFields: identityFields(data), rawFields: isDeletedAccount(current.data) ? {} : current.rawFields });
     } catch (err) {
       console.warn('[apkApp:mirror]', key, err?.message || err);
     }
@@ -187,7 +192,7 @@ async function requireAccount(req, res, next) {
   try {
     const key = cleanDocKey('email', identity.email);
     const doc = await readSettingsDoc(key);
-    if (!doc.exists || !doc.data) return res.status(404).json({ error: 'account_not_synced' });
+    if (!doc.exists || !doc.data || isDeletedAccount(doc.data)) return res.status(404).json({ error: 'account_not_synced' });
     req.apk = { claims: { key, u: doc.data.username, e: identity.email }, key, data: doc.data };
     return next();
   } catch (err) {
@@ -200,7 +205,7 @@ async function optionalApkUser(req) {
   if (!claims) return null;
   try {
     const doc = await readSettingsDoc(claims.key);
-    return doc.exists && doc.data ? { claims, key: claims.key, data: doc.data } : null;
+    return doc.exists && doc.data && !isDeletedAccount(doc.data) ? { claims, key: claims.key, data: doc.data } : null;
   } catch {
     return null;
   }
@@ -365,7 +370,12 @@ router.post('/auth/register', async (req, res) => {
   try {
     const userKey = cleanDocKey('user', username);
     const emailKey = email ? cleanDocKey('email', email) : null;
-    if (emailKey && (await readSettingsDoc(emailKey)).exists) return res.status(409).json({ error: 'email_taken' });
+    // A deleted account's empty document does not keep its name or e-mail taken.
+    const emailDoc = emailKey ? await readSettingsDoc(emailKey) : null;
+    if (emailDoc?.exists && !isDeletedAccount(emailDoc.data)) return res.status(409).json({ error: 'email_taken' });
+    const userDoc = await readSettingsDoc(userKey);
+    if (userDoc.exists && !isDeletedAccount(userDoc.data)) return res.status(409).json({ error: 'username_taken' });
+    const freeDoc = (doc) => (doc?.exists ? { updateTime: doc.updateTime } : { exists: false });
     const state = sanitizeStateInput(req.body?.state || {});
     const now = nowIso();
     const data = {
@@ -389,10 +399,10 @@ router.post('/auth/register', async (req, res) => {
       updatedAt: now,
       source: 'apk-v16'
     };
-    const created = await writeSettingsDoc(userKey, data, { extraFields: identityFields(data), precondition: { exists: false } });
+    const created = await writeSettingsDoc(userKey, data, { extraFields: identityFields(data), precondition: freeDoc(userDoc) });
     if (!created.ok) return res.status(409).json({ error: 'username_taken' });
     if (emailKey) {
-      await writeSettingsDoc(emailKey, data, { extraFields: identityFields(data), precondition: { exists: false } }).catch(() => null);
+      await writeSettingsDoc(emailKey, data, { extraFields: identityFields(data), precondition: freeDoc(emailDoc) }).catch(() => null);
     }
     res.status(201).json(sessionPayload(data, userKey));
   } catch (err) {
@@ -414,7 +424,7 @@ router.post('/auth/login', async (req, res) => {
     const isEmail = identifier.includes('@');
     const key = isEmail ? cleanDocKey('email', identifier) : cleanDocKey('user', identifier);
     const doc = await readSettingsDoc(key);
-    const data = doc.exists ? doc.data : null;
+    const data = doc.exists && !isDeletedAccount(doc.data) ? doc.data : null;
     const identityMatches = data && (isEmail
       ? normalizeEmail(data.email) === identifier
       : !data.username || normalizeUsername(data.username) === identifier);
@@ -464,7 +474,8 @@ router.post('/auth/google', async (req, res) => {
   try {
     const emailKey = cleanDocKey('email', email);
     const existing = await readSettingsDoc(emailKey);
-    let data = existing.exists && existing.data && normalizeEmail(existing.data.email || email) === email ? existing.data : null;
+    const existingDeleted = existing.exists && isDeletedAccount(existing.data);
+    let data = existing.exists && existing.data && !existingDeleted && normalizeEmail(existing.data.email || email) === email ? existing.data : null;
     const state = sanitizeStateInput(req.body?.state || {});
     if (!data) {
       let base = isDev ? 'developer' : email.split('@')[0].toLowerCase().replace(/[^a-z0-9_.-]/g, '').slice(0, 18);
@@ -474,7 +485,7 @@ router.post('/auth/google', async (req, res) => {
       for (let attempt = 0; attempt < 6 && !username; attempt += 1) {
         const candidate = attempt === 0 ? base : `${base.slice(0, 17)}_${Math.random().toString(36).slice(2, 6)}`;
         const doc = await readSettingsDoc(cleanDocKey('user', candidate));
-        if (!doc.exists) username = candidate;
+        if (!doc.exists || isDeletedAccount(doc.data)) username = candidate;
         else if (doc.data && normalizeEmail(doc.data.email) === email) {
           data = doc.data;
           username = candidate;
@@ -503,7 +514,12 @@ router.post('/auth/google', async (req, res) => {
           updatedAt: now,
           source: 'apk-v16'
         };
-        const created = await writeSettingsDoc(emailKey, data, { extraFields: identityFields(data), precondition: { exists: false } });
+        // Signing up again after deleting the account replaces the empty document; anything else
+        // already at this id belongs to someone (ids are cleaned, so two e-mails can share one).
+        const created = await writeSettingsDoc(emailKey, data, {
+          extraFields: identityFields(data),
+          precondition: existingDeleted ? { updateTime: existing.updateTime } : { exists: false }
+        });
         if (!created.ok) return res.status(409).json({ error: 'try_again' });
         await writeMirrors(data, emailKey);
         return res.json(sessionPayload(data, emailKey));
@@ -628,6 +644,124 @@ router.post('/vip/redeem', requireAccount, async (req, res) => {
   } catch (err) {
     sendFailure(res, err, 'redeem');
   }
+});
+
+// ---------------------------------------------------------------- account deletion
+export const FEED_DOC_ID = 'shared_community_feed';
+
+/** The community feed without this person's posts, replies and likes. */
+export function feedWithoutPerson(list, { username, keys }) {
+  if (!Array.isArray(list)) return { list, posts: 0, replies: 0, likes: 0 };
+  const me = normalizeUsername(username);
+  const mine = (item) => Boolean(me && item && item.username && normalizeUsername(item.username) === me);
+  let posts = 0;
+  let replies = 0;
+  let likes = 0;
+  const next = [];
+  for (const post of list) {
+    if (!post || typeof post !== 'object') continue;
+    if (mine(post)) {
+      posts += 1;
+      continue;
+    }
+    let p = post;
+    if (Array.isArray(p.likedBy) && p.likedBy.some((k) => keys.has(String(k)))) {
+      const likedBy = p.likedBy.filter((k) => !keys.has(String(k)));
+      const dropped = p.likedBy.length - likedBy.length;
+      likes += dropped;
+      p = { ...p, likedBy, likes: Math.max(likedBy.length, (Number(p.likes) || 0) - dropped) };
+    }
+    if (Array.isArray(p.replies) && p.replies.some(mine)) {
+      const kept = p.replies.filter((r) => !mine(r));
+      replies += p.replies.length - kept.length;
+      p = { ...p, replies: kept };
+    }
+    next.push(p);
+  }
+  return { list: posts || replies || likes ? next : list, posts, replies, likes };
+}
+
+/**
+ * POST /api/app/account/delete { confirm, password? } — the signed-in person deletes their own
+ * account. Password accounts confirm with the password; Google accounts (already signed in with
+ * Google) by typing their user name. Removed: this person's community posts, replies and likes,
+ * rankings votes, requests to the developer, the user name on VIP code records, and last the
+ * account documents (name, e-mail, password hash, lists, resume positions, VIP). Without
+ * FIREBASE_SERVICE_ACCOUNT the phase-1 rules refuse deletes, so those documents are emptied
+ * instead (`accountTombstone`: nothing personal left) and `removed` is false. Timed comments and
+ * reviews live in one document per title that nobody can list, so they stay (the policy says so).
+ */
+router.post('/account/delete', requireAccount, async (req, res) => {
+  const data = req.apk.data;
+  if (isRateLimited(`delete:${req.apk.key}`, 6, 3600_000)) return tooMany(res);
+  if (isDeveloperIdentity(data)) return res.status(403).json({ error: 'developer_account' });
+  const username = normalizeUsername(data.username);
+  if (!username || normalizeUsername(req.body?.confirm) !== username) return res.status(400).json({ error: 'confirm_mismatch' });
+  const hasPassword = /^\$2[aby]\$/.test(String(data.passBcrypt || '')) || /^[a-f0-9]{64}$/i.test(String(data.passSha256 || ''));
+  if (hasPassword && !data.isGoogleAccount) {
+    const check = await verifyCloudPassword(data, typeof req.body?.password === 'string' ? req.body.password : '');
+    if (!check.ok) return res.status(401).json({ error: 'bad_password' });
+  }
+  const email = normalizeEmail(data.email);
+  const summary = { ok: true, removed: true, posts: 0, replies: 0, likes: 0, votes: 0, requests: 0 };
+  const step = async (name, fn) => {
+    try {
+      await fn();
+    } catch (err) {
+      summary.ok = false;
+      console.warn(`[apkApp:delete:${name}]`, err?.message || err);
+    }
+  };
+  // 1. What other people can see or that names the person (best effort, safe to repeat).
+  await step('feed', async () => {
+    const keys = new Set([data.id, username, email].filter(Boolean).map(String));
+    await updateSettingsDoc(FEED_DOC_ID, (raw) => {
+      const out = feedWithoutPerson(raw, { username, keys });
+      if (out.list === raw) return undefined;
+      Object.assign(summary, { posts: out.posts, replies: out.replies, likes: out.likes });
+      return out.list;
+    }, { extraFields: () => ({ updatedAt: nowIso() }) });
+  });
+  await step('votes', async () => {
+    summary.votes = await removeVoterVotes([voterKey(`u:${username}`), email ? voterKey(`e:${email}`) : '']);
+  });
+  await step('global', async () => {
+    await mutateGlobal((g) => {
+      const userRequests = g.userRequests.filter((r) => normalizeUsername(r.username) !== username);
+      let touched = userRequests.length !== g.userRequests.length;
+      const codes = g.codes.map((c) => {
+        if (!Array.isArray(c?.redeemedBy) || !c.redeemedBy.some((r) => normalizeUsername(r?.username) === username)) return c;
+        touched = true;
+        return { ...c, redeemedBy: c.redeemedBy.map((r) => (normalizeUsername(r?.username) === username ? { ...r, username: '' } : r)) };
+      });
+      summary.requests = g.userRequests.length - userRequests.length;
+      return touched ? { ...g, userRequests, codes } : undefined;
+    }, 'account-deletion');
+  });
+  if (!summary.ok) return res.status(503).json({ error: 'cloud_unavailable', message: 'The account was not deleted — try again.' });
+  // 2. The account documents (the primary one and its mirrors), only where they are this person's.
+  try {
+    const tomb = accountTombstone();
+    for (const key of [...new Set([req.apk.key, ...accountKeys(data)])]) {
+      const cur = await readSettingsDoc(key);
+      if (!cur.exists || isDeletedAccount(cur.data)) continue;
+      const theirs = cur.data && (
+        (cur.data.username && normalizeUsername(cur.data.username) === username) ||
+        (email && cur.data.email && normalizeEmail(cur.data.email) === email)
+      );
+      if (!theirs) continue;
+      const erased = await writeSettingsDoc(key, tomb, {
+        extraFields: { username: '', email: '', updatedAt: tomb.updatedAt },
+        precondition: { updateTime: cur.updateTime }
+      });
+      if (!erased.ok) return res.status(409).json({ error: 'try_again' });
+      const gone = await deleteSettingsDoc(key, { precondition: { updateTime: erased.updateTime } }).catch(() => ({ ok: false }));
+      if (!gone.ok) summary.removed = false;
+    }
+  } catch (err) {
+    return sendFailure(res, err, 'delete');
+  }
+  res.json(summary);
 });
 
 // ---------------------------------------------------------------- developer

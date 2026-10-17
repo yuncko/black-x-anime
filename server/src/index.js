@@ -24,6 +24,8 @@ import { optionalAuth, isAuthConfigured } from './auth.js';
 import { db } from './db.js';
 import { cdnCacheMiddleware } from './lib/cdnCache.js';
 import { getFirestoreAuthStatus, getFirestoreAuthHeaders, isServiceAccountConfigured } from './services/firestoreAuth.js';
+import { PUBLIC_SITE_ORIGIN, LEGACY_SITE_ORIGINS } from '../../shared/publicSite.js';
+import { isSameOriginRequest } from './lib/sameOrigin.js';
 
 // Keep local Node development resilient to client-abort and background-task
 // rejections. Vercel should manage the serverless invocation lifecycle itself.
@@ -66,8 +68,8 @@ const PORT = Number(process.env.PORT) || 3000;
 
 const normalizeOrigin = (value) => String(value || '').trim().replace(/\/+$/, '').toLowerCase();
 const allowedCorsOrigins = new Set([
-  'https://black-x-anime.me',
-  'https://www.black-x-anime.me',
+  PUBLIC_SITE_ORIGIN,
+  ...LEGACY_SITE_ORIGINS,
   'http://localhost',
   'https://localhost',
   'http://localhost:3000',
@@ -92,14 +94,13 @@ app.use((req, res, next) => {
   const origin = req.get('origin');
   if (!origin || allowedCorsOrigins.has(normalizeOrigin(origin))) return next();
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
-    try {
-      const parsedOrigin = new URL(origin);
-      const requestHost = String(req.get('host') || '').toLowerCase();
-      const forwardedProto = String(req.get('x-forwarded-proto') || req.protocol || 'http').split(',')[0].trim().toLowerCase();
-      const isSameOrigin = parsedOrigin.host.toLowerCase() === requestHost &&
-        parsedOrigin.protocol === `${forwardedProto}:`;
-      if (isSameOrigin) return next();
-    } catch { /* malformed origin is rejected below */ }
+    const sameOrigin = isSameOriginRequest(origin, {
+      host: req.get('host'),
+      forwardedHost: req.get('x-forwarded-host'),
+      forwardedProto: req.get('x-forwarded-proto'),
+      protocol: req.protocol
+    });
+    if (sameOrigin) return next();
     return res.status(403).json({ error: 'origin_not_allowed' });
   }
   return next();

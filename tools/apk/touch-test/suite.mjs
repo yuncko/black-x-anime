@@ -783,6 +783,12 @@ scenario('logged', async (browser) => {
   });
   await sleep(800);
   check(G, 'session is checked with /api/app/me', ctx.net.some((n) => n.includes('/api/app/me')));
+  check(
+    G,
+    'the app calls the website at black-x-anime.ai.studio (black-x-anime.me is paused)',
+    ctx.net.some((n) => n.startsWith('GET black-x-anime.ai.studio/api/app/me')) && !ctx.net.some((n) => n.includes('black-x-anime.me')),
+    ctx.net.filter((n) => n.includes('/api/')).slice(0, 3).join(' | ')
+  );
   await tapEl(page, '.bx-avatar-btn', { scroll: false });
   await waitVt(page);
   await sleep(500);
@@ -811,6 +817,28 @@ scenario('logged', async (browser) => {
   const saved = (ctx.fsWrites.map((w) => JSON.parse(w.body.fields?.json?.stringValue || '[]')).at(-1) || [])[0] || {};
   check(G, 'member can post; it appears on top', firstPost.text === 'بوست تجريبي من الاختبار', JSON.stringify(firstPost));
   check(G, 'new post stores createdAt', Boolean(saved.createdAt && !Number.isNaN(Date.parse(saved.createdAt))), saved.createdAt || '');
+
+  // Account deletion: profile → «الخصوصية والأمان» → «مسح الحساب».
+  ctx.deletePassword = 'secret-pass';
+  await tapEl(page, '.bx-avatar-btn', { scroll: false });
+  await waitVt(page);
+  await tapEl(page, 'main .bxp-row', { text: 'الخصوصية والأمان' });
+  await waitVt(page);
+  await tapEl(page, 'main .bxp-row', { text: 'مسح الحساب' });
+  await waitVt(page);
+  await page.waitForFunction(() => Boolean(document.querySelector('.bxp-delete-btn')), { timeout: 6000 }).catch(() => {});
+  const off = await page.evaluate(() => document.querySelector('.bxp-delete-btn')?.disabled === true);
+  await tapEl(page, 'main .bxp-form input:not([type="password"])');
+  await page.keyboard.type('tester', { delay: 10 });
+  await tapEl(page, 'main input[type="password"]');
+  await page.keyboard.type('secret-pass', { delay: 10 });
+  const on = await page.evaluate(() => document.querySelector('.bxp-delete-btn')?.disabled === false);
+  check(G, 'delete account: the button waits for the typed user name', off && on, JSON.stringify({ off, on }));
+  await tapEl(page, '.bxp-delete-btn');
+  await page.waitForFunction(() => !localStorage.getItem('bx_mob_session_v16'), { timeout: 8000 }).catch(() => {});
+  const del = (ctx.accountDeletes || [])[0] || {};
+  const after = await page.evaluate(() => ({ session: Boolean(localStorage.getItem('bx_mob_session_v16')), user: Boolean(localStorage.getItem('bx_mob_user')) }));
+  check(G, '…sends the user name and password to the website, then signs out', del.confirm === 'tester' && del.password === 'secret-pass' && !after.session && !after.user, JSON.stringify({ del, after }));
   check(G, 'no uncaught page errors', ctx.errors.length === 0, ctx.errors.slice(0, 3).join(' | '));
 });
 

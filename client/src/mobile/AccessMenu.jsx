@@ -2,6 +2,7 @@ import React from 'react';
 import BxIcon from './BxIcon.jsx';
 import { openComputerVersion } from './webApp.js';
 import { BX_APK_VERSION, formatBxCount } from './bxServers.js';
+import { PUBLIC_SITE_HOST } from '../../../shared/publicSite.js';
 
 /**
  * AccessMenu: moved out of MobileApkApp.jsx unchanged (2026-10-17 split). It only renders —
@@ -227,7 +228,7 @@ export default function AccessMenu({
             <div style={{ fontWeight: 700, fontSize: '0.8125rem' }}>BLACK X</div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.55)' }}>
               {isWeb
-                ? `black-x-anime.me${bxAnimeTotal ? ` • ${formatBxCount(bxAnimeTotal)} ${isRtl ? 'أنمي' : 'anime'}` : ''}`
+                ? `${PUBLIC_SITE_HOST}${bxAnimeTotal ? ` • ${formatBxCount(bxAnimeTotal)} ${isRtl ? 'أنمي' : 'anime'}` : ''}`
                 : isRtl
                 ? `إصدار ${BX_APK_VERSION}${bxAnimeTotal ? ` • ${formatBxCount(bxAnimeTotal)} أنمي` : ''}`
                 : `Version ${BX_APK_VERSION}${bxAnimeTotal ? ` • ${formatBxCount(bxAnimeTotal)} anime` : ''}`}

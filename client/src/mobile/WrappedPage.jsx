@@ -3,6 +3,7 @@ import BxIcon from './BxIcon.jsx';
 import { coverForMode } from './dataSaver.js';
 import { POSITIONS_MAX, positionEntries } from './resumeStore.js';
 import { MONTHS_AR, MONTHS_EN, hoursText, wrappedStats } from './wrappedStats.js';
+import { PUBLIC_SITE_HOST } from '../../../shared/publicSite.js';
 
 /** The share image (1080×1350, monochrome like the app). Returns a PNG Blob. */
 async function drawCard({ stats, name, isRtl }) {
@@ -83,7 +84,7 @@ async function drawCard({ stats, name, isRtl }) {
   }
   g.fillStyle = 'rgba(255,255,255,0.5)';
   g.font = font(700, 28);
-  g.fillText('black-x-anime.me', W / 2, H - 80);
+  g.fillText(PUBLIC_SITE_HOST, W / 2, H - 80);
   return new Promise((resolve) => c.toBlob((b) => resolve(b), 'image/png'));
 }
 

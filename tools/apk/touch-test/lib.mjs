@@ -405,6 +405,14 @@ function api(req, url, ctx) {
     return json(req, { ok: true });
   }
   if (p === '/api/app/state') return auth ? json(req, { ok: true, state: safeJson(req.postData()) }) : json(req, { error: 'auth_required' }, 401);
+  // Account deletion (profile → privacy & security → delete account): recorded in ctx.accountDeletes.
+  if (p === '/api/app/account/delete' && method === 'POST') {
+    if (!auth) return json(req, { error: 'auth_required' }, 401);
+    const body = safeJson(req.postData()) || {};
+    (ctx.accountDeletes || (ctx.accountDeletes = [])).push(body);
+    if (ctx.deletePassword && body.password !== ctx.deletePassword) return json(req, { error: 'bad_password' }, 401);
+    return json(req, { ok: true, removed: false, posts: 1, replies: 0, likes: 2, votes: 0, requests: 0 });
+  }
   // Crash reports (client/src/errorReporter.js): recorded in ctx.telemetry.
   if (p === '/api/telemetry/error' && method === 'POST') {
     (ctx.telemetry || (ctx.telemetry = [])).push(safeJson(req.postData()) || {});
@@ -428,7 +436,7 @@ function api(req, url, ctx) {
       const at = new Date().toISOString();
       return json(req, {
         days: [
-          { day, dropped: 0, entries: [{ fp: 'abc123', message: "Cannot read properties of undefined (reading 'slug')", stack: 'TypeError: x\n    at openShow (https://black-x-anime.me/assets/index.js:1:2)', kind: 'error', path: '/watch/aw-x/3', platform: 'web', build: 'abc1234', ua: 'Mozilla/5.0', count: 3, firstAt: at, lastAt: at }] },
+          { day, dropped: 0, entries: [{ fp: 'abc123', message: "Cannot read properties of undefined (reading 'slug')", stack: 'TypeError: x\n    at openShow (https://black-x-anime.ai.studio/assets/index.js:1:2)', kind: 'error', path: '/watch/aw-x/3', platform: 'web', build: 'abc1234', ua: 'Mozilla/5.0', count: 3, firstAt: at, lastAt: at }] },
           { day: '20000101', dropped: 0, entries: [] }
         ]
       });
@@ -556,7 +564,8 @@ function route(req, ctx) {
   const raw = req.url();
   if (raw.startsWith('data:') || raw.startsWith('blob:')) return req.continue();
   const url = new URL(raw);
-  // The website build calls its API on the same origin (/api/...), the APK calls black-x-anime.me.
+  // The website build calls its API on the same origin (/api/...); the APK calls the public site
+  // (shared/publicSite.js: black-x-anime.ai.studio since v18.1, black-x-anime.me before).
   if (url.host === `127.0.0.1:${PORT}` && url.pathname.startsWith('/api/')) {
     ctx.net.push(`${req.method()} site${url.pathname}`);
     return api(req, url, ctx);
@@ -565,7 +574,7 @@ function route(req, ctx) {
   if (url.host === 'fonts.googleapis.com') return req.respond({ status: 200, headers: CORS, contentType: 'text/css', body: GOOGLE_FONTS_CSS });
   if (req.method() === 'OPTIONS') return req.respond({ status: 204, headers: CORS });
   ctx.net.push(`${req.method()} ${url.host}${url.pathname}`);
-  if (url.host === 'black-x-anime.me') return api(req, url, ctx);
+  if (url.host === 'black-x-anime.ai.studio' || url.host === 'black-x-anime.me') return api(req, url, ctx);
   if (/algolia(net)?\.(net|com)$/.test(url.host)) {
     const index = decodeURIComponent(url.pathname.split('/')[3] || '');
     const objectPart = url.pathname.split('/')[4] || '';

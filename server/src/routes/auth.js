@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { db } from '../db.js';
 import { hashPassword, verifyPassword, signToken, setAuthCookie, clearAuthCookie, publicUser, requireAuth, requireJwtSecret, DEVELOPER_EMAIL, verifyFirebaseGoogleIdToken } from '../auth.js';
 import { social } from '../lib/socialDb.js';
-import { syncUserToCloud, fetchUserFromCloud, syncAllLocalUsersToCloud } from '../services/cloudSync.service.js';
+import { syncUserToCloud, fetchUserFromCloud, syncAllLocalUsersToCloud, dropLocalUserIfDeleted } from '../services/cloudSync.service.js';
 import { verifyCloudPassword } from '../services/apkAccounts.js';
 
 const router = Router();
@@ -98,6 +98,8 @@ router.post('/login', requireJwtSecret, async (req, res) => {
   if (user && (user.email?.toLowerCase() === DEVELOPER_EMAIL || user.role === 'developer')) {
     return res.status(401).json({ error: 'google_sign_in_required', message: 'Use verified Google sign-in for this account.' });
   }
+  // The account may have been deleted in the app after this server copied it.
+  if (user && (await dropLocalUserIfDeleted(user).catch(() => false))) user = null;
 
   // If user registered on the Android APK, pull their account from shared Cloud Firestore
   if (!user) {
@@ -167,6 +169,8 @@ router.post('/google', requireJwtSecret, async (req, res) => {
   const safeBio = typeof bio === 'string' ? bio.trim().slice(0, 200) : '';
 
   let user = db.prepare('SELECT * FROM users WHERE LOWER(email) = ?').get(email);
+  // Deleted in the app since this server copied it: signing in again starts a new account.
+  if (user && (await dropLocalUserIfDeleted(user).catch(() => false))) user = null;
 
   if (!user) {
     let baseUsername = String(customUsername || email.split('@')[0] || 'user')

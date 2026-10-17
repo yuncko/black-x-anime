@@ -84,7 +84,7 @@ export function apiErrorMessage(err, lang = 'ar') {
     network: 'مفيش اتصال بالسيرفر — اتأكد من النت',
     timeout: 'السيرفر اتأخر في الرد — جرّب تاني',
     cloud_unavailable: 'خدمة الحسابات مش متاحة دلوقتي — جرّب بعد شوية',
-    auth_unavailable: 'تسجيل الدخول متوقف مؤقتاً على السيرفر',
+    auth_unavailable: 'تسجيل الدخول مش شغال على السيرفر لسه — صاحب الموقع لازم يضيف JWT_SECRET في إعدادات الاستضافة',
     auth_required: 'سجّل الدخول الأول',
     account_missing: 'الجلسة انتهت — سجّل الدخول تاني',
     bad_credentials: 'اسم المستخدم أو كلمة المرور غلط',
@@ -106,12 +106,20 @@ export function apiErrorMessage(err, lang = 'ar') {
     forbidden: 'الصلاحية دي للمطور بس',
     account_not_found: 'مفيش حساب بالاسم ده',
     invalid_photo: 'الصورة كبيرة أو صيغتها مش مدعومة',
-    try_again: 'حصلت مشكلة — جرّب تاني'
+    try_again: 'حصلت مشكلة — جرّب تاني',
+    confirm_mismatch: 'اسم المستخدم اللي كتبته مش مطابق لحسابك',
+    bad_password: 'كلمة المرور غلط',
+    developer_account: 'حساب المطور مايتمسحش من هنا',
+    account_not_synced: 'الحساب ده مش متسجل على السيرفر'
   };
   const en = {
     network: 'No connection to the server',
     timeout: 'The server took too long — try again',
     cloud_unavailable: 'The account service is unavailable right now',
+    auth_unavailable: 'Sign-in is not set up on this server yet — the site owner must add JWT_SECRET in the hosting settings',
+    confirm_mismatch: 'The user name you typed does not match your account',
+    bad_password: 'Wrong password',
+    developer_account: 'The developer account cannot be deleted here',
     bad_credentials: 'Wrong username or password',
     google_sign_in_required: 'This account signs in with Google only',
     username_taken: 'That username is taken',
@@ -168,6 +176,10 @@ export const pushAccountState = (state) => apkRequest('PUT', '/api/app/state', {
 export const updateAccountProfile = (patch) => apkRequest('PUT', '/api/app/profile', { auth: true, body: patch });
 
 export const redeemVipCode = (code) => apkRequest('POST', '/api/app/vip/redeem', { auth: true, body: { code } });
+
+/** Deletes the signed-in account (server/src/routes/apkApp.js). `password` only for password accounts. */
+export const deleteAccount = ({ confirm, password }) =>
+  apkRequest('POST', '/api/app/account/delete', { auth: true, body: { confirm, ...(password ? { password } : {}) }, timeoutMs: 30000 });
 
 export const sendDeveloperRequest = (type, text) =>
   apkRequest('POST', '/api/app/requests', { auth: hasSession(), body: { type, text } }).catch((err) => {

@@ -10,24 +10,26 @@
  * whenever a rebuilt APK is committed. `minSupported` marks older builds that can
  * no longer work (they get a non-dismissible banner).
  */
+import { PUBLIC_SITE_ORIGIN } from './publicSite.js';
+
 export const APK_RELEASE = Object.freeze({
-  version: '18.0',
+  version: '18.1',
   minSupported: '15.0',
-  url: 'https://black-x-anime.me/BLACK-X-Mobile-120Hz.apk',
+  url: `${PUBLIC_SITE_ORIGIN}/BLACK-X-Mobile-120Hz.apk`,
   publishedAt: '2026-10-17',
   notesAr: Object.freeze([
-    'تذكير بميعاد عرض حلقات الأعمال اللي بتتابعها حتى والتطبيق مقفول',
-    'حفلة المشاهدة اتعملت من جديد: بتفتح حلقة صاحب الغرفة، والفيديو بيمشي معاه، وشات ورياكشن حقيقيين',
-    'توفير البيانات ممكن يشتغل لوحده على باقة الموبايل («على الداتا»)',
-    'مؤقت النوم ظاهر فوق المشغل، وتلغيه بلمسة',
-    'صفحة «على الموقع بس» بتقولك الموقع فيه إيه زيادة'
+    'التطبيق بقى بيكلّم عنوان الموقع الجديد black-x-anime.ai.studio — الدخول والمزامنة رجعوا يشتغلوا',
+    'تقدر تمسح حسابك بنفسك: حسابي ← الخصوصية والأمان ← مسح الحساب',
+    'البوستات واللايكات والردود مابقتش تضيع لو اتنين كتبوا في نفس اللحظة',
+    'سياسة الخصوصية وشروط الاستخدام في حسابي ← عن BLACK X',
+    'لوحة المطور اتعملت من جديد وفيها تقارير الأعطال'
   ]),
   notesEn: Object.freeze([
-    'Air-time reminders for the titles you follow, even while the app is closed',
-    'Watch parties rebuilt: you open the host’s episode, the video follows the host, with a real chat and reactions',
-    'Data saver can turn itself on over mobile data («Mobile data»)',
-    'The sleep timer shows above the player and is cancelled with one tap',
-    'A «Website only» page lists what the website adds'
+    'The app now talks to the new website address black-x-anime.ai.studio — sign-in and sync work again',
+    'You can delete your account yourself: Profile → Privacy & security → Delete account',
+    'Posts, likes and replies are no longer lost when two people write at the same moment',
+    'Privacy policy and terms of use under Profile → About',
+    'Rebuilt developer panel with crash reports'
   ])
 });
 

@@ -5,15 +5,17 @@
  * with its own server list. When a title was missing it silently loaded the
  * chapters of an unrelated series, and broken pages were swapped for random
  * AniList covers. Since v15 every anime and manga server call goes through the
- * same public BLACK X API the website uses (https://black-x-anime.me/api), so
+ * same public BLACK X API the website uses (shared/publicSite.js; since v18.1
+ * https://black-x-anime.ai.studio/api, before that black-x-anime.me), so
  * the app and the website always list the same servers, episodes, chapters and
  * pages. Nothing here invents data: unknown values stay empty.
  */
 import { getServerUrl, isNativeApk } from '../api.js';
 import { APK_RELEASE, compareVersions } from '../../../shared/apkRelease.js';
+import { PUBLIC_SITE_ORIGIN } from '../../../shared/publicSite.js';
 import { ANILIST_GENRE_NOT_IN, ANILIST_TAG_NOT_IN, isHiddenAnime, isHiddenManga } from './contentFilter.js';
 
-export const BX_PUBLIC_ORIGIN = 'https://black-x-anime.me';
+export const BX_PUBLIC_ORIGIN = PUBLIC_SITE_ORIGIN;
 export const BX_APK_FILE_NAME = 'BLACK-X-Mobile-120Hz.apk';
 export const BX_APK_DOWNLOAD_URL = `${BX_PUBLIC_ORIGIN}/${BX_APK_FILE_NAME}`;
 // The version this APK was built as (the server reports the latest one in /api/app/config).
