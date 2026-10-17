@@ -114,6 +114,18 @@ test('two votes at the same moment both count; voting again replaces your vote',
   assert.deepEqual(votes.statsFor(await votes.loadRankingVotes({ fresh: true }), 5114), { votes: 2, avgScore: 8 });
 });
 
+test('caps: titles that left the rankings make room; the document stays under 1 MiB', async () => {
+  reset();
+  const k = votes.voterKey('u:cap');
+  for (let i = 1; i <= votes.MAX_TITLES; i += 1) await votes.castRankingVote(100000 + i, k, 7);
+  await assert.rejects(votes.castRankingVote(5114, k, 9), /too_many_titles/);
+  // with the current list known, old titles are dropped and the vote goes in
+  const stats = await votes.castRankingVote(5114, k, 9, { keepIds: [5114, 9253, 100001] });
+  assert.deepEqual(stats, { votes: 1, avgScore: 9 });
+  assert.deepEqual(Object.keys(stored().titles).sort(), ['100001', '5114']);
+  assert.ok(votes.MAX_TITLES * votes.MAX_VOTERS_PER_TITLE * 25 < 1024 * 1024);
+});
+
 test('POST /rankings/rate: an account is required and only ranked titles can be voted on', async () => {
   reset();
   // no account: refused (up to 2026-10-17 every anonymous vote was a new row)

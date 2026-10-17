@@ -1151,6 +1151,7 @@ scenario('bundle', async (browser) => {
   const rk = await page.evaluate(() => [...document.querySelectorAll('.bx-rank-row')].map((r) => r.innerText.replace(/\s+/g, ' ').trim()));
   check(G, '/rankings: the app\'s ranking page (AniList average on every row)', rk.length === 6 && rk[0].includes('Test Anime 3') && /\b9\b/.test(rk[0]) && /AniList/.test(rk[0]), rk.slice(0, 2).join(' | '));
   check(G, '…BLACK X votes only where someone voted', /4 صوت على BLACK X/.test(rk[1] || '') && !/صوت/.test(rk[0] || '') && !/صوت/.test(rk[2] || ''), rk.slice(0, 3).join(' | '));
+  check(G, '…members\' average on the 10-point scale (85 from the API → 8.5)', /8\.5\s*4 صوت/.test(rk[1] || '') && !/\b85\b/.test(rk[1] || ''), rk[1]);
   await clickEl(page, '.bx-rank-row', { text: 'Test Anime 5' });
   await waitFor(page, () => Boolean(document.querySelector('.bx-details-sheet')), null, 8000);
   check(G, '…a row opens that title on BLACK X', /Test Anime 5/.test(await detailsTitle(page)), await detailsTitle(page));
@@ -1262,6 +1263,181 @@ scenario('bundle', async (browser) => {
   await waitFor(page, () => /ملخصك السنوي/.test(document.querySelector('.app-shell')?.innerText || ''), null, 12000);
   const classic = await page.evaluate(() => document.querySelector('.app-shell')?.innerText || '');
   check(G, 'classic «ملخص 2026»: no «TOP 1%», levels or fixed genre — a link to «ملخصك»', /ملخصك السنوي/.test(classic) && !/TOP 1%|Dark Fantasy|ZIAD AL SHAFY/.test(classic));
+  await page.close();
+});
+
+/* ============================================================ close-out (2026-10-17) */
+// Community writes from two browsers (precondition updates, client/src/mobile/sharedLists.js),
+// the privacy policy / terms, the redesigned developer panel, crash reports and the SEO files.
+scenario('closeout', async (browser) => {
+  const G = 'closeout';
+  let page;
+  let ctx;
+  const until = async (fn, timeout = 10000) => {
+    const end = Date.now() + timeout;
+    while (Date.now() < end) {
+      if (fn()) return true;
+      await sleep(150);
+    }
+    return Boolean(fn());
+  };
+  const person = (id, name, extra = {}) => ({ id: `u_${id}`, username: id, displayName: name, email: `${id}@example.com`, role: 'user', ...extra });
+  const sessionOf = (user) => ({
+    bx_mob_session_v16: { token: `test-session-token-${user.username}-0123456789abcdef`, savedAt: Date.now() },
+    bx_mob_user: { vipTier: 'free', ...user }
+  });
+  const mainText = (pg) => pg.evaluate(() => document.querySelector('main')?.innerText || '');
+  // localStorage is shared by every page of one browser: sign the seeded person out again.
+  const clearStorage = async (br) => {
+    const pg = await br.newPage();
+    await pg.goto(`${LOCAL}/__blank`, { waitUntil: 'domcontentloaded' });
+    await pg.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+    await pg.close();
+  };
+
+  // ---- community: two people write at the same moment, nothing is lost
+  const fs = new Map();
+  const fsTimes = new Map();
+  fs.set('settings/shared_community_feed', {
+    json: {
+      stringValue: JSON.stringify([
+        { id: 'post_z', author: 'Kai', username: 'kai', role: 'user', category: 'discussion', isSpoiler: false, createdAt: new Date(Date.now() - 60e3).toISOString(), time: '', text: 'بوست للايكات', likes: 0, likedBy: [], replies: [] }
+      ])
+    }
+  });
+  const feedNow = () => JSON.parse(fs.get('settings/shared_community_feed')?.json?.stringValue || '[]');
+  const alice = person('alice', 'Alice');
+  const bob = person('bob', 'Bob');
+  const browser2 = await launch();
+  const a = await openWeb(browser, { route: '/community', seed: sessionOf(alice), ctx: { fs, fsTimes, userPatch: alice } });
+  const b = await openWeb(browser2, { route: '/community', seed: sessionOf(bob), ctx: { fs, fsTimes, userPatch: bob } });
+  for (const x of [a, b]) await waitFor(x.page, () => Boolean(document.querySelector('.bx-composer textarea')) && /بوست للايكات/.test(document.querySelector('main')?.innerText || ''), null, 15000);
+  await a.page.type('.bx-composer textarea', 'بوست من أليس');
+  await b.page.type('.bx-composer textarea', 'بوست من بوب');
+  await Promise.all([tapEl(a.page, '.bx-composer button[type="submit"]'), tapEl(b.page, '.bx-composer button[type="submit"]')]);
+  const both = await until(() => {
+    const t = feedNow().map((x) => x.text).join('|');
+    return /بوست من أليس/.test(t) && /بوست من بوب/.test(t) && /بوست للايكات/.test(t);
+  }, 15000);
+  check(G, 'two posts sent at the same moment from two browsers are both saved (and the old one kept)', both, feedNow().map((x) => x.text).join(' | '));
+  for (const x of [a, b]) {
+    await x.page.evaluate(() => {
+      const post = [...document.querySelectorAll('.bx-post')].find((el) => /بوست للايكات/.test(el.innerText));
+      post?.querySelector('.bx-post-act')?.setAttribute('data-test-like', '1');
+    });
+  }
+  await Promise.all([tapEl(a.page, '[data-test-like]'), tapEl(b.page, '[data-test-like]')]);
+  const liked = await until(() => {
+    const z = feedNow().find((x) => x.id === 'post_z');
+    return Boolean(z && z.likes === 2 && z.likedBy.length === 2);
+  }, 15000);
+  check(G, 'two likes at the same moment on one post count 2', liked, JSON.stringify(feedNow().find((x) => x.id === 'post_z') || {}).slice(0, 160));
+  await a.page.reload({ waitUntil: 'domcontentloaded' });
+  const seen = await waitFor(a.page, () => /بوست من بوب/.test(document.querySelector('main')?.innerText || '') && /بوست من أليس/.test(document.querySelector('main')?.innerText || ''), null, 15000);
+  check(G, '…and everyone sees both posts', seen, (await mainText(a.page)).slice(0, 120));
+  check(G, 'no page errors (two-browser community)', a.ctx.errors.length === 0 && b.ctx.errors.length === 0, [...a.ctx.errors, ...b.ctx.errors].slice(0, 3).join(' | '));
+  await a.page.close();
+  await b.page.close();
+  await browser2.close().catch(() => {});
+  await clearStorage(browser);
+
+  // ---- privacy policy and terms (app interface)
+  ({ page, ctx } = await openWeb(browser, { route: '/privacy' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bx-legal')), null, 10000);
+  check(G, '/privacy opens the privacy policy page', (await topTitle(page)) === 'سياسة الخصوصية' && (await page.evaluate(() => document.querySelectorAll('.bx-legal-section').length)) >= 8, await topTitle(page));
+  check(G, '…dated, in Arabic, right to left', await page.evaluate(() => /آخر تحديث/.test(document.querySelector('.bx-legal-updated')?.innerText || '') && document.querySelector('.bx-legal')?.getAttribute('dir') === 'rtl'));
+  check(G, '…the browser tab says so', (await page.title()).startsWith('سياسة الخصوصية'), await page.title());
+  await tapEl(page, '.bx-legal-footer .bxp-row', { text: 'شروط الاستخدام' });
+  await waitFor(page, () => document.querySelector('.bx-legal')?.getAttribute('data-legal') === 'terms', null, 6000);
+  check(G, '…links to the terms, at /terms', (await topTitle(page)) === 'شروط الاستخدام' && (await here(page)) === '/terms', `${await topTitle(page)} ${await here(page)}`);
+  check(G, 'no page errors (legal pages)', ctx.errors.length === 0, ctx.errors.slice(0, 3).join(' | '));
+  await page.close();
+  ({ page, ctx } = await openWeb(browser, { route: '/profile' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bxp.is-root')), null, 10000);
+  const legalRows = await page.evaluate(() => [...document.querySelectorAll('.bxp-row')].map((r) => r.innerText.trim()).filter((t) => /سياسة الخصوصية|شروط الاستخدام/.test(t)));
+  check(G, 'profile: «عن BLACK X» has the privacy policy and the terms', legalRows.length === 2, legalRows.join(' | '));
+  await page.close();
+  ({ page, ctx } = await openWeb(browser, { route: '/profile/privacy' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bxp.is-sub')), null, 10000);
+  check(G, '/profile/privacy is still the privacy & security settings', (await topTitle(page)) === 'الخصوصية والأمان', await topTitle(page));
+  await page.close();
+  ({ page, ctx } = await openWeb(browser, { route: '/profile/signin' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bxp-consent')), null, 10000);
+  check(G, 'sign in: the consent line links the terms and the policy', (await page.evaluate(() => document.querySelectorAll('.bxp-consent .bxp-link').length)) === 2);
+  await tapEl(page, '.bxp-consent .bxp-link', { text: 'سياسة الخصوصية' });
+  await waitFor(page, () => document.querySelector('.bx-legal')?.getAttribute('data-legal') === 'policy', null, 6000);
+  check(G, '…and a tap opens the policy', (await topTitle(page)) === 'سياسة الخصوصية', await topTitle(page));
+  await page.close();
+  // classic website pages
+  ({ page, ctx } = await openWeb(browser, { route: '/privacy', phone: false, ui: 'site' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bx-legal-page .bx-legal-title')), null, 12000);
+  check(G, 'classic website: /privacy is the same policy', /سياسة الخصوصية/.test(await page.evaluate(() => document.querySelector('.bx-legal-title')?.innerText || '')));
+  check(G, '…and its footer links both pages', await page.evaluate(() => Boolean(document.querySelector('footer a[href="/privacy"]') && document.querySelector('footer a[href="/terms"]'))));
+  check(G, 'no page errors (classic legal page)', ctx.errors.length === 0, ctx.errors.slice(0, 3).join(' | '));
+  await page.close();
+  await clearStorage(browser); // forget the classic-pages choice (bx_web_ui_v2)
+
+  // ---- developer panel (developer session only)
+  const dev = { id: 'u_dev', username: 'blackx', displayName: 'BLACK X', email: 'mz0970mmz@gmail.com', role: 'developer', isDeveloper: true, vipTier: 'vip_monarch' };
+  ({ page, ctx } = await openWeb(browser, { route: '/profile', seed: sessionOf(dev), ctx: { developer: true, userPatch: dev } }));
+  await waitFor(page, () => [...document.querySelectorAll('.bxp-row')].some((r) => /لوحة المطور/.test(r.innerText)), null, 12000);
+  await tapEl(page, '.bxp-row', { text: 'لوحة المطور' });
+  await waitFor(page, () => Boolean(document.querySelector('.bxp-devpanel')) && /BX-MON-TEST-CODE/.test(document.querySelector('.bxp-devpanel')?.innerText || ''), null, 10000);
+  const shape = await page.evaluate(() => ({
+    stats: document.querySelectorAll('.bxp-dev-stats > button').length,
+    tabs: document.querySelectorAll('.bxp-dev-tabs [role="radio"]').length,
+    inline: document.querySelectorAll('.bxp-devpanel [style]').length
+  }));
+  check(G, 'developer panel: profile-hub design (4 stats, 5 tabs, no inline styles)', shape.stats === 4 && shape.tabs === 5 && shape.inline === 0, JSON.stringify(shape));
+  check(G, '…the codes from the server are listed', /BX-MON-TEST-CODE/.test(await page.evaluate(() => document.querySelector('.bxp-devpanel')?.innerText || '')));
+  await tapEl(page, '.bxp-dev-tabs [role="radio"]', { text: 'الطلبات' });
+  await waitFor(page, () => /الحلقة 3 مش شغالة/.test(document.querySelector('.bxp-devpanel')?.innerText || ''), null, 4000);
+  check(G, '…requests tab: members\' requests', /الحلقة 3 مش شغالة/.test(await page.evaluate(() => document.querySelector('.bxp-devpanel')?.innerText || '')));
+  await tapEl(page, '.bxp-dev-tabs [role="radio"]', { text: 'الأخطاء' });
+  await waitFor(page, () => /Cannot read properties/.test(document.querySelector('.bxp-devpanel')?.innerText || '') && /المفتاح العام/.test(document.querySelector('.bxp-devpanel')?.innerText || ''), null, 8000);
+  const errText = await page.evaluate(() => document.querySelector('.bxp-devpanel')?.innerText || '');
+  check(G, '…errors tab: the crash reports with their count', /Cannot read properties/.test(errText) && /3×/.test(errText), errText.slice(0, 160));
+  check(G, '…and the phase-2 status from /api/health', /حماية الحسابات \(المرحلة 2\)/.test(errText) && /المفتاح العام/.test(errText));
+  check(G, 'no page errors (developer panel)', ctx.errors.length === 0, ctx.errors.slice(0, 3).join(' | '));
+  await page.close();
+  await clearStorage(browser);
+  ({ page, ctx } = await openWeb(browser, { route: '/profile' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bxp.is-root')), null, 10000);
+  check(G, 'a normal visitor has no developer row', await page.evaluate(() => ![...document.querySelectorAll('.bxp-row')].some((r) => /لوحة المطور/.test(r.innerText))));
+  await page.close();
+
+  // ---- crash reports (thrown from a page script: errors from DevTools-evaluated code reach
+  // window.onerror as a muted «Script error.», which the reporter ignores on purpose)
+  const pageScript = (pg, code) =>
+    pg.evaluate((c) => {
+      const el = document.createElement('script');
+      el.textContent = c;
+      document.head.appendChild(el);
+    }, code);
+  ({ page, ctx } = await openWeb(browser, { route: '/trending' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bx-dock')), null, 10000);
+  await pageScript(page, "setTimeout(function () { throw new Error('bx test crash 7'); }, 0);");
+  await until(() => (ctx.telemetry || []).length > 0, 5000);
+  const rep = (ctx.telemetry || [])[0] || {};
+  check(G, 'a crash sends one anonymous report', (ctx.telemetry || []).length === 1 && /bx test crash/.test(rep.message || ''), JSON.stringify(rep).slice(0, 160));
+  check(G, '…page path only, platform web, no account in it', rep.path === '/trending' && rep.platform === 'web' && !/tester|@example/.test(JSON.stringify(rep)), JSON.stringify(rep).slice(0, 200));
+  await pageScript(page, "setTimeout(function () { throw new Error('bx test crash 8'); }, 0); Promise.reject(new Error('Failed to fetch'));");
+  await sleep(1000);
+  check(G, '…the same error again and network drops send nothing more', (ctx.telemetry || []).length === 1, String((ctx.telemetry || []).length));
+  await page.close();
+
+  // ---- SEO files and the page description
+  const robots = await (await fetch(`${LOCAL}/robots.txt`)).text();
+  check(G, 'robots.txt: keeps crawlers off /api and the player, points to the sitemap', /Disallow: \/api\//.test(robots) && /Disallow: \/watch\//.test(robots) && /Sitemap: https:\/\/black-x-anime\.me\/sitemap\.xml/.test(robots), robots.slice(0, 120));
+  const sitemap = await (await fetch(`${LOCAL}/sitemap.xml`)).text();
+  check(G, 'sitemap.xml lists the main pages and the legal pages', /<loc>https:\/\/black-x-anime\.me\/trending<\/loc>/.test(sitemap) && /\/privacy<\/loc>/.test(sitemap) && /\/terms<\/loc>/.test(sitemap), sitemap.slice(0, 80));
+  ({ page, ctx } = await openWeb(browser, { route: '/discover' }));
+  await waitFor(page, () => document.title.startsWith('المواعيد'), null, 8000);
+  const meta = await page.evaluate(() => ({ title: document.title, desc: document.querySelector('meta[name="description"]')?.content || '' }));
+  check(G, 'every tab has its own title; the description has no old «Prediction Engine» claim', meta.title === 'المواعيد — BLACK X' && /الأنمي والمانجا/.test(meta.desc) && !/Prediction/.test(meta.desc), JSON.stringify(meta));
   await page.close();
 });
 

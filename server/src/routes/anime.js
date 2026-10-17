@@ -84,11 +84,11 @@ router.post('/rankings/rate', optionalAuth, async (req, res) => {
     if (!top.some((item) => Number(item.id) === id)) {
       return res.status(400).json({ error: 'not_ranked', message: 'Only titles on the rankings can be rated' });
     }
-    const stats = await castRankingVote(id, voterKey(identity), score);
+    const stats = await castRankingVote(id, voterKey(identity), score, { keepIds: top.map((item) => item.id) });
     res.json({ ok: true, stats });
   } catch (err) {
     console.error('[anime/rankings/rate]', err.message);
-    if (err.message === 'title_full' || err.message === 'too_many_titles') {
+    if (err.message === 'title_full' || err.message === 'too_many_titles' || err.message === 'votes_full') {
       return res.status(409).json({ error: err.message, message: 'Voting is full for this title' });
     }
     res.status(503).json({ error: 'votes_unavailable', message: 'Could not save the vote, try again later' });

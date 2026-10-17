@@ -134,37 +134,41 @@ All passwords: `blackx2026`
 | `raven`  |       |
 | `yuki`   |       |
 
-## Deploy — free hosting (2026)
+## Deploy
 
-### ⭐ Render.com (free, no credit card) — recommended
+### Vercel — what black-x-anime.me runs on
 
-1. Push this repo to GitHub (see below).
-2. On [render.com](https://render.com) → **New → Blueprint** → connect the repo.
-   The included `render.yaml` configures everything (or use **New → Web Service**,
-   runtime Node, build `npm install && npm run build`, start `npm start`).
-3. Deploy. Free plan: 750 hrs/month, sleeps after 15 min idle (≈60 s cold start).
-4. `JWT_SECRET` is auto-generated (Blueprint) — or set it in Environment.
+Import the repo — `vercel.json` builds the client (`client/dist`) and serves the API from
+`api/index.js` (one serverless function). Environment variables (**Project → Settings →
+Environment Variables**):
 
-### Railway (free $5 trial credit, no card)
+| variable | needed | what for |
+| -------- | ------ | -------- |
+| `JWT_SECRET` | yes | random, 32+ characters; sign-in is off without it |
+| `FIREBASE_SERVICE_ACCOUNT` | for phase 2 | server access to Firestore with IAM — see `docs/firestore-phase2.md` |
 
-**New Project → Deploy from GitHub repo** — build `npm install && npm run build`,
-start `npm start`. Add env `JWT_SECRET` (random, 32+ characters) — it is required in production.
+After a deploy check `/api/health`, `/api/anime/trending` and `/api/stream/latest`.
+The Hobby plan has monthly limits (data transfer, function time); when they are used up
+Vercel pauses the whole project until the next cycle or an upgrade.
 
-### Vercel
+### Other hosts (local testing, or a self-managed server)
 
-Import the repo — `vercel.json` builds the client and serves the API from `api/index.js`.
-Set `JWT_SECRET` (random, 32+ characters) in **Project → Settings → Environment Variables**.
-
-### Any Docker host
+The Express server runs anywhere Node 22 runs (`npm install && npm run build`, then
+`npm start`), or with Docker:
 
 ```bash
 docker build -t black-x .
 docker run -p 4001:4001 -e JWT_SECRET="$(openssl rand -base64 48)" black-x
 ```
 
-> **Note on persistence:** free tiers have ephemeral disks — a redeploy wipes the
-> SQLite DB and the app reseeds itself automatically. Favorites/progress survive
-> normal restarts, not redeploys. (On Render the disk survives sleep/wake cycles.)
+`render.yaml` is a Render Blueprint, but Render's free plan (2026) has only 5 GB of
+bandwidth a month and sleeps after 15 minutes idle — too small for the live site.
+Static-only hosts (Netlify, GitHub Pages) cannot run the API: the site would load
+without data, sign-in or video.
+
+> **Note on persistence:** SQLite lives on the server's disk, which is temporary on
+> serverless and free hosts (on Vercel: per instance, in `/tmp`). Accounts, VIP, the app's
+> community feed, rankings votes and crash reports are kept in Firestore for that reason.
 
 ## Push to GitHub
 
@@ -183,7 +187,10 @@ GET  /api/health
 GET  /api/stream/latest | /search?q= | /show/:slug | /episode/:slug/:ep
 POST /api/stream/resolve            { slug, episode, entryId }
 GET  /api/stream/proxy?url=…        Range-capable video proxy (host-allowlisted)
-GET  /api/anime/trending | /season
+GET  /api/anime/trending | /season | /rankings      POST /api/anime/rankings/rate (signed in)
+POST /api/telemetry/error           anonymous crash report (see client/src/errorReporter.js)
+GET  /api/app/config                APK / app interface: release, VIP gate, broadcast
+GET  /api/app/admin/errors          developer only: crash reports of the last days
 GET  /api/auth/me   POST /api/auth/login | /register   POST /api/auth/logout
 GET/PUT/DELETE /api/library/favorites[/:slug]
 GET/PUT /api/library/progress/:slug/:ep   GET /api/library/continue
