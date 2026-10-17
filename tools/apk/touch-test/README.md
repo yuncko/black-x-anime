@@ -24,7 +24,7 @@ server answers video `Range` requests with 206 (without that every seek restarts
 Taps and swipes are CDP touch events (`page.touchscreen`), never `element.click()`, because the
 v16.0 bug (no tab could be scrolled by finger) passed every mouse/JS-click check.
 
-Scenarios (210 checks): `nav` (dock, finger scroll on pages and rails, directional view
+Scenarios (213 checks): `nav` (dock, finger scroll on pages and rails, directional view
 transitions, avatar → profile, menu, long press → quick peek, language switch), `search` (grid,
 typing, recent searches, filter sheet), `catalog` ("load more" stops at Algolia's pagination
 limit with a note instead of a dead button; the mock caps paging like `paginationLimitedTo`), `genres` (Ecchi,
@@ -60,7 +60,7 @@ ONLY=links,back bash tools/apk/touch-test/run-web.sh    # some scenarios
 DIST=/path/to/website/build bash tools/apk/touch-test/run-web.sh
 ```
 
-`web-suite.mjs` (269 checks) opens the **website build** with the same mocks (`openWeb()` in `lib.mjs`:
+`web-suite.mjs` (278 checks) opens the **website build** with the same mocks (`openWeb()` in `lib.mjs`:
 the site's same-origin `/api/*` goes to the mock, Google Fonts are answered with the bundled fonts so
 Arabic renders in screenshots). A 412×915 touch phone with a phone browser user agent, or a 1440×900
 computer with a mouse; since 2026-10-17 both get the app interface. Scenarios: `boot` (phone and
