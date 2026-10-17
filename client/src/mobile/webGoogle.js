@@ -52,7 +52,14 @@ export function webGoogleErrorMessage(err, lang = 'ar') {
   if (code === 'auth/popup-blocked') {
     return ar ? 'المتصفح منع نافذة جوجل — اسمح بالنوافذ المنبثقة وجرّب تاني' : 'The browser blocked the Google window — allow pop-ups and try again';
   }
-  if (code === 'auth/unauthorized-domain' || code === 'auth/operation-not-supported-in-this-environment') {
+  if (code === 'auth/unauthorized-domain') {
+    // The address is missing from Firebase → Authentication → Settings → Authorized domains.
+    const host = typeof window !== 'undefined' ? window.location.hostname : '';
+    return ar
+      ? `الدخول بجوجل لسه مش متفعّل على العنوان ده (${host}) — ادخل باسم المستخدم دلوقتي`
+      : `Google sign-in is not enabled for this address (${host}) yet — use your username for now`;
+  }
+  if (code === 'auth/operation-not-supported-in-this-environment') {
     return ar ? 'الدخول بجوجل مش متاح من الصفحة دي — ادخل باسم المستخدم' : 'Google sign-in is not available on this page — use your username';
   }
   if (code === 'auth/network-request-failed') {

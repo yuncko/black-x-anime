@@ -136,7 +136,17 @@ All passwords: `blackx2026`
 
 ## Deploy
 
-### Vercel — what black-x-anime.me runs on
+### Google AI Studio — what black-x-anime.ai.studio runs on (since 2026-10-17)
+
+The repository is imported into Google AI Studio (Build → Import from GitHub) and published to
+Cloud Run; the Express server serves the built client and the API. Add the secrets in **AI Studio →
+Settings → Secrets** and publish again: `JWT_SECRET` (required — without it `/api/health` reports
+`authentication: unavailable` and no one can sign in) and, for phase 2, `FIREBASE_SERVICE_ACCOUNT`.
+Updates: merge into `main`, then **Settings → GitHub → Pull** and **Publish** (never force-push from
+AI Studio). Arabic steps: `docs/ai-studio-hosting.md`. The site address lives in
+`shared/publicSite.js`; the APK is built against it.
+
+### Vercel — black-x-anime.me (paused by Vercel on 2026-10-17)
 
 Import the repo — `vercel.json` builds the client (`client/dist`) and serves the API from
 `api/index.js` (one serverless function). Environment variables (**Project → Settings →

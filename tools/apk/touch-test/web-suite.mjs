@@ -97,7 +97,7 @@ scenario('boot', async (browser) => {
   const flags = await page.evaluate(() => ({ web: window.__BLACKX_WEB_APP__ === true, apk: window.__BLACKX_APK__ === true, dir: document.documentElement.dir }));
   check(G, 'it runs as the website, not as the APK', flags.web && !flags.apk, JSON.stringify(flags));
   check(G, 'Arabic is right to left', flags.dir === 'rtl');
-  check(G, 'the API is called on the same site (/api/…)', ctx.net.some((n) => n.startsWith('GET site/api/')) && !ctx.net.some((n) => n.includes('black-x-anime.me')), ctx.net.filter((n) => n.includes('/api/')).slice(0, 4).join(' | '));
+  check(G, 'the API is called on the same site (/api/…)', ctx.net.some((n) => n.startsWith('GET site/api/')) && !ctx.net.some((n) => /black-x-anime\.(me|ai\.studio)/.test(n)), ctx.net.filter((n) => n.includes('/api/')).slice(0, 4).join(' | '));
   const dock = await page.evaluate(() => [...document.querySelectorAll('.bx-dock .bx-dock-item')].map((b) => b.getAttribute('aria-label')));
   check(G, 'same 5-tab dock as the app', dock.length === 5, dock.join(' | '));
   check(G, 'no website page stylesheet on the phone', await page.evaluate(() => !document.querySelector('.app-shell') && ![...document.styleSheets].some((s) => { try { return [...s.cssRules].some((r) => r.selectorText === '.app-shell'); } catch { return false; } })));
@@ -367,7 +367,8 @@ scenario('profile', async (browser) => {
   }));
   check(G, 'the Android row opens «ليه تنزل التطبيق؟»: the APK-only features + a download from this site', perks.href === '/BLACK-X-Mobile-120Hz.apk' && perks.items.length >= 4 && perks.items.some((t) => /والتطبيق مقفول/.test(t)), `${perks.href} | ${perks.items.join(' / ')}`);
   await browserBack(page);
-  check(G, 'footer says black-x-anime.me (no app version)', /black-x-anime\.me/.test(await page.evaluate(() => document.querySelector('.bxp-foot')?.textContent || '')));
+  const foot = await page.evaluate(() => ({ text: document.querySelector('.bxp-foot')?.textContent || '', host: location.host }));
+  check(G, 'footer shows this site\'s own address (no app version)', foot.text.includes(foot.host) && !/BLACK X · v\d/.test(foot.text), foot.text);
 
   // Google: the web popup (Firebase), not the APK's OAuth window.
   const popups = [];
@@ -1409,6 +1410,54 @@ scenario('closeout', async (browser) => {
   check(G, 'a normal visitor has no developer row', await page.evaluate(() => ![...document.querySelectorAll('.bxp-row')].some((r) => /لوحة المطور/.test(r.innerText))));
   await page.close();
 
+  // ---- account deletion (profile → privacy & security → delete account)
+  const sara = person('sara', 'Sara');
+  ({ page, ctx } = await openWeb(browser, {
+    route: '/profile/privacy',
+    seed: { ...sessionOf(sara), bx_mob_favorites: [{ objectID: 'Naruto', titleEn: 'Naruto', slug: 'naruto' }] },
+    ctx: { userPatch: sara, deletePassword: 'secret12' }
+  }));
+  const hasDeleteRow = await waitFor(page, () => [...document.querySelectorAll('main .bxp-row')].some((r) => /مسح الحساب/.test(r.innerText)), null, 10000);
+  check(G, 'privacy & security: a member gets «مسح الحساب»', hasDeleteRow);
+  await tapEl(page, 'main .bxp-row', { text: 'مسح الحساب' });
+  await waitFor(page, () => document.querySelector('.bx-topbar-title')?.textContent.trim() === 'مسح الحساب' && Boolean(document.querySelector('.bxp-delete-btn')), null, 6000);
+  const delPage = await page.evaluate(() => {
+    const groups = [...document.querySelectorAll('main .bxp-group')];
+    const gone = groups.find((g) => /هيتمسح/.test(g.querySelector('.bxp-group-title')?.textContent || ''));
+    return {
+      gone: gone ? gone.querySelectorAll('.bxp-row').length : 0,
+      kept: /تعليقات الحلقات/.test(document.querySelector('main')?.innerText || ''),
+      password: Boolean(document.querySelector('main input[type="password"]')),
+      disabled: document.querySelector('.bxp-delete-btn')?.disabled === true
+    };
+  });
+  check(G, 'the delete page says what goes (5 rows) and what stays, and asks for the password', delPage.gone === 5 && delPage.kept && delPage.password, JSON.stringify(delPage));
+  check(G, '…its button stays off until the user name is typed', delPage.disabled);
+  await page.type('main .bxp-form input:not([type="password"])', 'sara');
+  await page.type('main input[type="password"]', 'wrong');
+  await tapEl(page, '.bxp-delete-btn');
+  const refused = await until(() => (ctx.accountDeletes || []).length === 1, 8000);
+  await waitFor(page, () => /كلمة المرور غلط/.test([...document.querySelectorAll('.bx-toast')].map((t) => t.innerText).join(' ')), null, 4000);
+  check(G, 'a wrong password is refused: told so, still signed in', refused && /كلمة المرور غلط/.test(await toastText(page)) && (await page.evaluate(() => Boolean(localStorage.getItem('bx_mob_session_v16')))), await toastText(page));
+  await page.$eval('main input[type="password"]', (el) => el.select());
+  await page.type('main input[type="password"]', 'secret12');
+  await tapEl(page, '.bxp-delete-btn');
+  const sent = await until(() => (ctx.accountDeletes || []).length === 2, 8000);
+  const signedOut = await waitFor(page, () => !localStorage.getItem('bx_mob_session_v16') && !localStorage.getItem('bx_mob_user'), null, 8000);
+  const lastDelete = (ctx.accountDeletes || [])[1] || {};
+  check(G, 'the right password deletes it: user name + password sent, signed out', sent && signedOut && lastDelete.confirm === 'sara' && lastDelete.password === 'secret12', JSON.stringify(ctx.accountDeletes || []));
+  check(G, '…the list on this device is cleared too (the default)', await page.evaluate(() => !localStorage.getItem('bx_mob_favorites')));
+  await waitFor(page, () => Boolean(document.querySelector('.bxp.is-root')), null, 6000);
+  check(G, '…and the profile is back to the guest page', await page.evaluate(() => Boolean(document.querySelector('.bxp.is-root')) && !document.querySelector('.bxp-signout')), await topTitle(page));
+  check(G, 'no page errors (account deletion)', ctx.errors.length === 0, ctx.errors.slice(0, 3).join(' | '));
+  await page.close();
+  await clearStorage(browser);
+  ({ page, ctx } = await openWeb(browser, { route: '/privacy' }));
+  await waitFor(page, () => Boolean(document.querySelector('.bx-legal')), null, 10000);
+  const policyText = await page.evaluate(() => document.querySelector('.bx-legal')?.innerText || '');
+  check(G, 'the policy explains the delete button and names the new address', /«الخصوصية والأمان» ← «مسح الحساب»/.test(policyText) && /black-x-anime\.ai\.studio/.test(policyText) && !/لسه مفيش زرار/.test(policyText), policyText.slice(0, 80));
+  await page.close();
+
   // ---- crash reports (thrown from a page script: errors from DevTools-evaluated code reach
   // window.onerror as a muted «Script error.», which the reporter ignores on purpose)
   const pageScript = (pg, code) =>
@@ -1431,9 +1480,9 @@ scenario('closeout', async (browser) => {
 
   // ---- SEO files and the page description
   const robots = await (await fetch(`${LOCAL}/robots.txt`)).text();
-  check(G, 'robots.txt: keeps crawlers off /api and the player, points to the sitemap', /Disallow: \/api\//.test(robots) && /Disallow: \/watch\//.test(robots) && /Sitemap: https:\/\/black-x-anime\.me\/sitemap\.xml/.test(robots), robots.slice(0, 120));
+  check(G, 'robots.txt: keeps crawlers off /api and the player, points to the sitemap', /Disallow: \/api\//.test(robots) && /Disallow: \/watch\//.test(robots) && /Sitemap: https:\/\/black-x-anime\.ai\.studio\/sitemap\.xml/.test(robots), robots.slice(0, 120));
   const sitemap = await (await fetch(`${LOCAL}/sitemap.xml`)).text();
-  check(G, 'sitemap.xml lists the main pages and the legal pages', /<loc>https:\/\/black-x-anime\.me\/trending<\/loc>/.test(sitemap) && /\/privacy<\/loc>/.test(sitemap) && /\/terms<\/loc>/.test(sitemap), sitemap.slice(0, 80));
+  check(G, 'sitemap.xml lists the main pages and the legal pages', /<loc>https:\/\/black-x-anime\.ai\.studio\/trending<\/loc>/.test(sitemap) && !/black-x-anime\.me/.test(sitemap) && /\/privacy<\/loc>/.test(sitemap) && /\/terms<\/loc>/.test(sitemap), sitemap.slice(0, 80));
   ({ page, ctx } = await openWeb(browser, { route: '/discover' }));
   await waitFor(page, () => document.title.startsWith('المواعيد'), null, 8000);
   const meta = await page.evaluate(() => ({ title: document.title, desc: document.querySelector('meta[name="description"]')?.content || '' }));

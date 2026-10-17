@@ -11,6 +11,7 @@ import { anilistService } from '../services/anilist.service.js';
 import { scraperService } from '../services/scraper.service.js';
 import { getPrisma } from '../lib/prisma.js';
 import { filterAnimeList, filterMangaList, getHiddenIndex, isHiddenMangaItem, markHiddenManga } from '../lib/hiddenTitles.js';
+import { PUBLIC_SITE_HOST } from '../../../shared/publicSite.js';
 
 /** Saved rows keep their data; hidden genres are only left out of what is shown. */
 function savedContentOf(row) {
@@ -262,7 +263,7 @@ export const mangaNovelController = {
       }
 
       const protocol = String(req.headers['x-forwarded-proto'] || req.protocol || 'https').split(',')[0] === 'https' ? 'https' : 'http';
-      const host = /^[a-z0-9.-]+(?::\d+)?$/i.test(req.get('host') || '') ? req.get('host') : 'black-x-anime.me';
+      const host = /^[a-z0-9.-]+(?::\d+)?$/i.test(req.get('host') || '') ? req.get('host') : PUBLIC_SITE_HOST;
       const baseUrl = `${protocol}://${host}`;
       const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'

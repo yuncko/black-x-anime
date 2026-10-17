@@ -16,7 +16,10 @@ rm -rf "$WORK" && mkdir -p "$WORK"
 cp "$BASE_APK" "$WORK/base.apk"
 
 echo "1/4 building the web bundle for the APK"
-(cd "$ROOT" && VITE_BUILD_TARGET=apk VITE_API_BASE_URL=https://black-x-anime.me \
+# The website the APK talks to (shared/publicSite.js). Installed apps keep the address they were
+# built with, so change it only together with PUBLIC_SITE_ORIGIN.
+BX_API_BASE="${BX_API_BASE:-https://black-x-anime.ai.studio}"
+(cd "$ROOT" && VITE_BUILD_TARGET=apk VITE_API_BASE_URL="$BX_API_BASE" \
   npx vite build client --outDir "$DIST" --emptyOutDir --logLevel warn)
 
 echo "2/4 repacking assets/public into the Capacitor shell"

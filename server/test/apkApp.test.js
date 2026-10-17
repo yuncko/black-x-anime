@@ -13,6 +13,7 @@ const store = await import('../src/services/settingsStore.js');
 const accounts = await import('../src/services/apkAccounts.js');
 const aniskip = await import('../src/services/aniskip.js');
 const apkApp = await import('../src/routes/apkApp.js');
+const rankingVotes = await import('../src/services/rankingVotes.js');
 const { APK_RELEASE } = await import('../../shared/apkRelease.js');
 
 // ------------------------------------------------------------ fake Firestore
@@ -20,6 +21,7 @@ const docs = new Map(); // id -> { fields, updateTime }
 let clock = 0;
 const nextTime = () => `2026-10-16T00:00:00.${String(++clock).padStart(9, '0')}Z`;
 let writeHook = null; // (id) => void, runs before a PATCH is applied
+let deletesAllowed = false; // phase-1 rules refuse deletes made with the public key
 
 function enc(obj) {
   const out = {};
@@ -58,6 +60,14 @@ async function fakeFetch(url, init = {}) {
     const rec = { fields: body.fields, updateTime: nextTime() };
     docs.set(id, rec);
     return respond(200, { name: id, fields: rec.fields, updateTime: rec.updateTime });
+  }
+  if (method === 'DELETE') {
+    if (!deletesAllowed) return respond(403, { error: { code: 403, status: 'PERMISSION_DENIED' } });
+    const d = docs.get(id);
+    const updateTime = u.searchParams.get('currentDocument.updateTime');
+    if (updateTime && d && d.updateTime !== updateTime) return respond(400, { error: { status: 'FAILED_PRECONDITION' } });
+    docs.delete(id);
+    return respond(200, {});
   }
   return respond(405, {});
 }
@@ -108,6 +118,8 @@ async function call(method, path, { body, token } = {}) {
 function reset() {
   docs.clear();
   writeHook = null;
+  deletesAllowed = false;
+  rankingVotes.__resetRankingVotesCacheForTests();
   apkApp.__resetRateLimitsForTests();
   apkApp.__resetConfigCacheForTests();
 }
@@ -380,4 +392,122 @@ test('website account sync keeps APK fields and never writes SHA-256 or an empty
   } finally {
     globalThis.fetch = prevFetch;
   }
+});
+
+test('feedWithoutPerson drops the person\'s posts, replies and likes and keeps everything else', () => {
+  const list = [
+    { id: 'p1', username: 'Sara_99', author: 'Sara', text: 'mine', likedBy: [], likes: 0, replies: [] },
+    {
+      id: 'p2', username: 'ali', author: 'Ali', text: 'his', likedBy: ['bx_1', 'ali', 'sara_99'], likes: 3,
+      replies: [{ id: 'r1', username: 'sara_99', author: 'Sara', text: 'hi' }, { id: 'r2', author: 'Old reply without a username', text: 'x' }]
+    },
+    { id: 'p3', username: 'mona', author: 'Mona', text: 'hers', likedBy: ['mona'], likes: 1 }
+  ];
+  const out = apkApp.feedWithoutPerson(list, { username: 'sara_99', keys: new Set(['bx_1', 'sara_99', 'sara@example.com']) });
+  assert.deepEqual(out.list.map((p) => p.id), ['p2', 'p3']);
+  assert.deepEqual(out.list[0].likedBy, ['ali']);
+  assert.equal(out.list[0].likes, 1);
+  assert.deepEqual(out.list[0].replies.map((r) => r.id), ['r2']);
+  assert.deepEqual({ posts: out.posts, replies: out.replies, likes: out.likes }, { posts: 1, replies: 1, likes: 2 });
+  assert.equal(out.list[1], list[2], 'untouched posts are the same objects');
+  const none = apkApp.feedWithoutPerson(list, { username: 'nobody', keys: new Set(['nobody']) });
+  assert.equal(none.list, list, 'nothing to remove: the same list (no write)');
+});
+
+test('account deletion: password check, then posts / likes / votes / requests and the account are erased', async () => {
+  reset();
+  const reg = await call('POST', '/api/app/auth/register', {
+    body: { username: 'Sara_99', password: 'secret12', email: 'sara@example.com', state: { favorites: [{ objectID: 'Naruto', titleEn: 'Naruto' }] } }
+  });
+  assert.equal(reg.status, 201);
+  const token = reg.body.token;
+  const id = getJson('user_sara_99').id;
+  putDoc('shared_community_feed', [
+    { id: 'p1', username: 'sara_99', author: 'Sara', text: 'my post', likedBy: [], likes: 0, replies: [] },
+    { id: 'p2', username: 'ali', author: 'Ali', text: 'his post', likedBy: [id, 'ali'], likes: 2, replies: [{ id: 'r1', username: 'sara_99', author: 'Sara', text: 'reply' }] }
+  ], { updatedAt: 'x' });
+  putDoc('ranking_votes', { v: 1, titles: { 5114: { [rankingVotes.voterKey('u:sara_99')]: 9, [rankingVotes.voterKey('u:ali')]: 7 } } });
+  putDoc('global_vip_system', {
+    enforced: true,
+    codes: [{ code: 'BX-1', tier: 'vip_basic', usedCount: 1, maxUses: 5, redeemedBy: [{ username: 'sara_99', at: 'x' }, { username: 'ali', at: 'y' }] }],
+    userRequests: [{ id: 'q1', type: 'anime', text: 'please add X', author: 'Sara', username: 'sara_99' }, { id: 'q2', type: 'anime', text: 'Y', author: 'Ali', username: 'ali' }]
+  }, { enforced: true });
+
+  assert.equal((await call('POST', '/api/app/account/delete', { body: { confirm: 'sara_99', password: 'secret12' } })).status, 401, 'needs a session');
+  assert.equal((await call('POST', '/api/app/account/delete', { token, body: { confirm: 'someone', password: 'secret12' } })).body.error, 'confirm_mismatch');
+  const wrong = await call('POST', '/api/app/account/delete', { token, body: { confirm: 'sara_99', password: 'wrong' } });
+  assert.deepEqual([wrong.status, wrong.body.error], [403, 'bad_password'], 'not 401: the app signs out on 401');
+  assert.ok(getJson('user_sara_99').passBcrypt, 'nothing deleted after a refused request');
+
+  const del = await call('POST', '/api/app/account/delete', { token, body: { confirm: 'SARA_99', password: 'secret12' } });
+  assert.equal(del.status, 200);
+  assert.deepEqual(del.body, { ok: true, removed: false, posts: 1, replies: 1, likes: 1, votes: 1, requests: 1 });
+  // Phase-1 rules refuse deletes: both account documents are emptied instead.
+  for (const key of ['user_sara_99', 'email_sara_example_com']) {
+    const doc = docs.get(key);
+    const json = getJson(key);
+    assert.equal(json.deleted, true);
+    assert.equal(json.passSha256, accounts.PASS_SENTINEL_DELETED, 'old APKs cannot sign in with any password');
+    for (const field of ['username', 'email', 'passBcrypt', 'favorites', 'displayName', 'vipTier']) assert.ok(!(field in json), `${key} keeps no ${field}`);
+    assert.equal(doc.fields.username.stringValue, '');
+    assert.equal(doc.fields.email.stringValue, '');
+  }
+  assert.deepEqual(getJson('shared_community_feed').map((p) => p.id), ['p2']);
+  assert.deepEqual(getJson('shared_community_feed')[0].likedBy, ['ali']);
+  assert.deepEqual(getJson('shared_community_feed')[0].replies, []);
+  assert.deepEqual(Object.keys(getJson('ranking_votes').titles['5114']), [rankingVotes.voterKey('u:ali')]);
+  const g = getJson('global_vip_system');
+  assert.deepEqual(g.userRequests.map((r) => r.id), ['q2']);
+  assert.deepEqual(g.codes[0].redeemedBy.map((r) => r.username), ['', 'ali']);
+  assert.equal(g.codes[0].usedCount, 1, 'code use count kept');
+
+  // The old session and the password are dead; the name and e-mail can be used again.
+  assert.equal((await call('GET', '/api/app/me', { token })).status, 401);
+  assert.equal((await call('POST', '/api/app/auth/login', { body: { identifier: 'sara_99', password: 'secret12' } })).status, 401);
+  assert.equal((await call('POST', '/api/app/auth/login', { body: { identifier: 'sara@example.com', password: 'secret12' } })).status, 401);
+  const again = await call('POST', '/api/app/auth/register', { body: { username: 'sara_99', password: 'newpass1', email: 'sara@example.com' } });
+  assert.equal(again.status, 201);
+  assert.equal(again.body.state.favorites.length, 0, 'a new account starts empty');
+  assert.notEqual(getJson('user_sara_99').id, id);
+  assert.ok(getJson('email_sara_example_com').email, 'e-mail document reused');
+});
+
+test('account deletion removes the documents when deletes are allowed (service account)', async () => {
+  reset();
+  deletesAllowed = true;
+  const token = (await call('POST', '/api/app/auth/register', { body: { username: 'omar', password: 'secret12', email: 'omar@example.com' } })).body.token;
+  const del = await call('POST', '/api/app/account/delete', { token, body: { confirm: 'omar', password: 'secret12' } });
+  assert.equal(del.status, 200);
+  assert.equal(del.body.removed, true);
+  assert.ok(!docs.has('user_omar') && !docs.has('email_omar_example_com'));
+});
+
+test('account deletion: Google accounts confirm with the user name; the developer account is refused', async () => {
+  reset();
+  const g = await call('POST', '/api/app/auth/google', { body: { idToken: googleToken('mona@gmail.com'), state: { favorites: [{ objectID: 'Bleach', titleEn: 'Bleach' }] } } });
+  assert.equal(g.status, 200);
+  const del = await call('POST', '/api/app/account/delete', { token: g.body.token, body: { confirm: g.body.user.username } });
+  assert.equal(del.status, 200);
+  assert.equal(getJson('email_mona_gmail_com').deleted, true);
+  // Signing in with Google again creates a new, empty account over the emptied document.
+  const back = await call('POST', '/api/app/auth/google', { body: { idToken: googleToken('mona@gmail.com') } });
+  assert.equal(back.status, 200);
+  assert.equal(back.body.state.favorites.length, 0);
+  assert.equal(getJson('email_mona_gmail_com').email, 'mona@gmail.com');
+  assert.ok(getJson(`user_${back.body.user.username}`).email, 'user-name document written again');
+  // The website deletes with a Firebase ID token too.
+  const web = await call('POST', '/api/app/account/delete', { token: googleToken('mona@gmail.com'), body: { confirm: back.body.user.username } });
+  assert.equal(web.status, 200);
+  const dev = (await call('POST', '/api/app/auth/google', { body: { idToken: googleToken('mz0970mmz@gmail.com') } })).body;
+  const refused = await call('POST', '/api/app/account/delete', { token: dev.token, body: { confirm: dev.user.username } });
+  assert.equal(refused.status, 403);
+  assert.equal(refused.body.error, 'developer_account');
+});
+
+test('a website (SQLite) copy of a deleted account does not bring it back', async () => {
+  const { isStaleAfterDeletion } = await import('../src/services/cloudSync.service.js');
+  const tomb = accounts.accountTombstone('2026-10-17T12:00:00.000Z');
+  assert.equal(isStaleAfterDeletion({ created_at: '2026-10-01 09:00:00' }, tomb), true, 'copied before the deletion');
+  assert.equal(isStaleAfterDeletion({ created_at: '2026-10-17 12:30:00' }, tomb), false, 'a new sign-up after it');
+  assert.equal(isStaleAfterDeletion({ created_at: '2026-10-01 09:00:00' }, { username: 'x' }), false, 'not deleted');
 });

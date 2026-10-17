@@ -10,6 +10,7 @@ import RankingsPage from '../RankingsPage.jsx';
 import WrappedPage from '../WrappedPage.jsx';
 import PlatformPerks from '../PlatformPerks.jsx';
 import LegalDoc from '../../legal/LegalDoc.jsx';
+import { PUBLIC_SITE_HOST } from '../../../../shared/publicSite.js';
 import './profile.css';
 
 /**
@@ -40,6 +41,7 @@ export const PROFILE_PAGES = {
   backup: { ar: 'نسخة احتياطية', en: 'Backup' },
   signin: { ar: 'تسجيل الدخول', en: 'Sign in' },
   developer: { ar: 'لوحة المطور', en: 'Developer' },
+  delete: { ar: 'مسح الحساب', en: 'Delete account' },
   // legal (2026-10-17; links /privacy and /terms — 'privacy' above is the settings page)
   policy: { ar: 'سياسة الخصوصية', en: 'Privacy policy' },
   terms: { ar: 'شروط الاستخدام', en: 'Terms of use' },
@@ -543,7 +545,7 @@ function RootPage(props) {
       ) : null}
 
       <p className="bxp-foot">
-        <span dir="ltr">{app.web ? 'BLACK X · black-x-anime.me' : `BLACK X · v${app.version}`}</span>
+        <span dir="ltr">{app.web ? `BLACK X · ${typeof window !== 'undefined' && window.location.host ? window.location.host : PUBLIC_SITE_HOST}` : `BLACK X · v${app.version}`}</span>
         {app.catalogTotal > 0 ? (
           <>
             {' · '}
@@ -1042,8 +1044,9 @@ function SplashPage({ isRtl, settings }) {
   );
 }
 
-function PrivacyPage({ isRtl, settings }) {
+function PrivacyPage({ isRtl, settings, account, onOpenPage }) {
   const hasPin = Boolean(settings.pinCode);
+  const canDelete = Boolean(account?.user && account?.sessionToken && !account?.isDeveloper);
   return (
     <>
       <Group title={isRtl ? 'المشاهدة' : 'Watching'}>
@@ -1090,6 +1093,107 @@ function PrivacyPage({ isRtl, settings }) {
               {isRtl ? 'إلغاء القفل' : 'Remove lock'}
             </button>
           ) : null}
+        </div>
+      </form>
+      {canDelete ? (
+        <Group
+          title={isRtl ? 'الحساب' : 'Account'}
+          footer={isRtl ? 'بيمسح حسابك وبياناته من السيرفر نهائياً.' : 'Permanently deletes your account and its data from the server.'}
+        >
+          <Row icon="trash" label={isRtl ? 'مسح الحساب' : 'Delete account'} onClick={() => onOpenPage('delete')} />
+        </Group>
+      ) : null}
+    </>
+  );
+}
+
+/** Account deletion (POST /api/app/account/delete): what goes, what stays, then a typed confirmation. */
+function DeleteAccountPage({ isRtl, account, accountDelete }) {
+  const user = account?.user || null;
+  const [confirm, setConfirm] = useState('');
+  const [password, setPassword] = useState('');
+  const [wipeLocal, setWipeLocal] = useState(true);
+  if (!user || !account?.sessionToken) {
+    return <Empty icon="user" title={isRtl ? 'سجّل الدخول الأول' : 'Sign in first'} text={isRtl ? 'مسح الحساب بيحتاج تكون داخل بحسابك.' : 'Deleting an account needs you to be signed in.'} />;
+  }
+  const username = String(user.username || '');
+  const needsPassword = user.isGoogleAccount !== true;
+  const matches = username && confirm.trim().toLowerCase() === username.toLowerCase();
+  const ready = matches && (!needsPassword || password.length > 0) && !accountDelete?.busy;
+  const gone = isRtl
+    ? [
+        ['user', 'الحساب نفسه: اسم المستخدم والإيميل وكلمة المرور'],
+        ['library', 'قائمتي وسجل المشاهدة ومكان الوقوف والنقاط المحفوظين على السيرفر'],
+        ['crown', 'اشتراك VIP لو عندك — مش هيرجع'],
+        ['message', 'بوستاتك وردودك وإعجاباتك في المجتمع'],
+        ['star', 'تقييماتك في صفحة الترتيب وطلباتك للمطور']
+      ]
+    : [
+        ['user', 'The account itself: username, e-mail and password'],
+        ['library', 'My list, watch history, resume points and points kept on the server'],
+        ['crown', 'Your VIP subscription, if any — it cannot be restored'],
+        ['message', 'Your community posts, replies and likes'],
+        ['star', 'Your rankings votes and your requests to the developer']
+      ];
+  return (
+    <>
+      <p className="bxp-lead">{isRtl ? 'مسح الحساب نهائي ومفيش رجوع فيه.' : 'Deleting your account is permanent.'}</p>
+      <Group title={isRtl ? 'هيتمسح' : 'Deleted'}>
+        {gone.map(([icon, text]) => (
+          <Row key={icon} icon={icon} label={text} chevron={false} />
+        ))}
+      </Group>
+      <Group
+        title={isRtl ? 'هيفضل' : 'Kept'}
+        footer={
+          isRtl
+            ? 'لو عاوزهم يتشالوا ابعت «بلاغ» من «اطلب أنمي أو مانهوا» بمكانهم (مش لازم حساب).'
+            : 'To have them removed, send a “Report” from “Request a title” saying where they are (no account needed).'
+        }
+      >
+        <Row
+          icon="info"
+          label={isRtl ? 'تعليقات الحلقات والمراجعات على صفحات الأنمي، والردود اللي اتكتبت قبل 17 أكتوبر 2026' : 'Episode comments and reviews on anime pages, and replies written before 17 October 2026'}
+          chevron={false}
+        />
+      </Group>
+      <Group>
+        <SwitchRow
+          icon="trash"
+          label={isRtl ? 'امسح القائمة والسجل من الجهاز ده كمان' : 'Also clear my list and history on this device'}
+          sub={isRtl ? 'من غير كده بيفضلوا محفوظين هنا من غير حساب' : 'Otherwise they stay here without an account'}
+          checked={wipeLocal}
+          onChange={setWipeLocal}
+        />
+      </Group>
+      <form
+        className="bxp-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (ready) accountDelete.onDelete({ confirm: confirm.trim(), password: needsPassword ? password : '', wipeLocal });
+        }}
+      >
+        <Field label={isRtl ? 'اكتب اسم المستخدم بتاعك للتأكيد' : 'Type your user name to confirm'} hint={username}>
+          <input
+            className="bxp-input"
+            dir="ltr"
+            autoComplete="off"
+            autoCapitalize="none"
+            spellCheck={false}
+            value={confirm}
+            placeholder={username}
+            onChange={(e) => setConfirm(e.target.value)}
+          />
+        </Field>
+        {needsPassword ? (
+          <Field label={isRtl ? 'كلمة المرور' : 'Password'}>
+            <input className="bxp-input" type="password" dir="ltr" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </Field>
+        ) : null}
+        <div className="bxp-actions">
+          <button type="submit" className="bx-btn bx-btn-primary bxp-delete-btn" disabled={!ready}>
+            {accountDelete?.busy ? (isRtl ? 'بيتمسح…' : 'Deleting…') : isRtl ? 'امسح حسابي نهائياً' : 'Delete my account'}
+          </button>
         </div>
       </form>
     </>
@@ -1197,6 +1301,9 @@ export default function ProfileTab(props) {
       break;
     case 'developer':
       body = devPanel || null;
+      break;
+    case 'delete':
+      body = <DeleteAccountPage {...props} />;
       break;
     case 'policy':
     case 'terms': {

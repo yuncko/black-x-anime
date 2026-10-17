@@ -16,9 +16,11 @@ BX_KEYSTORE_PASS_FILE=/path/to/password.txt \
 
 The script:
 
-1. builds the client with `VITE_BUILD_TARGET=apk VITE_API_BASE_URL=https://black-x-anime.me`
-   (the APK runs from `https://localhost`, so it must call the website explicitly). Since v16
-   that target starts from `client/src/main-apk.jsx` (only the mobile UI is bundled);
+1. builds the client with `VITE_BUILD_TARGET=apk VITE_API_BASE_URL=$BX_API_BASE` (default
+   `https://black-x-anime.ai.studio` = `PUBLIC_SITE_ORIGIN` in `shared/publicSite.js`; up to v18.0
+   it was `https://black-x-anime.me`). The APK runs from `https://localhost`, so it must call the
+   website explicitly, and installed apps keep the address they were built with. Since v16 that
+   target starts from `client/src/main-apk.jsx` (only the mobile UI is bundled);
 2. runs `repack-apk.py`: copies every entry of the current APK except
    `assets/public/` and `META-INF/`, adds the new bundle (never the `.apk` itself),
    and zipaligns stored entries to 4 bytes. Android 11+ refuses to install an app
@@ -84,6 +86,6 @@ and have the owner try the feature on a phone before publishing.
 - APK v14 and older were signed with a different key that was never saved, so moving
   from v14 to v15 needs one uninstall + reinstall. Every later build signed with the
   key above installs as a normal update. Signing with any other key breaks updates again.
-- Android accepts an update with the same or a higher `versionCode` (30 up to v17.1, 31 since v18.0).
+- Android accepts an update with the same or a higher `versionCode` (30 up to v17.1, 31 since v18.0; v18.1 changed only the web bundle and kept 31).
 - After committing a rebuilt APK, bump `version` (and the notes) in `shared/apkRelease.js`: the
   server's `/api/app/config` reports it and installed apps show the update banner.

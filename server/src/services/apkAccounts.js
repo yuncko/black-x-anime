@@ -16,6 +16,8 @@ import { deriveAuthSecret, isAuthConfigured, DEVELOPER_EMAIL } from '../auth.js'
 
 export const PASS_SENTINEL_BCRYPT = 'bcrypt-v1';
 export const PASS_SENTINEL_GOOGLE = 'google-oauth-only';
+// passSha256 of a deleted account: APK builds <= 15.1 accepted ANY password for an empty field.
+export const PASS_SENTINEL_DELETED = 'account-deleted';
 export const USERNAME_RE = /^[a-z0-9_.-]{3,24}$/;
 export const RESERVED_USERNAMES = new Set([
   'developer', 'admin', 'administrator', 'mz0970mmz', 'blackx', 'black_x', 'black-x',
@@ -71,6 +73,20 @@ export async function verifyCloudPassword(data, password) {
     return { ok: a.length === b.length && crypto.timingSafeEqual(a, b), legacy: true };
   }
   return { ok: false, legacy: false };
+}
+
+/** A deleted account's document (see accountTombstone). */
+export function isDeletedAccount(data) {
+  return Boolean(data && typeof data === 'object' && data.deleted === true);
+}
+
+/**
+ * What an account document holds after deletion when it cannot be removed (phase-1 rules refuse
+ * deletes made with the public key): no name, e-mail, password, lists, positions or VIP — only
+ * the fact and the time, and a password sentinel that keeps old APKs out.
+ */
+export function accountTombstone(now = new Date().toISOString()) {
+  return { deleted: true, deletedAt: now, passSha256: PASS_SENTINEL_DELETED, updatedAt: now };
 }
 
 /** VIP tier after expiry: 'vip_monarch' | 'vip_basic' | 'free'. */

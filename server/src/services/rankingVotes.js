@@ -115,3 +115,36 @@ export async function castRankingVote(animeId, voter, score, { keepIds = null } 
   cache = { at: Date.now(), data: doc };
   return statsFor(doc, id);
 }
+
+/**
+ * Remove every vote of these voters (account deletion). Resolves the number of votes removed;
+ * nothing is written when there were none.
+ */
+export async function removeVoterVotes(voters) {
+  const drop = new Set((Array.isArray(voters) ? voters : [voters]).filter(Boolean));
+  if (!drop.size) return 0;
+  let removed = 0;
+  const result = await updateSettingsDoc(
+    RANKING_VOTES_DOC,
+    (raw) => {
+      if (!raw) return undefined;
+      const doc = cleanVotesDoc(raw);
+      removed = 0;
+      for (const [id, byVoter] of Object.entries(doc.titles)) {
+        for (const voter of Object.keys(byVoter)) {
+          if (drop.has(voter)) {
+            delete byVoter[voter];
+            removed += 1;
+          }
+        }
+        if (!Object.keys(byVoter).length) delete doc.titles[id];
+      }
+      if (!removed) return undefined;
+      doc.updatedAt = new Date().toISOString();
+      return doc;
+    },
+    { extraFields: (next) => ({ updatedAt: next.updatedAt }) }
+  );
+  if (result.written) cache = { at: Date.now(), data: cleanVotesDoc(result.data) };
+  return result.written ? removed : 0;
+}

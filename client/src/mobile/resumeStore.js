@@ -114,6 +114,19 @@ export function flushPositions() {
   persist(true);
 }
 
+/** Forget every position on this device (account deletion with "clear this device"). */
+export function clearPositions() {
+  clearTimeout(writeTimer);
+  writeTimer = null;
+  cache = {};
+  try {
+    localStorage.removeItem(KEY);
+  } catch {
+    /* storage unavailable */
+  }
+  listeners.forEach((fn) => fn(null));
+}
+
 export function formatClock(totalSec) {
   const s = Math.max(0, Math.floor(Number(totalSec) || 0));
   const h = Math.floor(s / 3600);

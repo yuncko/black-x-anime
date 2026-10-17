@@ -17,6 +17,7 @@ import {
   adminSetEnforced,
   adminSetUserVip,
   apiErrorMessage,
+  deleteAccount as apkDeleteAccount,
   fetchAppConfig,
   fetchMe,
   fetchSkipTimes,
@@ -31,7 +32,7 @@ import {
   signOut as apkSignOut,
   updateAccountProfile
 } from './apkApi.js';
-import { animeSlugOf, episodeKey, flushPositions, formatClock, getPosition, mergePositions, positionEntries, positionsForSync, savePosition } from './resumeStore.js';
+import { animeSlugOf, clearPositions, episodeKey, flushPositions, formatClock, getPosition, mergePositions, positionEntries, positionsForSync, savePosition } from './resumeStore.js';
 import { checkFollowedTitles, lastAlertRun } from './episodeAlerts.js';
 import { attachHls, needsHlsJs } from './hlsPlayer.js';
 import { haptic, hapticsEnabled, setHapticsEnabled } from './haptics.js';
@@ -107,6 +108,7 @@ import { parseWebLocation, webUrlFor } from './webRoutes.js';
 import {
   BX_APK_DOWNLOAD_URL,
   BX_APK_VERSION,
+  BX_PUBLIC_ORIGIN,
   BX_MANGA_SEARCH_ONLY_TAB,
   BX_MANGA_SERVER_TABS,
   bxRequestJson,
@@ -133,7 +135,7 @@ import {
  * Webtoon Reader, and Real-Time Cloud Sync with the BLACK X Website Users & Anime Database.
  *
  * Servers: since v15 every anime episode/server and manga chapter/page request goes through the
- * website API (./bxServers.js), so the app always lists the same servers as black-x-anime.me.
+ * website API (./bxServers.js), so the app always lists the same servers as the website.
  */
 
 // 1. Anime catalogue index (the same Algolia index the website's BLACK X 1 catalogue reads)
@@ -382,7 +384,7 @@ export function dispatchPhoneNotification(title, body, notifId = 0) {
 }
 
 export default function MobileApkApp() {
-  // Phone website (webApp.js): the app interface served by black-x-anime.me on phones.
+  // Website (webApp.js): the app interface the website serves on every device.
   const isWeb = isWebApp();
   // The page the address bar asked for when the app started (webRoutes.js), website only.
   const [webStart] = useState(() => (isWeb ? parseWebLocation(window.location.pathname, window.location.search) : null));
@@ -477,7 +479,7 @@ export default function MobileApkApp() {
   const longPressTimerRef = useRef(null);
   const gestureHudTimerRef = useRef(null);
 
-  // Manga States (served by the website API: the same BLACK X manga servers as black-x-anime.me)
+  // Manga States (served by the website API: the same BLACK X manga servers as the website)
   const [mangaList, setMangaList] = useState([]);
   const [mangaSource, setMangaSource] = useState('all'); // website server id: 'all' | 'bx1' | 'bx2' | 'bx3' | 'bx4' (search only)
   const [mangaFilterType, setMangaFilterType] = useState('ALL'); // 'ALL' | 'MANHWA' | 'MANGA'
@@ -3684,6 +3686,8 @@ export default function MobileApkApp() {
       const replyObj = {
         id: sharedItemId('rep'),
         author: user.displayName || user.username,
+        // lets account deletion find the person's replies (server/src/routes/apkApp.js)
+        username: user.username || '',
         role: user.role || 'user',
         text,
         createdAt: new Date().toISOString(),
@@ -4451,6 +4455,43 @@ export default function MobileApkApp() {
     resetProfileStack();
     haptic('success');
     showToast(isRtl ? 'اتسجّل الخروج' : 'Signed out', 'logout');
+  };
+  // Account deletion (profile → privacy & security → delete account; server: /api/app/account/delete).
+  const [accountDeleteBusy, setAccountDeleteBusy] = useState(false);
+  const handleDeleteAccount = async ({ confirm, password, wipeLocal }) => {
+    if (accountDeleteBusy) return;
+    setAccountDeleteBusy(true);
+    try {
+      await apkDeleteAccount({ confirm, password });
+      apkSignOut();
+      setSessionToken(null);
+      setUser(null);
+      try {
+        localStorage.removeItem('bx_mob_user');
+        localStorage.removeItem('bx_mob_redeemed_vip_code');
+        if (wipeLocal) {
+          ['bx_mob_favorites', 'bx_mob_watchlist_map', 'bx_mob_history', 'bx_mob_manga_history', 'bx_mob_xp'].forEach((k) => localStorage.removeItem(k));
+        }
+      } catch (_) {
+        /* storage unavailable */
+      }
+      if (wipeLocal) {
+        setFavorites([]);
+        setWatchlistMap({});
+        setWatchHistory([]);
+        setMangaHistory([]);
+        setUserXp(0);
+        clearPositions();
+      }
+      resetProfileStack();
+      haptic('success');
+      showToast(isRtl ? 'اتمسح حسابك نهائياً' : 'Your account was deleted', 'check');
+    } catch (err) {
+      haptic('error');
+      showToast(apiErrorMessage(err, lang), 'alert');
+    } finally {
+      setAccountDeleteBusy(false);
+    }
   };
   const profileSettings = {
     lang,
@@ -5363,6 +5404,7 @@ export default function MobileApkApp() {
           }}
           backup={{ onExport: handleExportVaultBackup, onImport: handleImportVaultBackup, fileRef: backupFileInputRef }}
           signOut={{ open: signOutConfirmOpen, setOpen: setSignOutConfirmOpen }}
+          accountDelete={{ busy: accountDeleteBusy, onDelete: handleDeleteAccount }}
           devPanel={devPanelNode}
           devBadge={cloudUserRequests.length || null}
         />
@@ -6634,7 +6676,7 @@ export default function MobileApkApp() {
                 <button
                   type="button"
                   onClick={async () => {
-                    const url = `https://black-x-anime.me/show/${animeSlugOf(selectedAnime)}`;
+                    const url = `${isWeb ? window.location.origin : BX_PUBLIC_ORIGIN}/show/${animeSlugOf(selectedAnime)}`;
                     try {
                       if (navigator.share) {
                         await navigator.share({ title: selectedAnime.titleEn, url });

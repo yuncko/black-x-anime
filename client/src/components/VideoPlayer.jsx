@@ -121,7 +121,7 @@ export default function VideoPlayer({
     const emb = String(activeSource?.embedUrl || '');
     if (emb.startsWith('/api/stream/mp4-player')) {
       try {
-        const u = new URL(emb, 'https://black-x-anime.me');
+        const u = new URL(emb, 'http://localhost'); // only the query is read
         return u.searchParams.get('url') || '';
       } catch {
         return '';
@@ -134,7 +134,7 @@ export default function VideoPlayer({
     const emb = String(activeSource?.embedUrl || '');
     if (emb.startsWith('/api/stream/mp4-player')) {
       try {
-        const u = new URL(emb, 'https://black-x-anime.me');
+        const u = new URL(emb, 'http://localhost'); // only the query is read
         return u.searchParams.get('sub') || '';
       } catch {
         return '';

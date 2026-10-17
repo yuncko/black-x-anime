@@ -3,9 +3,9 @@
  * Supports dynamic cloud backend URL resolution for the native Android APK.
  */
 import { findPublicCacheRoute } from '../../shared/publicCacheRoutes.js';
+import { PUBLIC_SITE_ORIGIN } from '../../shared/publicSite.js';
 
 const TOKEN_KEY = 'blackx_token';
-const SERVER_URL_KEY = 'blackx_server_url';
 
 export function getStoredToken() {
   try {
@@ -36,37 +36,14 @@ export function isNativeApk() {
 }
 
 export function getServerUrl() {
-  // Browser deployments use Vercel's same-origin /api rewrites. Never let a
-  // stale desktop-browser override send website traffic to an old API host.
-  // Explicit backend URLs remain supported for the native APK, which cannot
-  // use the website's same-origin API route.
+  // Browsers (every website host) use their own same-origin /api routes.
   if (!isNativeApk()) return '';
-
-  try {
-    const saved = localStorage.getItem(SERVER_URL_KEY);
-    if (saved && saved.trim()) {
-      return saved.trim().replace(/\/+$/, '');
-    }
-  } catch {
-    /* ignore */
-  }
-
-  const envUrl = import.meta.env?.VITE_API_BASE_URL || '';
-  if (envUrl && String(envUrl).trim()) {
-    return String(envUrl).trim().replace(/\/+$/, '');
-  }
-  return '';
-}
-
-export function setServerUrl(url) {
-  try {
-    const clean = String(url || '').trim().replace(/\/+$/, '');
-    if (clean) localStorage.setItem(SERVER_URL_KEY, clean);
-    else localStorage.removeItem(SERVER_URL_KEY);
-    return clean;
-  } catch {
-    return '';
-  }
+  // The APK runs from https://localhost and calls the website it was built for
+  // (VITE_API_BASE_URL, set by tools/apk/build-apk.sh). A server address saved
+  // on the phone by old builds (localStorage 'blackx_server_url') is ignored:
+  // it could name an old host (black-x-anime.me stopped answering in 2026-10).
+  const envUrl = String(import.meta.env?.VITE_API_BASE_URL || '').trim();
+  return (envUrl || PUBLIC_SITE_ORIGIN).replace(/\/+$/, '');
 }
 
 export function resolveApiUrl(path) {

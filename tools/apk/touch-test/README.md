@@ -17,13 +17,14 @@ APK=/path/to/other.apk bash tools/apk/touch-test/run.sh
    `https://localhost` behaviour (`window.__BLACKX_APK__`) and a recording stub of the native
    `BlackXNativeAuth` bridge.
 
-Every network call is answered by in-memory mocks in `lib.mjs` (website `/api/*`, the Algolia
+Every network call is answered by in-memory mocks in `lib.mjs` (website `/api/*` — the APK calls
+black-x-anime.ai.studio since v18.1, black-x-anime.me before; both go to the mock —, the Algolia
 catalogue, Firestore `settings/*`, AniList), so results never depend on the live site; the test
 server answers video `Range` requests with 206 (without that every seek restarts at 0).
 Taps and swipes are CDP touch events (`page.touchscreen`), never `element.click()`, because the
 v16.0 bug (no tab could be scrolled by finger) passed every mouse/JS-click check.
 
-Scenarios (210 checks): `nav` (dock, finger scroll on pages and rails, directional view
+Scenarios (213 checks): `nav` (dock, finger scroll on pages and rails, directional view
 transitions, avatar → profile, menu, long press → quick peek, language switch), `search` (grid,
 typing, recent searches, filter sheet), `catalog` ("load more" stops at Algolia's pagination
 limit with a note instead of a dead button; the mock caps paging like `paginationLimitedTo`), `genres` (Ecchi,
@@ -33,7 +34,9 @@ every mock list), `schedule` (opens on today), `player` (resume, auto-hide,
 pause, ±10 s buttons and double tap, intro marks, full screen + native immersive call, settings
 sheet over the player, ±10 min, speed, lock, next episode, saved position, back order sheet →
 full screen → player → details → home), `manga` (chapters, reader pages, immersive, finger
-scroll), `community` (guest), `logged` (one like per account, posting), `bundle` (APK v18: the
+scroll), `community` (guest), `logged` (one like per account, posting, the API host is
+black-x-anime.ai.studio and never black-x-anime.me, account deletion: the button waits for the typed
+user name, the user name + password go to `/api/app/account/delete`, then the app signs out), `bundle` (APK v18: the
 air-time reminders handed to `BlackXNativeAuth.scheduleEpisodeAlarms` — one per followed title with a
 real air time, never an empty list —, the alerts sheet saying so, the menu's «على الموقع بس» page and
 no website pages, «على الداتا», the sleep-timer chip and its cancel, a watch-party room by code
@@ -57,7 +60,7 @@ ONLY=links,back bash tools/apk/touch-test/run-web.sh    # some scenarios
 DIST=/path/to/website/build bash tools/apk/touch-test/run-web.sh
 ```
 
-`web-suite.mjs` (269 checks) opens the **website build** with the same mocks (`openWeb()` in `lib.mjs`:
+`web-suite.mjs` (278 checks) opens the **website build** with the same mocks (`openWeb()` in `lib.mjs`:
 the site's same-origin `/api/*` goes to the mock, Google Fonts are answered with the bundled fonts so
 Arabic renders in screenshots). A 412×915 touch phone with a phone browser user agent, or a 1440×900
 computer with a mouse; since 2026-10-17 both get the app interface. Scenarios: `boot` (phone and
@@ -99,14 +102,17 @@ still the settings page, the consent line on the sign-in page, the classic `/pri
 links; the developer panel (4 stats, 5 tabs, codes, members' requests, crash reports with their count and
 the phase-2 status from `/api/health`) and no developer row for a normal visitor; one anonymous crash report
 with the page path only, nothing more for the same error or for network drops; `robots.txt`, `sitemap.xml`
-and a title per tab). `openWeb(browser, { route, phone, seed, ctx, ui })`:
+and a title per tab; account deletion from «الخصوصية والأمان»: what goes / what stays, the button off
+until the user name is typed, a wrong password refused, then signed out with the device lists
+cleared; the policy explaining it with the new address). `openWeb(browser, { route, phone, seed, ctx, ui })`:
 `seed` is written to localStorage, which every page of one browser shares, so seed `blackx.vipTier`
 explicitly; `ui: 'site'` stores the classic-pages choice; `ctx` patches the mock (`episodeDelayMs` holds
 `/api/stream/episode` back, `communityPosts` replaces the seeded feed, `extraSlots` adds AniList air
 times, `fs` / `fsTimes` share Firestore documents between pages or browsers, `recordOpen` makes
 `window.open` record the address instead of opening a tab, `developer: true` lets a seeded session open
 the mocked `/api/app/admin/*` (otherwise 403), `firestoreAuth` is what `/api/health` reports (default
-`api_key`), crash reports posted to `/api/telemetry/error` are collected in `ctx.telemetry`); a seeded `blackx_token` signs the classic
+`api_key`), crash reports posted to `/api/telemetry/error` are collected in `ctx.telemetry`, account
+deletions in `ctx.accountDeletes` (`deletePassword` makes any other password fail with `bad_password`)); a seeded `blackx_token` signs the classic
 computer pages in through the mocked `/api/auth/me`. The Firestore mock gives every write a new
 `updateTime` and enforces `currentDocument.exists` / `currentDocument.updateTime` like the real API.
 Extra browser contexts crash the single-process test Chromium, so a second person is a second

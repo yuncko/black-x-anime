@@ -14,11 +14,19 @@
  *  - no ads, analytics or tracking scripts in the code; Google Fonts on the website only
  *    (the APK bundles its fonts); search queries go to Algolia from the browser;
  *  - incognito stops the watch / reading history; «نسخة احتياطية» exports the lists;
- *  - there is no in-app account deletion yet: the policy says so and gives the request route.
+ *  - account deletion (2026-10-17): profile → privacy & security → delete account
+ *    (POST /api/app/account/delete): removes the account documents (or empties them while the
+ *    phase-1 rules refuse deletes), community posts / replies / likes, rankings votes and
+ *    requests; per-title episode comments and reviews stay (nobody can list those documents),
+ *    and so do replies written before replies carried a username (2026-10-17);
+ *  - hosting: Google Cloud Run through Google AI Studio (shared/publicSite.js), before that Vercel.
  * Change the text when the code changes, and update LEGAL_UPDATED.
  */
+import { PUBLIC_SITE_HOST } from '../../../shared/publicSite.js';
 
 export const LEGAL_UPDATED = '2026-10-17';
+
+const SITE = PUBLIC_SITE_HOST;
 
 export const LEGAL_DOCS = {
   policy: {
@@ -26,9 +34,9 @@ export const LEGAL_DOCS = {
     titleAr: 'سياسة الخصوصية',
     titleEn: 'Privacy policy',
     introAr:
-      'الصفحة دي بتشرح البيانات اللي BLACK X (الموقع black-x-anime.me وتطبيق الأندرويد) بيحتفظ بيها، وليه، ومين بيشوفها، وإزاي تتحكم فيها.',
+      `الصفحة دي بتشرح البيانات اللي BLACK X (الموقع ${SITE} وتطبيق الأندرويد) بيحتفظ بيها، وليه، ومين بيشوفها، وإزاي تتحكم فيها.`,
     introEn:
-      'This page explains what data BLACK X (the website black-x-anime.me and the Android app) keeps, why, who can see it and how you control it.',
+      `This page explains what data BLACK X (the website ${SITE} and the Android app) keeps, why, who can see it and how you control it.`,
     sections: [
       {
         hAr: 'من غير حساب',
@@ -98,7 +106,7 @@ export const LEGAL_DOCS = {
         hAr: 'الخدمات اللي بنعتمد عليها',
         hEn: 'Services we rely on',
         ar: [
-          'Vercel: استضافة الموقع والسيرفر. زي أي استضافة، بيسجّل بيانات تقنية عن الطلبات (زي عنوان IP ونوع المتصفح) عشان يشغّل الخدمة ويحميها.',
+          'Google Cloud Run (عن طريق Google AI Studio): استضافة الموقع والسيرفر (وقبل كده Vercel). زي أي استضافة، بيسجّل بيانات تقنية عن الطلبات (زي عنوان IP ونوع المتصفح) عشان يشغّل الخدمة ويحميها.',
           'Google Firebase: تخزين الحسابات ومحتوى المجتمع، وتسجيل الدخول بجوجل.',
           'Algolia: البحث في الأنمي؛ اللي بتكتبه في البحث بيتبعت لـ Algolia.',
           'مصادر بيانات الأنمي (زي AniList): البوسترات والمعلومات ممكن تتحمل من سيرفراتهم مباشرة.',
@@ -106,7 +114,7 @@ export const LEGAL_DOCS = {
           'Google Fonts (على الموقع بس): الخطوط بتتحمل من جوجل.'
         ],
         en: [
-          'Vercel hosts the website and the server. Like any host, it logs technical request data (such as IP address and browser type) to run and protect the service.',
+          'Google Cloud Run (through Google AI Studio) hosts the website and the server (Vercel did before). Like any host, it logs technical request data (such as IP address and browser type) to run and protect the service.',
           'Google Firebase stores accounts and community content, and runs Google sign-in.',
           'Algolia powers anime search; what you type in search is sent to Algolia.',
           'Anime databases (such as AniList): posters and details may load straight from their servers.',
@@ -127,13 +135,13 @@ export const LEGAL_DOCS = {
           'تعدّل اسمك وصورتك ونبذتك من «تعديل الملف».',
           'تصدّر نسخة من قائمتك وسجلك من «نسخة احتياطية».',
           '«التصفح الخفي» في «الخصوصية والأمان» بيوقف تسجيل سجل المشاهدة والقراءة.',
-          'مسح الحساب: لسه مفيش زرار لمسح الحساب جوه التطبيق. ابعت طلب من «اطلب أنمي أو مانهوا» (نوع «بلاغ») وانت داخل بحسابك، عشان المطور يمسح الحساب وبياناته.'
+          'مسح الحساب: من «الخصوصية والأمان» ← «مسح الحساب». بيتمسح حسابك (اسم المستخدم والإيميل وكلمة المرور)، وقائمتك وسجلك ومكان وقوفك ونقاطك واشتراك VIP اللي على السيرفر، وبوستاتك وردودك وإعجاباتك في المجتمع، وتقييماتك في صفحة الترتيب، وطلباتك للمطور. تعليقات الحلقات والمراجعات اللي على صفحات الأنمي، والردود اللي اتكتبت قبل 17 أكتوبر 2026، بتفضل باسمك الظاهر — لو عاوزها تتشال ابعت «بلاغ» بمكانها. اللي محفوظ على جهازك بيتمسح لو اخترت كده وانت بتمسح الحساب، أو لما تمسح بيانات المتصفح أو التطبيق.'
         ],
         en: [
           'Edit your name, photo and bio in “Edit profile”.',
           'Export a copy of your list and history in “Backup”.',
           '“Incognito mode” in “Privacy & security” stops recording your watch and reading history.',
-          'Deleting your account: there is no delete button in the app yet. Send a request from “Request a title” (type “Report”) while signed in, so the developer can delete the account and its data.'
+          'Deleting your account: “Privacy & security” → “Delete account”. It deletes your account (username, e-mail and password), your list, history, resume points, points and VIP kept on the server, your community posts, replies and likes, your rankings votes and your requests to the developer. Episode comments and reviews on anime pages, and replies written before 17 October 2026, stay under your display name — send a “Report” with where they are if you want them removed. What is stored on your device is deleted if you choose so while deleting the account, or when you clear the browser or app storage.'
         ]
       },
       {
