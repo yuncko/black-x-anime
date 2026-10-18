@@ -161,38 +161,18 @@ export default function HomeTab({
                 <img className="bx-hero-img" src={coverForMode(hero.poster || hero.banner, dataSaver)} alt="" decoding="async" />
               </picture>
               <div className="bx-hero-shade" aria-hidden="true" />
-              <div className="bx-hero-copy" key={`copy-${hero.objectID}`}>
-                <div className="bx-hero-meta">
-                  {hero.rating ? (
-                    <span className="bx-hero-rating">
-                      <BxIcon name="star" size="0.95em" filled />
-                      {hero.rating}
-                    </span>
-                  ) : null}
+              <div className="bx-hero-copy nv-hero-copy" key={`copy-${hero.objectID}`}>
+                <div className="bx-hero-meta nv-hero-meta">
                   {meta.map((m) => (
                     <span key={m}>{m}</span>
                   ))}
                 </div>
-                <h1 className="bx-hero-title" dir="auto">
+                <h1 className="bx-hero-title nv-hero-title" dir="auto">
                   {hero.titleEn}
                 </h1>
-                <div className="bx-hero-actions">
-                  <button type="button" className="bx-btn bx-btn-primary" onClick={() => onOpen(hero, resumeEpisode(hero))}>
-                    <BxIcon name="play" filled />
-                    {isRtl ? 'تشغيل' : 'Play'}
-                  </button>
-                  <button type="button" className="bx-btn bx-btn-ghost" onClick={() => onOpen(hero)}>
-                    <BxIcon name="info" />
-                    {isRtl ? 'التفاصيل' : 'Details'}
-                  </button>
-                  <button
-                    type="button"
-                    className={`bx-icon-btn${fav ? ' is-on' : ''}`}
-                    onClick={() => onToggleFavorite(hero)}
-                    aria-label={fav ? (isRtl ? 'في قائمتي' : 'In my list') : isRtl ? 'أضف لقائمتي' : 'Add to my list'}
-                    aria-pressed={fav}
-                  >
-                    <BxIcon name={fav ? 'check' : 'plus'} />
+                <div className="bx-hero-actions nv-hero-actions">
+                  <button type="button" className="nv-hero-cta" onClick={() => onOpen(hero)}>
+                    Voir les détails
                   </button>
                 </div>
               </div>
@@ -236,8 +216,8 @@ export default function HomeTab({
       {/* 4. Airing today (schedule of this weekday) */}
       {today.length > 0 && (
         <section className="bx-section">
-          <SectionHead title={isRtl ? 'بتنزل النهارده' : 'Airing today'} onMore={() => onSeeAll('schedule')} isRtl={isRtl} />
-          <ScrollRow className="bx-stories" label={isRtl ? 'بتنزل النهارده' : 'Airing today'}>
+          <SectionHead title="Aujourd'hui" onMore={() => onSeeAll('schedule')} isRtl={false} />
+          <ScrollRow className="bx-stories" label="Aujourd'hui">
             {today.slice(0, 14).map((item, idx) => (
               <button
                 key={`today-${item.objectID}`}
@@ -262,8 +242,8 @@ export default function HomeTab({
       {topRated.length >= 3 && (
         <LazyMount minHeight={250} placeholder={<SkeletonRow cards={3} cardWidth={150} cardHeight={200} animated={false} />}>
           <section className="bx-section">
-            <SectionHead title={isRtl ? 'أعلى 10 تقييماً' : 'Top 10 by rating'} onMore={() => onSeeAll('best_mal_ranked')} isRtl={isRtl} />
-            <ScrollRow className="bx-top10-row" label={isRtl ? 'أعلى 10 تقييماً' : 'Top 10 by rating'}>
+            <SectionHead title="Top 10" onMore={() => onSeeAll('best_mal_ranked')} isRtl={false} />
+            <ScrollRow className="bx-top10-row" label="Top 10">
               {topRated.slice(0, 10).map((item, idx) => (
                 <div key={`top-${item.objectID}`} className="bx-top10">
                   <span className="bx-top10-num" aria-hidden="true">
@@ -280,11 +260,11 @@ export default function HomeTab({
       {/* 6–8. Distinct catalogue rows */}
       <LazyMount minHeight={220} placeholder={<SkeletonRow cards={2} cardWidth={272} cardHeight={153} animated={false} />}>
         <AiringRail
-          title={isRtl ? 'بيتعرض دلوقتي' : 'Airing now'}
+          title="En cours de diffusion"
           items={airing}
           loading={loading}
           onMore={() => onSeeAll('series_fav_count_desc', 'airing')}
-          isRtl={isRtl}
+          isRtl={false}
           onOpen={onOpen}
           onPeek={onPeek}
           dataSaver={dataSaver}
@@ -294,11 +274,11 @@ export default function HomeTab({
       </LazyMount>
       <LazyMount minHeight={250} placeholder={<SkeletonRow cards={4} animated={false} />}>
         <PosterRail
-          title={isRtl ? 'أحدث الحلقات' : 'Latest episodes'}
+          title="Derniers épisodes"
           items={latest}
           loading={loading}
           onMore={() => onSeeAll('series_date_created')}
-          isRtl={isRtl}
+          isRtl={false}
           onOpen={onOpen}
           onPeek={onPeek}
           dataSaver={dataSaver}
@@ -306,11 +286,11 @@ export default function HomeTab({
       </LazyMount>
       <LazyMount minHeight={250} placeholder={<SkeletonRow cards={4} animated={false} />}>
         <PosterRail
-          title={isRtl ? 'أفلام' : 'Movies'}
+          title="Films"
           items={movies}
           loading={loading}
           onMore={() => onSeeAll('series_fav_count_desc', 'movie')}
-          isRtl={isRtl}
+          isRtl={false}
           onOpen={onOpen}
           onPeek={onPeek}
           dataSaver={dataSaver}
@@ -320,8 +300,8 @@ export default function HomeTab({
       {/* 9. Continue reading (manga) */}
       {mangaHistory.length > 0 && (
         <section className="bx-section">
-          <SectionHead title={isRtl ? 'كمّل قراءة' : 'Continue reading'} onMore={onMangaLibrary} isRtl={isRtl} />
-          <ScrollRow label={isRtl ? 'كمّل قراءة' : 'Continue reading'}>
+          <SectionHead title="Continuer la lecture" onMore={onMangaLibrary} isRtl={false} />
+          <ScrollRow label="Continuer la lecture">
             {mangaHistory.slice(0, 10).map((mh, i) => (
               <button key={`${mh.objectID}-${i}`} type="button" className="bx-read-card" onClick={() => onOpenManga(mh)}>
                 <img src={mh.poster_uri} alt="" loading="lazy" decoding="async" />
@@ -329,7 +309,7 @@ export default function HomeTab({
                   <span className="bx-read-title" dir="auto">
                     {mh.name}
                   </span>
-                  <span className="bx-read-sub">{isRtl ? `الفصل ${mh.lastChapter}` : `Chapter ${mh.lastChapter}`}</span>
+                  <span className="bx-read-sub">Chapitre {mh.lastChapter}</span>
                 </span>
               </button>
             ))}
@@ -339,11 +319,11 @@ export default function HomeTab({
 
       {/* 10. Browse by genre */}
       <section className="bx-section bx-section-last">
-        <SectionHead title={isRtl ? 'تصفح حسب النوع' : 'Browse by genre'} isRtl={isRtl} />
+        <SectionHead title="Découvrir" isRtl={false} />
         <div className="bx-row bx-chip-row bx-genre-row">
           {genres.map((g) => (
             <button key={g.id} type="button" className="bx-chip" onClick={() => onGenre(g)}>
-              {isRtl ? g.ar : g.en}
+              {g.fr || g.en}
             </button>
           ))}
         </div>
@@ -354,7 +334,7 @@ export default function HomeTab({
         <footer className="bx-home-foot">
           <button type="button" className="bx-classic-link" onClick={onClassicSite}>
             <BxIcon name="monitor" size="1em" />
-            {isRtl ? 'التصميم القديم للموقع (الروايات، متجر الإطارات…)' : 'Classic website (novels, frame shop…)'}
+            Site classique (romans, boutique…)
           </button>
         </footer>
       ) : null}

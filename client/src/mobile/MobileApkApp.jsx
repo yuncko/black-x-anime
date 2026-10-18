@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useLayoutEffect, useMemo, useR
 import { flushSync } from 'react-dom';
 import { BLACK_X_MOTION_THEMES } from '../components/BlackXSplashVortex.jsx';
 import BxIcon, { stripEmoji } from './BxIcon.jsx';
+import './nuvioTokens.css';
 import './mobileUi.css';
 import './desktop.css';
 import ToastHost from './ToastHost.jsx';
@@ -183,10 +184,10 @@ const GENRE_CHIPS = [
 const RECENT_SEARCHES_KEY = 'bx_mob_recent_searches';
 
 const TOPBAR_TITLES = {
-  schedule: { ar: 'جدول الحلقات', en: 'Schedule' },
+  schedule: { ar: 'جدول الحلقات', en: 'Planning' },
   manga: { ar: 'المانجا', en: 'Manga' },
-  community: { ar: 'المجتمع', en: 'Community' },
-  profile: { ar: 'حسابي', en: 'My account' }
+  community: { ar: 'المجتمع', en: 'Communauté' },
+  profile: { ar: 'حسابي', en: 'Profil' }
 };
 
 const HOME_GENRES = GENRE_CHIPS.filter((g) => g.id !== 'all').slice(0, 14);
@@ -388,7 +389,7 @@ export default function MobileApkApp() {
   const isWeb = isWebApp();
   // The page the address bar asked for when the app started (webRoutes.js), website only.
   const [webStart] = useState(() => (isWeb ? parseWebLocation(window.location.pathname, window.location.search) : null));
-  const [lang, setLang] = useState(() => localStorage.getItem('bx_mob_lang') || 'ar');
+  const [lang, setLang] = useState(() => localStorage.getItem('bx_mob_lang') || 'fr');
   const [activeTab, setActiveTab] = useState(() => {
     if (webStart?.kind === 'tab') return webStart.tab;
     if (webStart?.kind === 'profile') return 'profile';
@@ -450,6 +451,7 @@ export default function MobileApkApp() {
   const [epAscending, setEpAscending] = useState(true);
   const [hideFiller, setHideFiller] = useState(false);
   const [storyExpanded, setStoryExpanded] = useState(false);
+  const [detailActionsExpanded, setDetailActionsExpanded] = useState(false);
   const [animeCharacters, setAnimeCharacters] = useState([]);
   const [charactersLoading, setCharactersLoading] = useState(false);
   const [relatedAnimes, setRelatedAnimes] = useState([]);
@@ -641,7 +643,7 @@ export default function MobileApkApp() {
   });
   const [savingOfflineChapter, setSavingOfflineChapter] = useState(false);
 
-  // 2. Anime Ultra Player v4 (Audio Booster 200% + Bass, A-B Scene Loop, Smart Sleep Timer, Frame Snapshot)
+  // 2. Anime Ultra Player v4 (Audio Booster 200% + Bass, A-B Scene Loop, Smart Sleep Timer, Frame Capture)
   const [audioBoostMode, setAudioBoostMode] = useState('normal'); // 'normal' | 'boost150' | 'boost200' | 'voice'
   const [loopPointA, setLoopPointA] = useState(null);
   const [loopPointB, setLoopPointB] = useState(null);
@@ -786,7 +788,7 @@ export default function MobileApkApp() {
 
   // ==================== v9.0 SOVEREIGN CINEMA OS & STANDALONE PLAYER STATES ====================
   const [playerMinimized, setPlayerMinimized] = useState(false); // Floating Mini-Player vs Dedicated Standalone Player Page
-  const [epLayoutMode, setEpLayoutMode] = useState('cards'); // 'cards' (Crunchyroll Horizontal Cards) | 'grid' (Fast Number Grid)
+  const [epLayoutMode, setEpLayoutMode] = useState('cards'); // 'cards' (Crunchyroll Horizontal Cartes) | 'grid' (Fast Number Grid)
   const [epRangeChunk, setEpRangeChunk] = useState(-1); // -1 = All, 0 = 1..50, 1 = 51..100, etc.
   const [storyPreviewAnime, setStoryPreviewAnime] = useState(null); // Fullscreen Vertical Story / Highlight Modal
   const [mangaChSearch, setMangaChSearch] = useState(''); // Search chapters inside Manhwa Series Hub
@@ -880,7 +882,7 @@ export default function MobileApkApp() {
     };
   }, [activeMangaChapter, readerMode, mangaPages.length]);
 
-  // Pro Video Player Touch Gestures: Left Vertical Swipe = Brightness, Right Vertical Swipe = Volume, Long Press = 2.0x Speed
+  // Pro Video Player Touch Gestures: Left Vertical Swipe = Luminosité, Right Vertical Swipe = Volume, Long Press = 2.0x Vitesse
   const showGestureIndicator = useCallback((type, value) => {
     setGestureHud({ type, value });
     if (gestureHudTimerRef.current) clearTimeout(gestureHudTimerRef.current);
@@ -1259,8 +1261,8 @@ export default function MobileApkApp() {
     [vipRedeemCode, sessionToken, user, showToast, lang]
   );
 
-  // Developer Only: Send or Clear a Global Cloud Broadcast Banner to ALL users immediately
-  const handleDevSendBroadcast = useCallback(
+  // Developer Only: Envoyer or Clear a Global Cloud Broadcast Banner to ALL users immediately
+  const handleDevEnvoyerBroadcast = useCallback(
     async (clearMsg = false) => {
       if (!isDeveloper) return;
       setDevBroadcastBusy(true);
@@ -1462,8 +1464,8 @@ export default function MobileApkApp() {
     showToast(labelsAr[nextMode] || nextMode);
   }, [audioBoostMode, showToast]);
 
-  // 5. Anime Ultra Player v4: 1-Tap 1080p Frame Snapshot
-  const handleTakeVideoSnapshot = useCallback(() => {
+  // 5. Anime Ultra Player v4: 1-Tap 1080p Frame Capture
+  const handleTakeVideoCapture = useCallback(() => {
     const vid = videoRef.current;
     if (!vid || !selectedAnime || !activeEpisode) return;
     const curSec = Math.floor(vid.currentTime || 0);
@@ -1575,7 +1577,7 @@ export default function MobileApkApp() {
 
   // ==================== v5.0 SOVEREIGN CONTROLLERS ====================
 
-  // 1. Watch party: useWatchParty.js / watchParty.js (v18 — host-only room state, chat with
+  // 1. Soirée: useWatchParty.js / watchParty.js (v18 — host-only room state, chat with
   //    preconditions, the guest opens the host's episode). The old single-document party lived here.
 
   // 2. Timed Scene Comments / Danmaku (التعليقات الزمنية التفاعلية على مشاهد الحلقة)
@@ -2789,7 +2791,7 @@ export default function MobileApkApp() {
     }
   }, []);
 
-  // Cards open the details sheet with a shared-element transition from the tapped poster.
+  // Cartes open the details sheet with a shared-element transition from the tapped poster.
   const handleOpenAnime = useCallback(
     (anime, autoPlayEpNum = null) => {
       if (isHiddenAnime(anime)) {
@@ -2921,7 +2923,7 @@ export default function MobileApkApp() {
     ctl.setLevel(next);
     setHlsLevel(next);
     const lvl = hlsLevels.find((l) => l.index === next);
-    showToast(lang === 'ar' ? `الجودة: ${lvl ? `${lvl.height}p` : 'تلقائي'}` : `Quality: ${lvl ? `${lvl.height}p` : 'Auto'}`, 'sliders');
+    showToast(lang === 'ar' ? `الجودة: ${lvl ? `${lvl.height}p` : 'تلقائي'}` : `Qualité : ${lvl ? `${lvl.height}p` : 'Auto'}`, 'sliders');
   }, [hlsLevels, hlsLevel, showToast, lang]);
 
   // Reset per-episode player state.
@@ -3554,7 +3556,7 @@ export default function MobileApkApp() {
     }
   };
 
-  // Publish Post to Shared Community Feed (with Category, Spoiler Tag, Likes & Replies)
+  // Post Post to Shared Community Feed (with Category, Spoiler Tag, Likes & Replies)
   const myPostKey = user ? String(user.id || user.username || user.email || '') : '';
   const shortDateNow = () => {
     try {
@@ -3609,7 +3611,7 @@ export default function MobileApkApp() {
     }
   }, []);
 
-  const handlePublishPost = async (e) => {
+  const handlePostPost = async (e) => {
     e.preventDefault();
     const text = newPostText.trim();
     if (!text || publishingRef.current) return;
@@ -3725,15 +3727,15 @@ export default function MobileApkApp() {
   // when there is something to count. Reviews stay, because that tab is where one is written.
   const detailTrailerId = selectedAnime ? selectedAnime.trailer || selectedAnime.youtubeId || '' : '';
   const detailTabs = useMemo(() => {
-    const isRtl = lang === 'ar'; // (the component's isRtl is declared further down)
+    const isRtl = lang === 'ar';
     const tabs = [{ id: 'episodes', label: isRtl ? `الحلقات (${animeEpisodes.length})` : `Episodes (${animeEpisodes.length})` }];
-    if (charactersLoading) tabs.push({ id: 'characters', label: isRtl ? 'الشخصيات' : 'Cast' });
-    else if (animeCharacters.length) tabs.push({ id: 'characters', label: isRtl ? `الشخصيات (${animeCharacters.length})` : `Cast (${animeCharacters.length})` });
-    if (detailTrailerId) tabs.push({ id: 'trailer', label: isRtl ? 'التريلر والمشابهة' : 'Trailer & more' });
-    else if (relatedAnimes.length) tabs.push({ id: 'trailer', label: isRtl ? 'أعمال مشابهة' : 'More like this' });
+    if (charactersLoading) tabs.push({ id: 'characters', label: isRtl ? 'الشخصيات' : 'Casting' });
+    else if (animeCharacters.length) tabs.push({ id: 'characters', label: isRtl ? `الشخصيات (${animeCharacters.length})` : `Casting (${animeCharacters.length})` });
+    if (detailTrailerId) tabs.push({ id: 'trailer', label: isRtl ? 'التريلر والمشابهة' : 'Bandes-annonces' });
+    else if (relatedAnimes.length) tabs.push({ id: 'trailer', label: isRtl ? 'أعمال مشابهة' : 'Titres similaires' });
     tabs.push({
       id: 'reviews',
-      label: animeReviews.length ? (isRtl ? `التقييمات (${animeReviews.length})` : `Reviews (${animeReviews.length})`) : isRtl ? 'التقييمات' : 'Reviews'
+      label: animeReviews.length ? (isRtl ? `التقييمات (${animeReviews.length})` : `Avis (${animeReviews.length})`) : isRtl ? 'التقييمات' : 'Avis'
     });
     return tabs;
   }, [lang, animeEpisodes.length, charactersLoading, animeCharacters.length, detailTrailerId, relatedAnimes.length, animeReviews.length]);
@@ -3741,7 +3743,7 @@ export default function MobileApkApp() {
     if (!detailTabs.some((t) => t.id === detailTab)) setDetailTab('episodes');
   }, [detailTabs, detailTab]);
 
-  // Episode options sheet: the filler switch only exists when the server marks filler episodes.
+  // Options des épisodes sheet: the filler switch only exists when the server marks filler episodes.
   const hasFillerData = useMemo(() => animeEpisodes.some((ep) => ep && ep.filler), [animeEpisodes]);
   const epOptionsCount = (epLayoutMode === 'grid' ? 1 : 0) + (epAscending ? 0 : 1) + (hideFiller && hasFillerData ? 1 : 0);
 
@@ -4079,7 +4081,7 @@ export default function MobileApkApp() {
     async (slug, sourceHint = '', ep = null) => {
       const anime = await resolveAnimeBySlug(slug, sourceHint);
       if (!anime) {
-        showToast(isRtl ? 'ماقدرناش نلاقي العمل ده — جرّب البحث' : 'We could not find that title — try searching', 'search');
+        showToast(isRtl ? 'ماقدرناش نلاقي العمل ده — جرّب البحث' : 'Impossible de trouver ce titre — essayez une recherche', 'search');
         return false;
       }
       if (anime.bxHidden || isHiddenAnime(anime)) {
@@ -4259,7 +4261,7 @@ export default function MobileApkApp() {
           return;
         }
       }
-      showToast(isRtl ? 'مش لاقيين العمل ده على BLACK X — دوّرنا عليه في البحث' : 'Not found on BLACK X — searching for it', 'search');
+      showToast(isRtl ? 'مش لاقيين العمل ده على BLACK X — دوّرنا عليه في البحث' : 'Introuvable sur BLACK X — recherche en cours', 'search');
       setSearchQuery(names[0] || '');
       goToTab('catalog');
     },
@@ -4435,7 +4437,7 @@ export default function MobileApkApp() {
     setSelectedManga({ name: och.mangaName, poster_uri: och.poster, source: och.source });
     handleReadMangaChapter(och);
   };
-  const deleteSnapshot = (id) => {
+  const deleteCapture = (id) => {
     setSavedPanels((prev) => {
       const next = prev.filter((x) => x.id !== id);
       try {
@@ -4454,7 +4456,7 @@ export default function MobileApkApp() {
     localStorage.removeItem('bx_mob_user');
     resetProfileStack();
     haptic('success');
-    showToast(isRtl ? 'اتسجّل الخروج' : 'Signed out', 'logout');
+    showToast(isRtl ? 'اتسجّل الخروج' : 'Déconnecté', 'logout');
   };
   // Account deletion (profile → privacy & security → delete account; server: /api/app/account/delete).
   const [accountDeleteBusy, setAccountDeleteBusy] = useState(false);
@@ -4485,7 +4487,7 @@ export default function MobileApkApp() {
       }
       resetProfileStack();
       haptic('success');
-      showToast(isRtl ? 'اتمسح حسابك نهائياً' : 'Your account was deleted', 'check');
+      showToast(isRtl ? 'اتمسح حسابك نهائياً' : 'Votre compte a été supprimé', 'check');
     } catch (err) {
       haptic('error');
       showToast(apiErrorMessage(err, lang), 'alert');
@@ -4539,14 +4541,14 @@ export default function MobileApkApp() {
       } catch (_) {
         /* storage or scroll unavailable */
       }
-      showToast(next ? (isRtl ? 'التصفح الخفي شغال' : 'Incognito on') : isRtl ? 'التصفح الخفي اتقفل' : 'Incognito off', 'eye-off');
+      showToast(next ? (isRtl ? 'التصفح الخفي شغال' : 'Mode privé activé') : isRtl ? 'التصفح الخفي اتقفل' : 'Mode privé désactivé', 'eye-off');
     },
     pinCode: appPinCode,
     pinInput: pinSetupInput,
     setPinInput: setPinSetupInput,
     onSavePin: () => {
       if (pinSetupInput.length !== 4) {
-        showToast(isRtl ? 'اكتب 4 أرقام بالظبط' : 'Enter exactly 4 digits');
+        showToast(isRtl ? 'اكتب 4 أرقام بالظبط' : 'Saisissez exactement 4 chiffres');
         return;
       }
       setAppPinCode(pinSetupInput);
@@ -4557,7 +4559,7 @@ export default function MobileApkApp() {
       }
       setPinSetupInput('');
       haptic('success');
-      showToast(isRtl ? 'اتفعّل قفل التطبيق' : 'App lock is on', 'lock');
+      showToast(isRtl ? 'اتفعّل قفل التطبيق' : 'Verrouillage activé', 'lock');
     },
     onClearPin: () => {
       setAppPinCode('');
@@ -4568,7 +4570,7 @@ export default function MobileApkApp() {
       } catch (_) {
         /* storage or scroll unavailable */
       }
-      showToast(isRtl ? 'اتلغى قفل التطبيق' : 'App lock removed', 'unlock');
+      showToast(isRtl ? 'اتلغى قفل التطبيق' : 'Verrouillage désactivé', 'unlock');
     },
     title: selectedSovereignTitle,
     onTitle: (t, locked) => {
@@ -4620,7 +4622,7 @@ export default function MobileApkApp() {
           } catch (_) {
             /* clipboard unavailable */
           }
-          showToast(isRtl ? `اتنسخ الكود: ${code}` : `Copied: ${code}`, 'check');
+          showToast(isRtl ? `اتنسخ الكود: ${code}` : `Copié : ${code}`, 'check');
         },
         // members
         grantTarget: devGrantTarget,
@@ -4641,14 +4643,14 @@ export default function MobileApkApp() {
         onPickForGrant: (u) => {
           setDevGrantTarget(u.email || u.username || '');
           setDevGrantTier('vip_monarch');
-          showToast(isRtl ? 'اتحدد في خانة الترقية فوق' : 'Filled in the grant form above', 'crown');
+          showToast(isRtl ? 'اتحدد في خانة الترقية فوق' : 'Rempli dans le formulaire ci-dessus', 'crown');
         },
         // broadcast + spotlight
         broadcastMsg: globalBroadcastMsg,
         broadcastInput: devBroadcastInput,
         setBroadcastInput: setDevBroadcastInput,
         broadcastBusy: devBroadcastBusy,
-        onBroadcast: handleDevSendBroadcast,
+        onBroadcast: handleDevEnvoyerBroadcast,
         pinnedRec: globalPinnedRec,
         pinTitle: devPinTitleInput,
         setPinTitle: setDevPinTitleInput,
@@ -4703,12 +4705,12 @@ export default function MobileApkApp() {
       {/* Top toast (own component: showing one does not re-render the app) */}
       <ToastHost />
 
-      {/* Pull to refresh (home + schedule) */}
+      {/* Tirez pour actualiser (home + schedule) */}
       <PullToRefresh
         onRefresh={handlePullRefresh}
         disabled={!(activeTab === 'home' || activeTab === 'schedule') || Boolean(selectedAnime) || Boolean(activeMangaChapter) || commandMenuOpen}
-        label={isRtl ? 'اسحب للتحديث' : 'Pull to refresh'}
-        releaseLabel={isRtl ? 'سيب للتحديث' : 'Release to refresh'}
+        label={isRtl ? 'اسحب للتحديث' : 'Tirez pour actualiser'}
+        releaseLabel={isRtl ? 'سيب للتحديث' : 'Relâchez pour actualiser'}
       />
 
       {/* App 4-Digit PIN Lock Screen Overlay */}
@@ -4738,10 +4740,10 @@ export default function MobileApkApp() {
             }}
           />
           <h2 style={{ margin: '0 0 0.35rem', fontSize: '1.0625rem', fontWeight: 800 }}>
-            <BxIcon name="lock" className="bx-ico-lead" />{isRtl ? 'قفل حماية BLACK X مفعل' : 'BLACK X PIN Lock'}
+            <BxIcon name="lock" className="bx-ico-lead" />{isRtl ? 'قفل حماية BLACK X مفعل' : 'Verrouillage PIN BLACK X'}
           </h2>
           <p style={{ margin: '0 0 1.2rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
-            {isRtl ? 'أدخل رمز الـ PIN المكون من 4 أرقام لفتح التطبيق:' : 'Enter your 4-digit PIN code to unlock:'}
+            {isRtl ? 'أدخل رمز الـ PIN المكون من 4 أرقام لفتح التطبيق:' : 'Saisissez votre code PIN à 4 chiffres :'}
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
             {[0, 1, 2, 3].map((i) => (
@@ -4773,7 +4775,7 @@ export default function MobileApkApp() {
                       setPinInput('');
                     } else {
                       setPinInput('');
-                      showToast(isRtl ? 'الـ PIN غلط' : 'Incorrect PIN', 'x-circle');
+                      showToast(isRtl ? 'الـ PIN غلط' : 'PIN incorrect', 'x-circle');
                     }
                     return;
                   }
@@ -4786,7 +4788,7 @@ export default function MobileApkApp() {
                     } else {
                       setTimeout(() => {
                         setPinInput('');
-                        showToast(isRtl ? 'الـ PIN غلط' : 'Incorrect PIN', 'x-circle');
+                        showToast(isRtl ? 'الـ PIN غلط' : 'PIN incorrect', 'x-circle');
                       }, 180);
                     }
                   }
@@ -4814,7 +4816,7 @@ export default function MobileApkApp() {
           real air times, and a test notification that says it is a test. */}
       <AlertsSheet
         open={appSheet === 'alerts'}
-        onClose={() => setAppSheet(null)}
+        onFermer={() => setAppSheet(null)}
         isRtl={isRtl}
         followed={followedForAlerts}
         airingMap={airingMap}
@@ -4823,8 +4825,8 @@ export default function MobileApkApp() {
         onTest={() => {
           haptic('tap');
           const sent = dispatchPhoneNotification(
-            isRtl ? 'إشعار تجربة من BLACK X' : 'BLACK X test notification',
-            isRtl ? 'لو شايف الإشعار ده يبقى الإشعارات شغالة على جهازك.' : 'If you can see this, notifications work on this device.',
+            isRtl ? 'إشعار تجربة من BLACK X' : 'Notification de test BLACK X',
+            isRtl ? 'لو شايف الإشعار ده يبقى الإشعارات شغالة على جهازك.' : 'Si vous voyez ceci, les notifications fonctionnent.',
             Math.floor(Date.now() % 90000) + 1000
           );
           let denied = false;
@@ -4857,28 +4859,28 @@ export default function MobileApkApp() {
         <>
           <CommandPalette
             open={appSheet === 'palette'}
-            onClose={() => setAppSheet(null)}
+            onFermer={() => setAppSheet(null)}
             isRtl={isRtl}
             dataSaver={dataSaver}
             search={searchForPalette}
             onOpenItem={(item) => handleOpenAnime(item)}
             onOpenItemNewTab={(item) => openInNewTab(posterHref(item))}
             pages={[
-              { id: 'home', icon: 'home', label: isRtl ? 'الرئيسية' : 'Home', keywords: 'home', run: () => goToTab('home') },
-              { id: 'catalog', icon: 'search', label: isRtl ? 'البحث' : 'Search', keywords: 'search catalog', run: () => goToTab('catalog') },
-              { id: 'schedule', icon: 'calendar', label: isRtl ? 'جدول الحلقات' : 'Schedule', keywords: 'schedule', run: () => goToTab('schedule') },
+              { id: 'home', icon: 'home', label: isRtl ? 'الرئيسية' : 'Accueil', keywords: 'home', run: () => goToTab('home') },
+              { id: 'catalog', icon: 'search', label: isRtl ? 'البحث' : 'Rechercher', keywords: 'search catalog', run: () => goToTab('catalog') },
+              { id: 'schedule', icon: 'calendar', label: isRtl ? 'جدول الحلقات' : 'Planning', keywords: 'schedule', run: () => goToTab('schedule') },
               { id: 'manga', icon: 'book', label: isRtl ? 'المانجا' : 'Manga', keywords: 'manga manhwa', run: () => goToTab('manga') },
-              { id: 'community', icon: 'users', label: isRtl ? 'المجتمع' : 'Community', keywords: 'community', run: () => goToTab('community') },
-              { id: 'mylist', icon: 'bookmark', label: isRtl ? 'قائمتي' : 'My list', keywords: 'list favorites', run: () => goToTab('profile', () => resetProfileStack(['library'])) },
-              { id: 'rankings', icon: 'trophy', label: isRtl ? 'الترتيب' : 'Rankings', keywords: 'rankings top', run: () => goToTab('profile', () => resetProfileStack(['rankings'])) },
-              { id: 'wrapped', icon: 'sparkles', label: isRtl ? 'ملخصك' : 'Your year', keywords: 'wrapped year', run: () => goToTab('profile', () => resetProfileStack(['wrapped'])) },
-              { id: 'alerts', icon: 'bell', label: isRtl ? 'تنبيهات الحلقات' : 'Episode alerts', keywords: 'alerts', run: () => setAppSheet('alerts') },
-              { id: 'shortcuts', icon: 'keyboard', label: isRtl ? 'اختصارات الكيبورد' : 'Keyboard shortcuts', keywords: 'shortcuts keys', hint: '?', run: () => setAppSheet('shortcuts') },
-              { id: 'profile', icon: 'user', label: isRtl ? 'حسابي' : 'Profile', keywords: 'profile account', run: () => goToTab('profile') },
-              { id: 'classic', icon: 'monitor', label: isRtl ? 'التصميم القديم للموقع' : 'Classic website', keywords: 'classic old', run: () => openComputerVersion() }
+              { id: 'community', icon: 'users', label: isRtl ? 'المجتمع' : 'Communauté', keywords: 'community', run: () => goToTab('community') },
+              { id: 'mylist', icon: 'bookmark', label: isRtl ? 'قائمتي' : 'Ma liste', keywords: 'list favorites', run: () => goToTab('profile', () => resetProfileStack(['library'])) },
+              { id: 'rankings', icon: 'trophy', label: isRtl ? 'الترتيب' : 'Classement', keywords: 'rankings top', run: () => goToTab('profile', () => resetProfileStack(['rankings'])) },
+              { id: 'wrapped', icon: 'sparkles', label: isRtl ? 'ملخصك' : 'Bilan annuel', keywords: 'wrapped year', run: () => goToTab('profile', () => resetProfileStack(['wrapped'])) },
+              { id: 'alerts', icon: 'bell', label: isRtl ? 'تنبيهات الحلقات' : 'Alertes épisodes', keywords: 'alerts', run: () => setAppSheet('alerts') },
+              { id: 'shortcuts', icon: 'keyboard', label: isRtl ? 'اختصارات الكيبورد' : 'Raccourcis clavier', keywords: 'shortcuts keys', hint: '?', run: () => setAppSheet('shortcuts') },
+              { id: 'profile', icon: 'user', label: isRtl ? 'حسابي' : 'Profil', keywords: 'profile account', run: () => goToTab('profile') },
+              { id: 'classic', icon: 'monitor', label: isRtl ? 'التصميم القديم للموقع' : 'Site classique', keywords: 'classic old', run: () => openComputerVersion() }
             ]}
           />
-          <ShortcutsSheet open={appSheet === 'shortcuts'} onClose={() => setAppSheet(null)} isRtl={isRtl} />
+          <ShortcutsSheet open={appSheet === 'shortcuts'} onFermer={() => setAppSheet(null)} isRtl={isRtl} />
           <HoverPreview isRtl={isRtl} dataSaver={dataSaver} isFavorite={isFavoriteItem} onPlay={playFromPreview} onToggleFavorite={toggleFavorite} />
         </>
       ) : null}
@@ -4887,7 +4889,7 @@ export default function MobileApkApp() {
       {!selectedAnime && !activeMangaChapter && (
         <header className={`bx-topbar${pageScrolled ? ' is-solid' : ''}${topbarHidden && !commandMenuOpen && !(activeTab === 'profile' && profilePage !== 'root') ? ' is-hidden' : ''}`}>
           {activeTab === 'profile' && profilePage !== 'root' ? (
-            <button type="button" className="bx-round-btn bxp-back" onClick={closeProfilePage} aria-label={isRtl ? 'رجوع' : 'Back'}>
+            <button type="button" className="bx-round-btn bxp-back" onClick={closeProfilePage} aria-label={isRtl ? 'رجوع' : 'Retour'}>
               <BxIcon name="chevron-left" />
             </button>
           ) : (
@@ -4895,7 +4897,7 @@ export default function MobileApkApp() {
               type="button"
               className={`bx-avatar-btn${activeTab === 'profile' ? ' is-on' : ''}`}
               onClick={() => goToTab('profile', () => resetProfileStack())}
-              aria-label={isRtl ? 'حسابي' : 'My account'}
+              aria-label={isRtl ? 'حسابي' : 'Mon compte'}
             >
               {avatarPhoto ? (
                 <img src={avatarPhoto} alt="" referrerPolicy="no-referrer" onError={() => setAvatarFailed(true)} />
@@ -4996,7 +4998,7 @@ export default function MobileApkApp() {
             <SearchBox
               value={searchQuery}
               onCommit={setSearchQuery}
-              placeholder={isRtl ? 'دوّر على أنمي أو فيلم' : 'Search anime & movies'}
+              placeholder={isRtl ? 'دوّر على أنمي أو فيلم' : 'Rechercher un animé'}
               inputStyle={{
                 flex: 1,
                 minWidth: 0,
@@ -5009,7 +5011,7 @@ export default function MobileApkApp() {
               }}
             />
             {searchQuery && (
-              <button type="button" className="bx-search-clear" onClick={() => setSearchQuery('')} aria-label={isRtl ? 'مسح' : 'Clear'}>
+              <button type="button" className="bx-search-clear" onClick={() => setSearchQuery('')} aria-label={isRtl ? 'مسح' : 'Effacer'}>
                 <BxIcon name="close" />
               </button>
             )}
@@ -5025,7 +5027,7 @@ export default function MobileApkApp() {
               }}
             >
               <BxIcon name="sliders" size="1.05em" />
-              {isRtl ? 'فلترة' : 'Filters'}
+              {isRtl ? 'فلترة' : 'Filtres'}
               {catalogFilterCount ? ` · ${catalogFilterCount}` : ''}
             </button>
             <span className="bx-search-count">
@@ -5033,10 +5035,10 @@ export default function MobileApkApp() {
                 ? searchQuery.trim()
                   ? isRtl
                     ? `${catalogTotal.toLocaleString()} نتيجة`
-                    : `${catalogTotal.toLocaleString()} results`
+                    : `${catalogTotal.toLocaleString()} résultats`
                   : isRtl
                   ? `${catalogTotal.toLocaleString()} عمل`
-                  : `${catalogTotal.toLocaleString()} titles`
+                  : `${catalogTotal.toLocaleString()} titres`
                 : ''}
             </span>
           </div>
@@ -5044,9 +5046,9 @@ export default function MobileApkApp() {
           {!searchQuery.trim() && recentSearches.length > 0 && (
             <section className="bx-search-recent">
               <div className="bx-section-head">
-                <h2 className="bx-section-title">{isRtl ? 'آخر عمليات البحث' : 'Recent searches'}</h2>
+                <h2 className="bx-section-title">{isRtl ? 'آخر عمليات البحث' : 'Recherches récentes'}</h2>
                 <button type="button" className="bx-see-all" onClick={clearRecentSearches}>
-                  {isRtl ? 'مسح' : 'Clear'}
+                  {isRtl ? 'مسح' : 'Effacer'}
                 </button>
               </div>
               <div className="bx-filter-chips">
@@ -5066,7 +5068,7 @@ export default function MobileApkApp() {
               <SectionHead
                 title={isRtl ? `مانجا (${universalMangaHits.length})` : `Manga (${universalMangaHits.length})`}
                 onMore={() => goToTab('manga', () => setMangaQuery(searchQuery))}
-                moreLabel={isRtl ? 'افتح في المانجا' : 'Open in Manga'}
+                moreLabel={isRtl ? 'افتح في المانجا' : 'Ouvrir dans Manga'}
                 isRtl={isRtl}
               />
               <div className="bx-row bx-mob-scroll">
@@ -5102,10 +5104,10 @@ export default function MobileApkApp() {
           ) : catalogItems.length === 0 ? (
             <div className="bx-empty">
               <BxIcon name="search" size="2rem" />
-              <p>{isRtl ? 'مفيش نتايج. جرّب اسم تاني أو غيّر الفلترة.' : 'No results. Try another name or change the filters.'}</p>
+              <p>{isRtl ? 'مفيش نتايج. جرّب اسم تاني أو غيّر الفلترة.' : 'Aucun résultat. Essayez un autre nom ou modifiez les filtres.'}</p>
               {catalogFilterCount > 0 && (
                 <button type="button" className="bx-btn bx-btn-outline" onClick={resetCatalogFilters}>
-                  {isRtl ? 'إلغاء الفلترة' : 'Clear filters'}
+                  {isRtl ? 'إلغاء الفلترة' : 'Effacer les filtres'}
                 </button>
               )}
             </div>
@@ -5128,18 +5130,18 @@ export default function MobileApkApp() {
                   {loadingMoreCatalog ? (
                     <>
                       <BxIcon name="loader" spin />
-                      {isRtl ? 'بيحمّل...' : 'Loading...'}
+                      {isRtl ? 'بيحمّل...' : 'Chargement...'}
                     </>
                   ) : Number.isFinite(catalogTotal) ? (
                     isRtl ? (
                       `عرض المزيد (${catalogItems.length.toLocaleString()} من ${catalogTotal.toLocaleString()})`
                     ) : (
-                      `Load more (${catalogItems.length.toLocaleString()} of ${catalogTotal.toLocaleString()})`
+                      `Voir plus (${catalogItems.length.toLocaleString()} sur ${catalogTotal.toLocaleString()})`
                     )
                   ) : isRtl ? (
                     'عرض المزيد'
                   ) : (
-                    'Load more'
+                    'Voir plus'
                   )}
                 </button>
               )}
@@ -5155,7 +5157,7 @@ export default function MobileApkApp() {
                     <p>
                       {isRtl
                         ? `ظاهر أول ${catalogItems.length.toLocaleString()} من ${catalogTotal.toLocaleString()} عمل. خدمة البحث بتعرض أول ${catalogItems.length.toLocaleString()} بس في كل ترتيب، فعشان توصل للباقي دوّر بالاسم أو غيّر الترتيب والفلترة.`
-                        : `Showing the first ${catalogItems.length.toLocaleString()} of ${catalogTotal.toLocaleString()} titles. The search service lists only the first ${catalogItems.length.toLocaleString()} for each sort, so search by name or change the sort and filters to reach the rest.`}
+                        : `Affichering the first ${catalogItems.length.toLocaleString()} of ${catalogTotal.toLocaleString()} titles. The search service lists only the first ${catalogItems.length.toLocaleString()} for each sort, so search by name or change the sort and filters to reach the rest.`}
                     </p>
                     <button
                       type="button"
@@ -5166,7 +5168,7 @@ export default function MobileApkApp() {
                       }}
                     >
                       <BxIcon name="sliders" />
-                      {isRtl ? 'الترتيب والفلترة' : 'Sort & filters'}
+                      {isRtl ? 'الترتيب والفلترة' : 'Trier & filtrer'}
                     </button>
                   </div>
                 )}
@@ -5291,7 +5293,7 @@ export default function MobileApkApp() {
           onCategory={setPostCategory}
           postAnime={postAnime}
           onPostAnime={setPostAnime}
-          onPublish={handlePublishPost}
+          onPost={handlePostPost}
           onLike={handleLikePost}
           onReply={handleAddPostReply}
           replyingToPostId={replyingToPostId}
@@ -5299,7 +5301,7 @@ export default function MobileApkApp() {
           replyText={replyText}
           onReplyText={setReplyText}
           onSignIn={() => goToTab('profile')}
-          onNeedSignIn={() => showToast(isRtl ? 'سجّل دخولك الأول عشان ترد' : 'Sign in to reply', 'user')}
+          onNeedSignIn={() => showToast(isRtl ? 'سجّل دخولك الأول عشان ترد' : 'Connectez-vous pour répondre', 'user')}
           pickerOpen={appSheet === 'postAnime'}
           onPickerOpen={(open) => setAppSheet(open ? 'postAnime' : null)}
           searchAnime={searchAnimeForPost}
@@ -5371,7 +5373,7 @@ export default function MobileApkApp() {
             onOpenManga: openMangaFromProfile,
             onReadOffline: readOfflineFromProfile,
             onDeleteOffline: handleDeleteOfflineChapter,
-            onDeleteSnapshot: deleteSnapshot
+            onDeleteCapture: deleteCapture
           }}
           vip={{ code: vipRedeemCode, setCode: setVipRedeemCode, busy: vipRedeemBusy, onRedeem: handleRedeemVipCode }}
           requests={{
@@ -5443,7 +5445,7 @@ export default function MobileApkApp() {
               type="button"
               className="bx-icon-btn bx-icon-btn-sm"
               onClick={closeDetailsSheet}
-              aria-label={isRtl ? 'رجوع' : 'Back'}
+              aria-label={isRtl ? 'رجوع' : 'Retour'}
             >
               <BxIcon name={isRtl ? 'arrow-right' : 'arrow-left'} />
             </button>
@@ -5532,7 +5534,7 @@ export default function MobileApkApp() {
                   <button
                     type="button"
                     className="bx-icon-btn bx-icon-btn-sm"
-                    aria-label={isRtl ? 'رجوع لصفحة الأنمي' : 'Back to the show'}
+                    aria-label={isRtl ? 'رجوع لصفحة الأنمي' : 'Retour à la série'}
                     onClick={() => {
                       setActiveEpisode(null);
                       setPlayingVideoUrl('');
@@ -5563,16 +5565,16 @@ export default function MobileApkApp() {
                     <button
                       type="button"
                       className="bx-chip bx-sleep-chip"
-                      aria-label={isRtl ? 'إلغاء مؤقت النوم' : 'Cancel the sleep timer'}
-                      title={isRtl ? 'إلغاء مؤقت النوم' : 'Cancel the sleep timer'}
+                      aria-label={isRtl ? 'إلغاء مؤقت النوم' : 'Annuler la minuterie'}
+                      title={isRtl ? 'إلغاء مؤقت النوم' : 'Annuler la minuterie'}
                       onClick={() => {
                         setSleepTimerMode('off');
                         setSleepTimerRemainingSec(0);
-                        showToast(isRtl ? 'اتلغى مؤقت النوم' : 'Sleep timer cancelled', 'moon');
+                        showToast(isRtl ? 'اتلغى مؤقت النوم' : 'Minuterie annulée', 'moon');
                       }}
                     >
                       <BxIcon name="moon" size="1em" />
-                      {sleepTimerMode === 'end_of_ep' ? (isRtl ? 'آخر الحلقة' : 'End of episode') : formatClock(sleepTimerRemainingSec)}
+                      {sleepTimerMode === 'end_of_ep' ? (isRtl ? 'آخر الحلقة' : "Fin de l'épisode") : formatClock(sleepTimerRemainingSec)}
                     </button>
                   ) : null}
 
@@ -5581,8 +5583,8 @@ export default function MobileApkApp() {
                       type="button"
                       className={`bx-icon-btn bx-icon-btn-sm bx-theatre-btn${theatreOn ? ' is-active' : ''}`}
                       aria-pressed={theatreOn}
-                      aria-label={isRtl ? 'وضع السينما (T)' : 'Cinema mode (T)'}
-                      title={isRtl ? 'وضع السينما (T)' : 'Cinema mode (T)'}
+                      aria-label={isRtl ? 'وضع السينما (T)' : 'Mode cinéma (T)'}
+                      title={isRtl ? 'وضع السينما (T)' : 'Mode cinéma (T)'}
                       onClick={toggleTheatre}
                     >
                       <BxIcon name="cinema" />
@@ -5592,7 +5594,7 @@ export default function MobileApkApp() {
                   <button
                     type="button"
                     className="bx-icon-btn bx-icon-btn-sm"
-                    aria-label={isRtl ? 'تصغير المشغل' : 'Mini player'}
+                    aria-label={isRtl ? 'تصغير المشغل' : 'Mini-lecteur'}
                     onClick={() => setPlayerMinimized(true)}
                   >
                     <BxIcon name="chevron-down" />
@@ -5671,7 +5673,7 @@ export default function MobileApkApp() {
                           const saved = getPosition(episodeKey(selectedAnime, activeEpisode));
                           if (saved && !saved.done && saved.sec > 12 && dur && saved.sec < dur - 20) {
                             v.currentTime = saved.sec;
-                            showToast(isRtl ? `كمّلنا من ${formatClock(saved.sec)}` : `Resumed at ${formatClock(saved.sec)}`, 'play');
+                            showToast(isRtl ? `كمّلنا من ${formatClock(saved.sec)}` : `Reprise à ${formatClock(saved.sec)}`, 'play');
                           }
                         } catch (_) {}
                       }}
@@ -5769,11 +5771,11 @@ export default function MobileApkApp() {
                         }}
                         onLock={() => {
                           setVideoTouchLocked(true);
-                          showToast(isRtl ? 'اتقفل اللمس عشان مفيش ضغطة غلط' : 'Screen touch locked', 'lock');
+                          showToast(isRtl ? 'اتقفل اللمس عشان مفيش ضغطة غلط' : 'Écran verrouillé', 'lock');
                         }}
                         onUnlock={() => {
                           setVideoTouchLocked(false);
-                          showToast(isRtl ? 'اتفتح قفل اللمس' : 'Touch unlocked', 'unlock');
+                          showToast(isRtl ? 'اتفتح قفل اللمس' : 'Écran déverrouillé', 'unlock');
                         }}
                       />
                     )}
@@ -5793,15 +5795,15 @@ export default function MobileApkApp() {
                         />
                         <NextEpisodeCountdown
                           open={Boolean(nextEpCountdown)}
-                          title={nextEpCountdown ? `${isRtl ? 'الحلقة' : 'Episode'} ${nextEpCountdown.ep.number}` : ''}
+                          title={nextEpCountdown ? `${isRtl ? 'الحلقة' : 'Épisode'} ${nextEpCountdown.ep.number}` : ''}
                           subtitle={nextEpCountdown?.anime?.titleEn || ''}
                           isRtl={isRtl}
                           onPlay={playNextFromCountdown}
-                          onCancel={() => setNextEpCountdown(null)}
+                          onAnnuler={() => setNextEpCountdown(null)}
                         />
                       </>
                     )}
-                    {/* Live Brightness / Volume Gesture HUD */}
+                    {/* Live Luminosité / Volume Gesture HUD */}
                     {gestureHud && (
                       <div
                         style={{
@@ -5821,14 +5823,14 @@ export default function MobileApkApp() {
                         }}
                       >
                         {gestureHud.type === 'brightness'
-                          ? <><BxIcon name="sun" className="bx-ico-lead" />{isRtl ? 'السطوع' : 'Brightness'}{": "}{gestureHud.value}{"%"}</>
+                          ? <><BxIcon name="sun" className="bx-ico-lead" />{isRtl ? 'السطوع' : 'Luminosité'}{": "}{gestureHud.value}{"%"}</>
                           : <><BxIcon name="volume" className="bx-ico-lead" />{isRtl ? 'الصوت' : 'Volume'}{": "}{gestureHud.value}{"%"}</>}
                       </div>
                     )}
-                    {/* Watch party reactions float over the video for everyone in the room */}
+                    {/* Soirée reactions float over the video for everyone in the room */}
                     {party.code ? <PartyReactions messages={party.messages} /> : null}
 
-                    {/* Long-Press 2.0x Speed Boost Badge */}
+                    {/* Long-Press 2.0x Vitesse Boost Badge */}
                     {longPress2x && (
                       <div
                         style={{
@@ -5846,7 +5848,7 @@ export default function MobileApkApp() {
                           pointerEvents: 'none'
                         }}
                       >
-                        <BxIcon name="zap" className="bx-ico-lead" />2.0x {isRtl ? 'سرعة مضاعفة' : 'Fast Forward'}
+                        <BxIcon name="zap" className="bx-ico-lead" />2.0x {isRtl ? 'سرعة مضاعفة' : 'Avance rapide'}
                       </div>
                     )}
                     {/* Timed Scene Comment (Danmaku) Floating Banner */}
@@ -5941,7 +5943,7 @@ export default function MobileApkApp() {
                       {selectedAnime.titleEn}
                     </div>
                     <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.68)', marginTop: '2px' }}>
-                      <BxIcon name="film" className="bx-ico-lead" />{activeEpisode.name} • {isRtl ? 'اضغط للتكبير' : 'Tap to expand'}
+                      <BxIcon name="film" className="bx-ico-lead" />{activeEpisode.name} • {isRtl ? 'اضغط للتكبير' : 'Appuyez pour agrandir'}
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexShrink: 0 }}>
@@ -5959,7 +5961,7 @@ export default function MobileApkApp() {
                         cursor: 'pointer'
                       }}
                     >
-                      <BxIcon name="fullscreen" className="bx-ico-lead" />{isRtl ? 'فتح' : 'Open'}
+                      <BxIcon name="fullscreen" className="bx-ico-lead" />{isRtl ? 'فتح' : 'Ouvrir'}
                     </button>
                     <button
                       type="button"
@@ -5986,7 +5988,7 @@ export default function MobileApkApp() {
                 </div>
               )}
 
-              {/* Cinema Controls Strip (Fullscreen Button, Fit Mode, Prev/Next Ep, Auto-Next, PiP, Speed, Download) */}
+              {/* Cinema Controls Strip (Fullscreen Button, Fit Mode, Prev/Next Ep, Auto-Next, PiP, Vitesse, Download) */}
               {/* (the computer's cinema mode puts this column beside the video: desktop.css .is-theatre) */}
               {!videoFullscreen && !playerMinimized && (
                 <div className="bx-player-side" style={{ padding: '0.65rem 1rem 0' }}>
@@ -6016,7 +6018,7 @@ export default function MobileApkApp() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <BxIcon name="skip-back" className="bx-ico-lead" />{isRtl ? 'السابقة' : 'Prev'}
+                                <BxIcon name="skip-back" className="bx-ico-lead" />{isRtl ? 'السابقة' : 'Préc.'}
                               </button>
                             )}
                             {nextEp && (
@@ -6034,7 +6036,7 @@ export default function MobileApkApp() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <BxIcon name="skip-forward" className="bx-ico-lead" />{isRtl ? 'التالية' : 'Next'}
+                                <BxIcon name="skip-forward" className="bx-ico-lead" />{isRtl ? 'التالية' : 'Suiv.'}
                               </button>
                             )}
                           </>
@@ -6060,7 +6062,7 @@ export default function MobileApkApp() {
                         }}
                       >
                         <BxIcon name="popcorn" className="bx-ico-lead" />
-                        {party.code ? party.code : isRtl ? 'حفلة مشاهدة' : 'Watch party'}
+                        {party.code ? party.code : isRtl ? 'حفلة مشاهدة' : 'Soirée'}
                         {party.code && party.unread && !partyPanelOpen ? <span className="bx-party-unread">{party.unread}</span> : null}
                       </button>
 
@@ -6079,12 +6081,12 @@ export default function MobileApkApp() {
                           cursor: 'pointer'
                         }}
                       >
-                        <BxIcon name="sliders" className="bx-ico-lead" />{isRtl ? 'إعدادات المشغل' : 'Player settings'} {playerStudioOpen ? <BxIcon name="chevron-up" /> : <BxIcon name="chevron-down" />}
+                        <BxIcon name="sliders" className="bx-ico-lead" />{isRtl ? 'إعدادات المشغل' : 'Paramètres du lecteur'} {playerStudioOpen ? <BxIcon name="chevron-up" /> : <BxIcon name="chevron-down" />}
                       </button>
                     </div>
                   </div>
 
-                  {/* Player settings panel (also opened by the settings button on the video) */}
+                  {/* Paramètres du lecteur panel (also opened by the settings button on the video) */}
                   {playerStudioOpen && (
                     <div
                       id="bx-player-studio"
@@ -6117,7 +6119,7 @@ export default function MobileApkApp() {
                           }}
                         >
                           <BxIcon name="sliders" className="bx-ico-lead" />
-                          {isRtl ? 'الجودة: ' : 'Quality: '}
+                          {isRtl ? 'الجودة: ' : 'Qualité : '}
                           {hlsLevel === -1
                             ? isRtl ? `تلقائي${dataSaver ? ' (توفير البيانات)' : ''}` : `Auto${dataSaver ? ' (data saver)' : ''}`
                             : `${hlsLevels.find((l) => l.index === hlsLevel)?.height || ''}p`}
@@ -6138,13 +6140,13 @@ export default function MobileApkApp() {
                         }}
                       >
                         <BxIcon name="sparkles" className="bx-ico-lead" />
-                        {isRtl ? 'الصورة: ' : 'Picture: '}
+                        {isRtl ? 'الصورة: ' : 'Image : '}
                         {visualShaderMode === 'upscale4k'
-                          ? isRtl ? 'خطوط أوضح' : 'Sharper lines'
+                          ? isRtl ? 'خطوط أوضح' : 'Contours nets'
                           : visualShaderMode === 'amoled_hdr'
-                          ? isRtl ? 'تباين أعلى' : 'More contrast'
+                          ? isRtl ? 'تباين أعلى' : 'Plus de contraste'
                           : visualShaderMode === 'cinema_imax'
-                          ? isRtl ? 'ألوان دافية' : 'Warm colours'
+                          ? isRtl ? 'ألوان دافية' : 'Couleurs chaudes'
                           : isRtl ? 'أصلية' : 'Original'}
                       </button>
 
@@ -6213,7 +6215,7 @@ export default function MobileApkApp() {
 
                       <button
                         type="button"
-                        onClick={handleTakeVideoSnapshot}
+                        onClick={handleTakeVideoCapture}
                         style={{
                           padding: '0.45rem 0.6rem',
                           borderRadius: '8px',
@@ -6467,18 +6469,18 @@ export default function MobileApkApp() {
                         cursor: 'pointer'
                       }}
                     >
-                      {isRtl ? 'إرسال' : 'Send'}
+                      {isRtl ? 'إرسال' : 'Envoyer'}
                     </button>
                   </form>
 
-                  {/* Watch party (PartyPanel.jsx + useWatchParty.js): real rooms, chat, reactions */}
+                  {/* Soirée (PartyPanel.jsx + useWatchParty.js): real rooms, chat, reactions */}
                   {(partyPanelOpen || party.code) && (
                     <PartyPanel
                       party={party}
                       isRtl={isRtl}
                       isWeb={isWeb}
                       canHost={Boolean(partyCurrent)}
-                      onClose={() => setPartyPanelOpen(false)}
+                      onFermer={() => setPartyPanelOpen(false)}
                       onToast={showToast}
                     />
                   )}
@@ -6533,22 +6535,20 @@ export default function MobileApkApp() {
             </div>
           )}
 
-          {/* ==================== v11.0 OMNI-UI (SLOTH-UI + CURVED ARCH + WAKUWAKU 6-STATS) ANIME SHOW HUB HEADER ==================== */}
-          <div style={{ position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-            {/* Full-Bleed Key Art Hero Banner with Curved Arch Bottom Edge (UI #3 + SlothUI) */}
+          {/* Nuvio DetailHero — centered logo/title + genres, cinematic gradient, 28px bottom radius */}
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div
               style={{
                 position: 'relative',
                 width: '100%',
-                height: '315px',
+                height: 'clamp(420px, 62vh, 560px)',
                 overflow: 'hidden',
-                borderBottomLeftRadius: '18px',
-                borderBottomRightRadius: '18px',
-                borderBottom: '1px solid rgba(255,255,255,0.16)'
+                borderRadius: '0 0 28px 28px',
+                background: '#0d0d0d'
               }}
             >
               <img
-                src={selectedAnime.poster || selectedAnime.banner}
+                src={selectedAnime.banner || selectedAnime.poster}
                 alt={selectedAnime.titleEn}
                 style={{
                   viewTransitionName: 'bx-poster',
@@ -6556,7 +6556,8 @@ export default function MobileApkApp() {
                   height: '100%',
                   objectFit: 'cover',
                   objectPosition: 'center 20%',
-                  filter: 'brightness(0.75) contrast(1.1)'
+                  filter: 'brightness(0.78) contrast(1.06)',
+                  transform: 'scale(1.08)'
                 }}
               />
               <div
@@ -6564,137 +6565,160 @@ export default function MobileApkApp() {
                   position: 'absolute',
                   inset: 0,
                   background:
-                    'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 32%, rgba(0,0,0,0.88) 78%, #000000 100%)',
+                    'linear-gradient(180deg, rgba(13,13,13,0.02) 0%, transparent 16%, rgba(13,13,13,0.14) 32%, rgba(13,13,13,0.34) 50%, rgba(13,13,13,0.62) 68%, rgba(13,13,13,0.84) 84%, #0d0d0d 100%)',
                   pointerEvents: 'none'
                 }}
               />
-
-              {/* SlothUI [X] BLACK X ORIGINAL Seal overlaid on lower-left of Key Art */}
               <div
                 style={{
                   position: 'absolute',
-                  bottom: '16px',
-                  left: '16px',
-                  right: '16px'
+                  left: 0,
+                  right: 0,
+                  bottom: '18px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '0 18px',
+                  textAlign: 'center'
                 }}
               >
                 <h1
                   dir="auto"
                   style={{
                     margin: 0,
-                    fontSize: '1.75rem',
-                    fontWeight: 800,
-                    lineHeight: 1.18,
-                    textAlign: isRtl ? 'right' : 'left',
-                    textShadow: '0 4px 18px #000000'
+                    fontSize: '30px',
+                    fontWeight: 300,
+                    lineHeight: 1.1,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: '#f5f7f8',
+                    textShadow: '0 2px 18px rgba(0,0,0,0.6)',
+                    maxWidth: '100%',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
                   }}
                 >
                   {selectedAnime.titleEn}
                 </h1>
+                {visibleGenres(selectedAnime.tags).length > 0 ? (
+                  <div style={{ color: '#b8bec5', fontSize: '13px', fontWeight: 600, letterSpacing: '0.02em' }}>
+                    {visibleGenres(selectedAnime.tags).slice(0, 3).join(' • ')}
+                  </div>
+                ) : null}
               </div>
             </div>
 
-            <div style={{ position: 'relative', zIndex: 2, padding: '0.55rem 1rem 1rem', background: '#000000' }}>
-              <div className="bx-detail-meta">
-                {selectedAnime.rating && (
-                  <span className="bx-hero-rating">
-                    <BxIcon name="star" size="0.95em" filled />
-                    {selectedAnime.rating}
-                  </span>
-                )}
-                {selectedAnime.year && <span>{selectedAnime.year}</span>}
-                {selectedAnime.type && <span>{selectedAnime.type}</span>}
-                {selectedAnime.state && <span>{selectedAnime.state}</span>}
-                {animeEpisodes.length > 0 && <span>{isRtl ? `${animeEpisodes.length} حلقة` : `${animeEpisodes.length} episodes`}</span>}
-              </div>
-              {visibleGenres(selectedAnime.tags).length > 0 && (
-                <div className="bx-detail-tags">
-                  {visibleGenres(selectedAnime.tags).slice(0, 4).map((t) => (
-                    <span key={t}>{t}</span>
-                  ))}
+            <div style={{ position: 'relative', zIndex: 2, padding: '12px 1rem 1rem', background: '#0d0d0d' }}>
+              {/* Nuvio DetailMetaInfo: release • runtime • ageBadge • IMDb (yellow) then Réalisateur/Scénariste + synopsis */}
+              {(() => {
+                const metaRow = [];
+                if (selectedAnime.year) metaRow.push(String(selectedAnime.year));
+                if (selectedAnime.state) metaRow.push(selectedAnime.state);
+                const ageBadge = selectedAnime.ageRating || null;
+                const imdb = selectedAnime.rating || null;
+                const hasMetaRow = metaRow.length > 0 || ageBadge || (imdb && Number(imdb) > 0);
+                return hasMetaRow ? (
+                  <div className="nv-detail-meta-row">
+                    {metaRow.map((m) => (
+                      <span key={m} className="nv-detail-release">{m}</span>
+                    ))}
+                    {ageBadge ? <span className="nv-detail-age-badge">{ageBadge}</span> : null}
+                    {imdb && Number(imdb) > 0 ? (
+                      <span className="nv-detail-imdb"><span className="nv-imdb-label">IMDb</span><span className="nv-imdb-val">{imdb}</span></span>
+                    ) : null}
+                  </div>
+                ) : null;
+              })()}
+              {selectedAnime.director ? (
+                <div className="nv-detail-credit">
+                  <span className="nv-detail-credit-label">Réalisateur:  </span>
+                  <span className="nv-detail-credit-val">{Array.isArray(selectedAnime.director) ? selectedAnime.director.join(', ') : selectedAnime.director}</span>
                 </div>
-              )}
+              ) : null}
+              {selectedAnime.writer ? (
+                <div className="nv-detail-credit">
+                  <span className="nv-detail-credit-label">Scénariste:  </span>
+                  <span className="nv-detail-credit-val">{Array.isArray(selectedAnime.writer) ? selectedAnime.writer.join(', ') : selectedAnime.writer}</span>
+                </div>
+              ) : null}
 
-              {/* Main action: resume where you stopped (real position), else episode 1 */}
+              {/* Nuvio DetailActionButtons — white pill Lire + circular … (secondaries expand) */}
               {(() => {
                 const savedHist = watchHistory.find((h) => h.objectID === selectedAnime.objectID);
                 const resumeEp = savedHist && animeEpisodes.find((e) => Number(e.number) === Number(savedHist.episode));
                 const pos = resumeEp ? getPosition(episodeKey(selectedAnime, resumeEp.number)) : null;
                 let targetEp = resumeEp || animeEpisodes[0];
-                let label = targetEp ? (isRtl ? `شغّل الحلقة ${targetEp.number}` : `Play episode ${targetEp.number}`) : isRtl ? 'تشغيل' : 'Play';
-                if (resumeEp && pos?.done) {
+                let playLabel = null;
+                if (episodesLoading) playLabel = 'Chargement' + '…';
+                else if (resumeEp && pos && pos.done) {
                   const nextEp = animeEpisodes.find((e) => Number(e.number) === Number(resumeEp.number) + 1);
-                  if (nextEp) {
-                    targetEp = nextEp;
-                    label = isRtl ? `شغّل الحلقة ${nextEp.number}` : `Play episode ${nextEp.number}`;
-                  } else {
-                    label = isRtl ? `أعد الحلقة ${resumeEp.number}` : `Replay episode ${resumeEp.number}`;
-                  }
+                  if (nextEp) { targetEp = nextEp; playLabel = `Lire S1E${nextEp.number}`; }
+                  else playLabel = `Revoir S1E${resumeEp.number}`;
                 } else if (resumeEp) {
-                  const leftMin = pos && pos.dur > 0 ? Math.max(1, Math.ceil((pos.dur - pos.sec) / 60)) : null;
-                  label = isRtl
-                    ? `كمّل الحلقة ${resumeEp.number}${leftMin ? ` · فاضل ${leftMin} د` : ''}`
-                    : `Resume episode ${resumeEp.number}${leftMin ? ` · ${leftMin} min left` : ''}`;
+                  playLabel = `Lire S1E${resumeEp.number}`;
+                } else if (targetEp) {
+                  playLabel = `Lire S1E${targetEp.number}`;
+                } else {
+                  playLabel = 'Indisponible';
                 }
+                const fav = favorites.some((f) => f.objectID === selectedAnime.objectID);
+                const isVu = Boolean(pos && pos.done);
+                const moreOpen = detailActionsExpanded;
                 return (
-                  <button
-                    type="button"
-                    className="bx-btn bx-btn-primary bx-btn-block bx-detail-cta"
-                    disabled={episodesLoading || !targetEp}
-                    onClick={() => targetEp && handlePlayEpisode(selectedAnime, targetEp)}
-                  >
-                    {episodesLoading ? <BxIcon name="loader" spin /> : <BxIcon name="play" filled />}
-                    {episodesLoading ? (isRtl ? 'بيجهّز الحلقات...' : 'Loading episodes...') : label}
-                  </button>
+                  <div className="nv-detail-actions">
+                    <div className="nv-detail-pill-row">
+                      <button
+                        type="button"
+                        className="nv-detail-play"
+                        disabled={episodesLoading || !targetEp}
+                        onClick={() => targetEp && handlePlayEpisode(selectedAnime, targetEp)}
+                      >
+                        {episodesLoading ? <BxIcon name="loader" size="1.05em" spin /> : <BxIcon name="play" filled size="1.05em" />}
+                        <span>{playLabel}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={`nv-detail-more${moreOpen ? ' is-open' : ''}`}
+                        aria-expanded={moreOpen}
+                        aria-label="Plus d&apos;actions"
+                        onClick={() => setDetailActionsExpanded((v) => !v)}
+                      >
+                        <BxIcon name="more-horiz" size="1.25em" />
+                      </button>
+                    </div>
+                    {moreOpen ? (
+                      <div className="nv-detail-secondaries">
+                        <button type="button" className={`nv-detail-icon${fav ? ' is-on' : ''}`} onClick={() => toggleFavorite(selectedAnime)} aria-label={fav ? 'Retirer de ma liste' : 'Ajouter à ma liste'}>
+                          <BxIcon name={fav ? 'check' : 'plus'} size="1.15em" />
+                        </button>
+                        <button type="button" className={`nv-detail-icon${isVu ? ' is-on' : ''}`} onClick={() => {
+                          // watched toggle: UI only (real watched comes from resumeStore)
+                          showToast(isVu ? 'Marqué non vu' : 'Marqué vu', isVu ? 'eye-off' : 'check-circle');
+                        }} aria-label={isVu ? 'Marquer non vu' : 'Marquer vu'}>
+                          <BxIcon name={isVu ? 'check-circle' : 'check-circle-outline'} size="1.15em" />
+                        </button>
+                        <button type="button" className="nv-detail-icon" disabled={!animeEpisodes.length} onClick={() => {
+                          const h2 = watchHistory.find((h) => h.objectID === selectedAnime.objectID);
+                          const t2 = (h2 && animeEpisodes.find((e) => Number(e.number) === Number(h2.episode))) || animeEpisodes[0];
+                          if (t2) handleSaveOfflineVault(selectedAnime, t2);
+                        }} aria-label="Télécharger">
+                          <BxIcon name="download" size="1.15em" />
+                        </button>
+                        <button type="button" className="nv-detail-icon" onClick={async () => {
+                          const url = `${isWeb ? window.location.origin : BX_PUBLIC_ORIGIN}/show/${animeSlugOf(selectedAnime)}`;
+                          try { if (navigator.share) { await navigator.share({ title: selectedAnime.titleEn, url }); return; } } catch (_) { return; }
+                          try { await navigator.clipboard?.writeText(url); showToast('Lien copié', 'share'); } catch (_) {}
+                        }} aria-label="Partager">
+                          <BxIcon name="share" size="1.15em" />
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 );
               })()}
-
-              {/* Labelled secondary actions */}
-              <div className="bx-detail-actions">
-                {(() => {
-                  const fav = favorites.some((f) => f.objectID === selectedAnime.objectID);
-                  return (
-                    <button type="button" className={fav ? 'is-on' : ''} aria-pressed={fav} onClick={() => toggleFavorite(selectedAnime)}>
-                      <BxIcon name={fav ? 'check' : 'plus'} />
-                      <span>{fav ? (isRtl ? 'في قائمتي' : 'In my list') : isRtl ? 'قائمتي' : 'My list'}</span>
-                    </button>
-                  );
-                })()}
-                <button
-                  type="button"
-                  disabled={!animeEpisodes.length}
-                  onClick={() => {
-                    const savedHist = watchHistory.find((h) => h.objectID === selectedAnime.objectID);
-                    const targetEp =
-                      (savedHist && animeEpisodes.find((e) => Number(e.number) === Number(savedHist.episode))) || animeEpisodes[0];
-                    if (targetEp) handleSaveOfflineVault(selectedAnime, targetEp);
-                  }}
-                >
-                  <BxIcon name="download" />
-                  <span>{isRtl ? 'تنزيل' : 'Download'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    const url = `${isWeb ? window.location.origin : BX_PUBLIC_ORIGIN}/show/${animeSlugOf(selectedAnime)}`;
-                    try {
-                      if (navigator.share) {
-                        await navigator.share({ title: selectedAnime.titleEn, url });
-                        return;
-                      }
-                    } catch (_) {
-                      return;
-                    }
-                    try {
-                      await navigator.clipboard?.writeText(url);
-                      showToast(isRtl ? 'اتنسخ اللينك' : 'Link copied', 'share');
-                    } catch (_) {}
-                  }}
-                >
-                  <BxIcon name="share" />
-                  <span>{isRtl ? 'مشاركة' : 'Share'}</span>
-                </button>
-              </div>
 
               {/* Story */}
               {selectedAnime.storyAr && (
@@ -6703,7 +6727,7 @@ export default function MobileApkApp() {
                     {selectedAnime.storyAr}
                   </p>
                   <div className="bx-detail-story-foot">
-                    <span>{storyExpanded ? (isRtl ? 'أقل' : 'Less') : isRtl ? 'المزيد' : 'More'}</span>
+                    <span>{storyExpanded ? (isRtl ? 'أقل' : 'Moins') : isRtl ? 'المزيد' : 'Plus'}</span>
                     <button
                       type="button"
                       className="bx-chip bx-chip-sm"
@@ -6713,7 +6737,7 @@ export default function MobileApkApp() {
                       }}
                     >
                       <BxIcon name={ttsSpeaking ? 'mute' : 'volume'} size="1em" />
-                      {ttsSpeaking ? (isRtl ? 'إيقاف' : 'Stop') : isRtl ? 'استماع' : 'Listen'}
+                      {ttsSpeaking ? (isRtl ? 'إيقاف' : 'Arrêter') : isRtl ? 'استماع' : 'Écouter'}
                     </button>
                   </div>
                 </div>
@@ -6822,8 +6846,8 @@ export default function MobileApkApp() {
                       inputMode="numeric"
                       value={epSearchQuery}
                       onChange={(e) => setEpSearchQuery(e.target.value)}
-                      placeholder={isRtl ? 'ابحث برقم الحلقة' : 'Episode number'}
-                      aria-label={isRtl ? 'ابحث برقم الحلقة' : 'Search episodes'}
+                      placeholder={isRtl ? 'ابحث برقم الحلقة' : "Numéro d'épisode"}
+                      aria-label={isRtl ? 'ابحث برقم الحلقة' : 'Rechercher un épisode'}
                     />
                   </label>
                   <button
@@ -6833,7 +6857,7 @@ export default function MobileApkApp() {
                       haptic('tap');
                       setAppSheet('epOptions');
                     }}
-                    aria-label={isRtl ? 'خيارات الحلقات' : 'Episode options'}
+                    aria-label={isRtl ? 'خيارات الحلقات' : 'Options des épisodes'}
                   >
                     <BxIcon name="sliders" size="1.05em" />
                     {isRtl ? 'خيارات' : 'Options'}
@@ -6880,16 +6904,16 @@ export default function MobileApkApp() {
                         cursor: 'pointer'
                       }}
                     >
-                      {isRtl ? <><BxIcon name="retry" className="bx-ico-lead" />{"إعادة المحاولة"}</> : <><BxIcon name="retry" className="bx-ico-lead" />{"Retry"}</>}
+                      {isRtl ? <><BxIcon name="retry" className="bx-ico-lead" />{"إعادة المحاولة"}</> : <><BxIcon name="retry" className="bx-ico-lead" />{"Réessayer"}</>}
                     </button>
                   </div>
                 ) : epLayoutMode === 'grid' ? (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '0.45rem' }}>
                     {displayedEpisodes.map((ep) => {
                       const isPlaying = activeEpisode?.docId === ep.docId;
-                      // Watched = the saved position reached the end (resumeStore `done`), not "opened once".
+                      // Vu = the saved position reached the end (resumeStore `done`), not "opened once".
                       const epPos = getPosition(episodeKey(selectedAnime, ep.number));
-                      const isWatched = Boolean(epPos?.done);
+                      const isVu = Boolean(epPos?.done);
                       const epPct = epPos && epPos.dur > 0 && !epPos.done ? Math.min(100, Math.max(3, (epPos.sec / epPos.dur) * 100)) : null;
                       return (
                         <button
@@ -6899,11 +6923,11 @@ export default function MobileApkApp() {
                           style={{
                             padding: '0.65rem 0.3rem',
                             borderRadius: '12px',
-                            background: isPlaying ? '#ffffff' : isWatched ? 'rgba(255,255,255,0.06)' : '#0b0b10',
+                            background: isPlaying ? '#ffffff' : isVu ? 'rgba(255,255,255,0.06)' : '#0b0b10',
                             color: isPlaying ? '#000000' : '#ffffff',
                             border: isPlaying
                               ? '1.5px solid #ffffff'
-                              : isWatched
+                              : isVu
                               ? '1px solid rgba(255,255,255,0.28)'
                               : '1px solid rgba(255,255,255,0.12)',
                             fontWeight: 700,
@@ -6913,7 +6937,7 @@ export default function MobileApkApp() {
                           }}
                         >
                           <div>{ep.number}</div>
-                          {isWatched && <div style={{ fontSize: '0.75rem', opacity: 0.72 }}><BxIcon name="check" /></div>}
+                          {isVu && <div style={{ fontSize: '0.75rem', opacity: 0.72 }}><BxIcon name="check" /></div>}
                           {epPct !== null && (
                             <span className="bx-ep-progress" aria-hidden="true">
                               <span style={{ width: `${epPct}%` }} />
@@ -6927,9 +6951,9 @@ export default function MobileApkApp() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
                     {displayedEpisodes.map((ep) => {
                       const isPlaying = activeEpisode?.docId === ep.docId;
-                      // Watched = the saved position reached the end (resumeStore `done`), not "opened once".
+                      // Vu = the saved position reached the end (resumeStore `done`), not "opened once".
                       const epPos = getPosition(episodeKey(selectedAnime, ep.number));
-                      const isWatched = Boolean(epPos?.done);
+                      const isVu = Boolean(epPos?.done);
                       const epPct = epPos && epPos.dur > 0 && !epPos.done ? Math.min(100, Math.max(3, (epPos.sec / epPos.dur) * 100)) : null;
                       return (
                         <div
@@ -6945,7 +6969,7 @@ export default function MobileApkApp() {
                             background: isPlaying ? '#ffffff' : '#0a0a0e',
                             color: isPlaying ? '#000000' : '#ffffff',
                             border: isPlaying ? '1.5px solid #ffffff' : '1px solid rgba(255,255,255,0.1)',
-                            opacity: isWatched && !isPlaying ? 0.78 : 1,
+                            opacity: isVu && !isPlaying ? 0.78 : 1,
                             cursor: 'pointer'
                           }}
                         >
@@ -6988,15 +7012,15 @@ export default function MobileApkApp() {
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontWeight: 700, fontSize: '0.9375rem', display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0 }}>
                               <span dir="auto" style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ep.name}</span>
-                              {isWatched && (
+                              {isVu && (
                                 <span style={{ flexShrink: 0, fontSize: '0.75rem', fontWeight: 600, padding: '0.05rem 0.4rem', borderRadius: '8px', background: 'rgba(255,255,255,0.16)' }}>
                                   <BxIcon name="check" className="bx-ico-lead" />
-                                  {isRtl ? 'اتشافت' : 'Watched'}
+                                  {isRtl ? 'اتشافت' : 'Vu'}
                                 </span>
                               )}
                             </div>
                             {epPct !== null && (
-                              <span className="bx-ep-progress" aria-label={isRtl ? `اتشاف ${Math.round(epPct)}%` : `${Math.round(epPct)}% watched`}>
+                              <span className="bx-ep-progress" aria-label={isRtl ? `اتشاف ${Math.round(epPct)}%` : `${Math.round(epPct)}% regardé`}>
                                 <span style={{ width: `${epPct}%` }} />
                               </span>
                             )}
@@ -7101,7 +7125,7 @@ export default function MobileApkApp() {
                 {detailTrailerId ? (
                   <div>
                     <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9375rem', fontWeight: 700 }}>
-                      <BxIcon name="film" className="bx-ico-lead" />{isRtl ? 'الإعلان الرسمي' : 'Official Trailer'}
+                      <BxIcon name="film" className="bx-ico-lead" />{isRtl ? 'الإعلان الرسمي' : 'Bande-annonce officielle'}
                     </h4>
                     <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.2)' }}>
                       <iframe
@@ -7118,7 +7142,7 @@ export default function MobileApkApp() {
 
                 {relatedAnimes.length > 0 && <div>
                   <h4 style={{ margin: '0 0 0.6rem', fontSize: '0.9375rem', fontWeight: 700 }}>
-                    <BxIcon name="sparkles" className="bx-ico-lead" />{isRtl ? 'من نفس التصنيف' : 'Same genre'}
+                    <BxIcon name="sparkles" className="bx-ico-lead" />{isRtl ? 'من نفس التصنيف' : 'Même genre'}
                   </h4>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.6rem' }}>
                     {relatedAnimes.map((rel) => (
@@ -7155,7 +7179,7 @@ export default function MobileApkApp() {
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.55rem' }}>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>
-                      <BxIcon name="star" className="bx-ico-lead" />{isRtl ? 'التقييم الرباعي الاحترافي (4-Pillar Rating):' : '4-Pillar Master Rating:'}
+                      <BxIcon name="star" className="bx-ico-lead" />{isRtl ? 'التقييم الرباعي الاحترافي (4-Pillar Rating):' : 'Note en 4 piliers :'}
                     </span>
                     <span
                       style={{
@@ -7172,7 +7196,7 @@ export default function MobileApkApp() {
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.4rem', marginBottom: '0.55rem' }}>
                     {[
-                      { label: isRtl ? 'القصة' : 'Story', val: revStoryScore, set: setRevStoryScore },
+                      { label: isRtl ? 'القصة' : 'Histoire', val: revStoryScore, set: setRevStoryScore },
                       { label: isRtl ? 'التحريك' : 'Animation', val: revAnimScore, set: setRevAnimScore },
                       { label: isRtl ? 'الموسيقى' : 'OST', val: revOstScore, set: setRevOstScore },
                       { label: isRtl ? 'الشخصيات' : 'Cast', val: revCharScore, set: setRevCharScore }
@@ -7219,7 +7243,7 @@ export default function MobileApkApp() {
                       type="text"
                       value={newReviewText}
                       onChange={(e) => setNewReviewText(e.target.value)}
-                      placeholder={isRtl ? 'اكتب مراجعتك أو رأيك حول هذا الأنمي...' : 'Write your review...'}
+                      placeholder={isRtl ? 'اكتب مراجعتك أو رأيك حول هذا الأنمي...' : 'Écrivez votre avis...'}
                       style={{
                         flex: 1,
                         padding: '0.58rem 0.8rem',
@@ -7402,7 +7426,7 @@ export default function MobileApkApp() {
                   cursor: 'pointer'
                 }}
               >
-                <BxIcon name="play" className="bx-ico-lead" />{isRtl ? 'تشغيل الآن' : 'Play Now'}
+                <BxIcon name="play" className="bx-ico-lead" />{isRtl ? 'تشغيل الآن' : 'Lire maintenant'}
               </button>
               <button
                 type="button"
@@ -7422,7 +7446,7 @@ export default function MobileApkApp() {
                   cursor: 'pointer'
                 }}
               >
-                <BxIcon name="landmark" className="bx-ico-lead" />{isRtl ? 'الحلقات' : 'Hub'}
+                <BxIcon name="landmark" className="bx-ico-lead" />{isRtl ? 'الحلقات' : 'Épisodes'}
               </button>
               <button
                 type="button"
@@ -7477,16 +7501,16 @@ export default function MobileApkApp() {
         />
       )}
 
-      {/* Playback settings (PlayerControls settings button in full screen) */}
+      {/* Lecture settings (PlayerControls settings button in full screen) */}
       <BottomSheet
         open={playerMoreOpen && Boolean(activeEpisode)}
-        onClose={() => setPlayerMoreOpen(false)}
-        title={isRtl ? 'إعدادات التشغيل' : 'Playback'}
-        closeLabel={isRtl ? 'إغلاق' : 'Close'}
+        onFermer={() => setPlayerMoreOpen(false)}
+        title={isRtl ? 'إعدادات التشغيل' : 'Lecture'}
+        closeLabel={isRtl ? 'إغلاق' : 'Fermer'}
         layerClassName="bx-sheet-over-player"
       >
         <section className="bx-filter-group">
-          <h4>{isRtl ? 'السرعة' : 'Speed'}</h4>
+          <h4>{isRtl ? 'السرعة' : 'Vitesse'}</h4>
           <div className="bx-filter-chips">
             {[0.75, 1, 1.25, 1.5, 2].map((sp) => (
               <button
@@ -7505,7 +7529,7 @@ export default function MobileApkApp() {
           </div>
         </section>
         <section className="bx-filter-group">
-          <h4>{isRtl ? 'قفز سريع' : 'Jump'}</h4>
+          <h4>{isRtl ? 'قفز سريع' : 'Saut'}</h4>
           <div className="bx-filter-chips">
             <button type="button" className="bx-chip" onClick={() => seekVideoBy(-600)}>
               {isRtl ? '− 10 دقايق' : '−10 min'}
@@ -7514,17 +7538,17 @@ export default function MobileApkApp() {
               {isRtl ? '+ 10 دقايق' : '+10 min'}
             </button>
             <button type="button" className="bx-chip" onClick={skipIntroManually}>
-              {skipSegments.some((sg) => sg.type === 'op') ? (isRtl ? 'تخطي المقدمة' : 'Skip intro') : isRtl ? 'قدّم 85 ثانية' : '+85 s'}
+              {skipSegments.some((sg) => sg.type === 'op') ? (isRtl ? 'تخطي المقدمة' : "Passer l'intro") : isRtl ? 'قدّم 85 ثانية' : '+85 s'}
             </button>
           </div>
         </section>
         <section className="bx-filter-group">
-          <h4>{isRtl ? 'مقاس الصورة' : 'Picture fit'}</h4>
+          <h4>{isRtl ? 'مقاس الصورة' : "Format d'image"}</h4>
           <div className="bx-filter-chips">
             {[
-              ['cover', isRtl ? 'ملء الشاشة' : 'Fill screen'],
+              ['cover', isRtl ? 'ملء الشاشة' : "Remplir l'écran"],
               ['contain', isRtl ? 'الأصلي' : 'Original'],
-              ['fill', isRtl ? 'تمديد' : 'Stretch']
+              ['fill', isRtl ? 'تمديد' : 'Étirer']
             ].map(([id, label]) => (
               <button
                 key={id}
@@ -7544,12 +7568,12 @@ export default function MobileApkApp() {
             <button type="button" className={`bx-chip${visualShaderMode !== 'original' ? ' is-active' : ''}`} onClick={handleCycleVisualShader}>
               <BxIcon name="wand" size="1em" />
               {visualShaderMode === 'upscale4k'
-                ? isRtl ? 'خطوط أوضح' : 'Sharper lines'
+                ? isRtl ? 'خطوط أوضح' : 'Contours nets'
                 : visualShaderMode === 'amoled_hdr'
-                ? isRtl ? 'تباين أعلى' : 'More contrast'
+                ? isRtl ? 'تباين أعلى' : 'Plus de contraste'
                 : visualShaderMode === 'cinema_imax'
-                ? isRtl ? 'ألوان دافية' : 'Warm colours'
-                : isRtl ? 'الصورة: أصلية' : 'Picture: original'}
+                ? isRtl ? 'ألوان دافية' : 'Couleurs chaudes'
+                : isRtl ? 'الصورة: أصلية' : 'Image : original'}
             </button>
             <button type="button" className={`bx-chip${audioBoostMode !== 'normal' ? ' is-active' : ''}`} onClick={handleCycleAudioBooster}>
               <BxIcon name={audioBoostMode === 'voice' ? 'mic' : 'volume'} size="1em" />
@@ -7558,12 +7582,12 @@ export default function MobileApkApp() {
                 : audioBoostMode === 'boost150'
                 ? isRtl ? 'الصوت 150%' : 'Volume 150%'
                 : audioBoostMode === 'voice'
-                ? isRtl ? 'وضوح الكلام' : 'Clear voices'
+                ? isRtl ? 'وضوح الكلام' : 'Voix claires'
                 : isRtl ? 'الصوت 100%' : 'Volume 100%'}
             </button>
-            <button type="button" className="bx-chip" onClick={handleTakeVideoSnapshot}>
+            <button type="button" className="bx-chip" onClick={handleTakeVideoCapture}>
               <BxIcon name="camera" size="1em" />
-              {isRtl ? 'لقطة' : 'Snapshot'}
+              {isRtl ? 'لقطة' : 'Capture'}
             </button>
           </div>
         </section>
@@ -7572,9 +7596,9 @@ export default function MobileApkApp() {
       {/* Search filters (bottom sheet) */}
       <BottomSheet
         open={signOutConfirmOpen}
-        onClose={() => setSignOutConfirmOpen(false)}
-        title={isRtl ? 'تسجيل الخروج؟' : 'Sign out?'}
-        closeLabel={isRtl ? 'إغلاق' : 'Close'}
+        onFermer={() => setSignOutConfirmOpen(false)}
+        title={isRtl ? 'تسجيل الخروج؟' : 'Se déconnecter?'}
+        closeLabel={isRtl ? 'إغلاق' : 'Fermer'}
       >
         <p className="bxp-confirm-text">
           {isRtl
@@ -7584,18 +7608,18 @@ export default function MobileApkApp() {
         <div className="bxp-confirm-actions">
           <button type="button" className="bx-btn bx-btn-primary bx-btn-block" onClick={handleSignOut}>
             <BxIcon name="logout" />
-            {isRtl ? 'تسجيل الخروج' : 'Sign out'}
+            {isRtl ? 'تسجيل الخروج' : 'Se déconnecter'}
           </button>
           <button type="button" className="bx-btn bx-btn-ghost bx-btn-block" onClick={() => setSignOutConfirmOpen(false)}>
-            {isRtl ? 'إلغاء' : 'Cancel'}
+            {isRtl ? 'إلغاء' : 'Annuler'}
           </button>
         </div>
       </BottomSheet>
       <BottomSheet
         open={appSheet === 'epOptions' && Boolean(selectedAnime)}
-        onClose={() => setAppSheet(null)}
-        title={isRtl ? 'خيارات الحلقات' : 'Episode options'}
-        closeLabel={isRtl ? 'إغلاق' : 'Close'}
+        onFermer={() => setAppSheet(null)}
+        title={isRtl ? 'خيارات الحلقات' : 'Options des épisodes'}
+        closeLabel={isRtl ? 'إغلاق' : 'Fermer'}
         className="bx-ep-options"
       >
         <section className="bx-filter-group">
@@ -7603,34 +7627,34 @@ export default function MobileApkApp() {
           <div className="bx-seg" role="group">
             <button type="button" className={epLayoutMode === 'cards' ? 'is-on' : ''} aria-pressed={epLayoutMode === 'cards'} onClick={() => setEpLayoutMode('cards')}>
               <BxIcon name="list" className="bx-ico-lead" />
-              {isRtl ? 'بطاقات' : 'Cards'}
+              {isRtl ? 'بطاقات' : 'Cartes'}
             </button>
             <button type="button" className={epLayoutMode === 'grid' ? 'is-on' : ''} aria-pressed={epLayoutMode === 'grid'} onClick={() => setEpLayoutMode('grid')}>
               <BxIcon name="grid" className="bx-ico-lead" />
-              {isRtl ? 'أرقام' : 'Numbers'}
+              {isRtl ? 'أرقام' : 'Numéros'}
             </button>
           </div>
         </section>
         <section className="bx-filter-group">
-          <h4>{isRtl ? 'الترتيب' : 'Order'}</h4>
+          <h4>{isRtl ? 'الترتيب' : 'Ordre'}</h4>
           <div className="bx-seg" role="group">
             <button type="button" className={epAscending ? 'is-on' : ''} aria-pressed={epAscending} onClick={() => setEpAscending(true)}>
-              {isRtl ? 'من الأولى' : 'First to last'}
+              {isRtl ? 'من الأولى' : 'Du début à la fin'}
             </button>
             <button type="button" className={!epAscending ? 'is-on' : ''} aria-pressed={!epAscending} onClick={() => setEpAscending(false)}>
-              {isRtl ? 'من الأحدث' : 'Newest first'}
+              {isRtl ? 'من الأحدث' : "Plus récent d'abord"}
             </button>
           </div>
         </section>
         {hasFillerData ? (
           <section className="bx-filter-group">
-            <h4>{isRtl ? 'حلقات الفلر' : 'Filler episodes'}</h4>
+            <h4>{isRtl ? 'حلقات الفلر' : 'Épisodes filler'}</h4>
             <div className="bx-seg" role="group">
               <button type="button" className={!hideFiller ? 'is-on' : ''} aria-pressed={!hideFiller} onClick={() => setHideFiller(false)}>
-                {isRtl ? 'اعرضها' : 'Show'}
+                {isRtl ? 'اعرضها' : 'Afficher'}
               </button>
               <button type="button" className={hideFiller ? 'is-on' : ''} aria-pressed={hideFiller} onClick={() => setHideFiller(true)}>
-                {isRtl ? 'اخفيها' : 'Hide'}
+                {isRtl ? 'اخفيها' : 'Masquer'}
               </button>
             </div>
           </section>
@@ -7638,7 +7662,7 @@ export default function MobileApkApp() {
       </BottomSheet>
       <FilterSheet
         open={filterSheetOpen && activeTab === 'manga' && !selectedAnime && !selectedManga && !activeMangaChapter}
-        onClose={() => setFilterSheetOpen(false)}
+        onFermer={() => setFilterSheetOpen(false)}
         isRtl={isRtl}
         value={{
           server: mangaServerTabs.find((t) => t.id === mangaSource) || mangaServerTabs[0],
@@ -7656,7 +7680,7 @@ export default function MobileApkApp() {
       />
       <FilterSheet
         open={filterSheetOpen && activeTab === 'catalog' && !selectedAnime}
-        onClose={() => setFilterSheetOpen(false)}
+        onFermer={() => setFilterSheetOpen(false)}
         isRtl={isRtl}
         value={catalogFilterValue}
         onApply={applyCatalogFilters}

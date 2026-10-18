@@ -45,7 +45,7 @@ class ApkErrorBoundary extends React.Component {
 function readLang(platform) {
   if (platform === 'web') seedWebLanguage();
   try {
-    return localStorage.getItem('bx_mob_lang') || 'ar';
+    return localStorage.getItem('bx_mob_lang') || 'fr';
   } catch {
     return 'ar';
   }

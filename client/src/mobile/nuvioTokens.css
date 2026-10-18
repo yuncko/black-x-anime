@@ -1,0 +1,52 @@
+/* Nuvio design tokens — ported from composeApp/.../core/ui/Tokens.kt
+   Single source for spacing, radii, type, colours. Import before mobileUi.css.
+   Pure-MVP: no new JS, only CSS vars so existing components keep working. */
+:root {
+  /* Space */
+  --nv-s1: 1px; --nv-s2: 2px; --nv-s3: 3px; --nv-s4: 4px; --nv-s5: 5px; --nv-s6: 6px;
+  --nv-s7: 7px; --nv-s8: 8px; --nv-s10: 10px; --nv-s12: 12px; --nv-s14: 14px; --nv-s16: 16px;
+  --nv-s18: 18px; --nv-s20: 20px; --nv-s22: 22px; --nv-s24: 24px; --nv-s28: 28px; --nv-s32: 32px;
+  --nv-s36: 36px; --nv-s40: 40px; --nv-s48: 48px; --nv-s56: 56px; --nv-s64: 64px;
+
+  /* Radii — Nuvio: card 24, poster 12, button 16, chip 999 */
+  --nv-r-xs: 4px; --nv-r-sm: 6px; --nv-r-md: 8px; --nv-r-lg: 12px; --nv-r-xl: 16px;
+  --nv-r-xxl: 24px; --nv-r-full: 999px;
+  --nv-r-card: var(--nv-r-xxl); --nv-r-poster: var(--nv-r-lg); --nv-r-sheet: var(--nv-r-xxl);
+  --nv-r-dialog: 28px; --nv-r-button: var(--nv-r-xl); --nv-r-chip: var(--nv-r-full);
+  --nv-r-avatar: var(--nv-r-full); --nv-r-player: var(--nv-r-xxl);
+
+  /* Gold theme accents (screenshots: warm yellow pill/badges) */
+  --nv-accent: #e8a91c; --nv-accent-strong: #9a6200; --nv-accent-on: #111111;
+  --nv-imdb: #ebb305; --nv-imdb-bg: #f5c518;
+
+  /* Dark surface stack — #0D0D0D / #1A1A1A / #242424 */
+  --nv-bg: #0d0d0d; --nv-surface: #1a1a1a; --nv-surface-card: #242424;
+  --nv-surface-elev: #1a1a1e; --nv-surface-popover: #242424;
+
+  /* Text */
+  --nv-text: #f5f7f8; --nv-text-sec: #b8bec5; --nv-text-muted: #969ca3;
+  --nv-text-2: rgba(245, 247, 248, 0.72); --nv-text-3: rgba(245, 247, 248, 0.52);
+  --nv-line: rgba(255, 255, 255, 0.08); --nv-line-strong: #2a2e2e; /* #252A2A family */
+
+  /* Overlay */
+  --nv-overlay-scrim: rgba(0, 0, 0, 0.56); --nv-overlay-hover: rgba(255, 255, 255, 0.08);
+  --nv-overlay-pressed: rgba(255, 255, 255, 0.12); --nv-overlay-selected: rgba(255, 255, 255, 0.15);
+
+  /* Motion / z / type helpers */
+  --nv-ease: cubic-bezier(0.2, 0, 0, 1); --nv-ease-sheet: cubic-bezier(0.22, 1, 0.36, 1);
+  --nv-t-fast: 150ms; --nv-t-norm: 220ms; --nv-t-sheet: 300ms; --nv-t-slow: 400ms;
+  --nv-z-nav: 4; --nv-z-sheet: 8; --nv-z-dialog: 10; --nv-z-player: 12; --nv-z-toast: 16;
+
+  /* Type (JetBrains Sans in Nuvio — web keeps Cairo/Space Grotesk) */
+  --nv-fs-label-xs: 11px; --nv-fs-label-sm: 12px; --nv-fs-body-sm: 13px; --nv-fs-body-md: 14px;
+  --nv-fs-body-lg: 16px; --nv-fs-title-sm: 18px; --nv-fs-title-md: 22px; --nv-fs-headline: 26px;
+  --nv-fs-display: 32px;
+}
+
+/* Compat: keep existing --bx-* vars but point at nv values */
+.bx-app {
+  --bx-surface: var(--nv-surface); --bx-surface-2: var(--nv-surface-card);
+  --bx-text-2: var(--nv-text-2); --bx-text-3: var(--nv-text-3);
+  --bx-line: var(--nv-line); --bx-r-sm: var(--nv-r-md); --bx-r-md: var(--nv-r-lg);
+  --bx-r-lg: var(--nv-r-xl);
+}

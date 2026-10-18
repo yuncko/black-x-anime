@@ -30,7 +30,7 @@ test('countdowns in Egyptian Arabic and English', () => {
   assert.equal(countdownText(sec(NOW + 2 * 60e3), NOW, true), 'بعد دقيقتين');
   assert.equal(countdownText(sec(NOW + 2 * 3600e3), NOW, true), 'بعد ساعتين');
   assert.equal(countdownText(sec(NOW + 3 * 3600e3 + 10 * 60e3), NOW, true), 'بعد 3 ساعات و 10 دقايق');
-  assert.equal(countdownText(sec(NOW + 2 * 3600e3), NOW, false), 'in 2 h');
+  assert.equal(countdownText(sec(NOW + 2 * 3600e3), NOW, false), 'dans 2 h');
   assert.equal(countdownText(sec(NOW - 1000), NOW, true), '');
 });
 

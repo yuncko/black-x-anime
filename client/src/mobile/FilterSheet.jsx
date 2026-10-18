@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import BottomSheet from './BottomSheet.jsx';
 
 export const SORT_OPTIONS = [
-  { id: 'series_fav_count_desc', ar: 'الأكثر شعبية', en: 'Most popular' },
-  { id: 'best_mal_ranked', ar: 'الأعلى تقييماً', en: 'Top rated' },
-  { id: 'series_date_created', ar: 'الأحدث', en: 'Newest' },
+  { id: 'series_fav_count_desc', ar: 'الأكثر شعبية', en: 'Populaires' },
+  { id: 'best_mal_ranked', ar: 'الأعلى تقييماً', en: 'Mieux notés' },
+  { id: 'series_date_created', ar: 'الأحدث', en: 'Récents' },
   { id: 'series_name_asc', ar: 'أبجدياً', en: 'A–Z' }
 ];
 
@@ -65,12 +65,12 @@ export default function FilterSheet({ open, onClose, isRtl, value, onApply, type
     <BottomSheet
       open={open}
       onClose={onClose}
-      title={isRtl ? 'فلترة' : 'Filters'}
+      title={isRtl ? 'فلترة' : 'Filtres'}
       closeLabel={isRtl ? 'إغلاق' : 'Close'}
       footer={
         <>
           <button type="button" className="bx-btn bx-btn-outline" onClick={reset}>
-            {isRtl ? 'إعادة ضبط' : 'Reset'}
+            {isRtl ? 'إعادة ضبط' : 'Réinitialiser'}
           </button>
           <button
             type="button"
@@ -81,7 +81,7 @@ export default function FilterSheet({ open, onClose, isRtl, value, onApply, type
               onClose();
             }}
           >
-            {isRtl ? 'عرض النتائج' : 'Show results'}
+            {isRtl ? 'عرض النتائج' : 'Voir les résultats'}
           </button>
         </>
       }
@@ -91,9 +91,9 @@ export default function FilterSheet({ open, onClose, isRtl, value, onApply, type
           <>{groups.map((g) => <React.Fragment key={g.key}>{group(g.title, g.items, g.key)}</React.Fragment>)}</>
         ) : (
           <>
-            {group(isRtl ? 'الترتيب' : 'Sort by', SORT_OPTIONS, 'sort', true)}
+            {group(isRtl ? 'الترتيب' : 'Trier', SORT_OPTIONS, 'sort', true)}
             {group(isRtl ? 'النوع' : 'Type', types, 'type')}
-            {group(isRtl ? 'الحالة' : 'Status', states, 'state')}
+            {group(isRtl ? 'الحالة' : 'Statut', states, 'state')}
             {group(isRtl ? 'التصنيف' : 'Genre', genres, 'genre')}
             {group(isRtl ? 'الاستوديو' : 'Studio', studios, 'studio')}
           </>

@@ -60,7 +60,7 @@ const LOCALE_AR = 'ar-EG-u-nu-latn';
 /** "9:30 م" / "9:30 PM" in the phone's time zone. */
 export function formatAirClock(airingAt, isRtl) {
   try {
-    return new Date(airingAt * 1000).toLocaleTimeString(isRtl ? LOCALE_AR : 'en-US', { hour: 'numeric', minute: '2-digit' });
+    return new Date(airingAt * 1000).toLocaleTimeString(isRtl ? LOCALE_AR : 'fr-FR', { hour: 'numeric', minute: '2-digit' });
   } catch {
     return '';
   }
@@ -69,7 +69,7 @@ export function formatAirClock(airingAt, isRtl) {
 /** "الجمعة" / "Friday" of an air time (local). */
 export function formatAirWeekday(airingAt, isRtl) {
   try {
-    return new Date(airingAt * 1000).toLocaleDateString(isRtl ? LOCALE_AR : 'en-US', { weekday: 'long' });
+    return new Date(airingAt * 1000).toLocaleDateString(isRtl ? LOCALE_AR : 'fr-FR', { weekday: 'long' });
   } catch {
     return '';
   }
@@ -86,17 +86,17 @@ export function countdownText(airingAt, nowMs, isRtl) {
   const diffMin = Math.ceil((airingAt * 1000 - nowMs) / 60000);
   if (!(diffMin > 0)) return '';
   if (diffMin < 60) {
-    return isRtl ? `بعد ${arCount(diffMin, 'دقيقة', 'دقيقتين', 'دقايق', 'دقيقة')}` : `in ${diffMin} min`;
+    return isRtl ? `بعد ${arCount(diffMin, 'دقيقة', 'دقيقتين', 'دقايق', 'دقيقة')}` : `dans ${diffMin} min`;
   }
   const h = Math.floor(diffMin / 60);
   const m = diffMin % 60;
   if (h < 24) {
-    if (!isRtl) return m && h < 6 ? `in ${h} h ${m} min` : `in ${h} h`;
+    if (!isRtl) return m && h < 6 ? `dans ${h} h ${m} min` : `dans ${h} h`;
     const hours = arCount(h, 'ساعة', 'ساعتين', 'ساعات', 'ساعة');
     return m && h < 6 ? `بعد ${hours} و ${arCount(m, 'دقيقة', 'دقيقتين', 'دقايق', 'دقيقة')}` : `بعد ${hours}`;
   }
   const d = Math.floor(h / 24);
-  return isRtl ? `بعد ${arCount(d, 'يوم', 'يومين', 'أيام', 'يوم')}` : `in ${d} ${d === 1 ? 'day' : 'days'}`;
+  return isRtl ? `بعد ${arCount(d, 'يوم', 'يومين', 'أيام', 'يوم')}` : `dans ${d} ${d === 1 ? 'jour' : 'jours'}`;
 }
 
 /**
@@ -117,12 +117,12 @@ export function airingState(airingAt, nowMs = Date.now()) {
 /** One short line for cards: "الحلقة 8 • الجمعة 9:30 م" (or "• بعد 3 ساعات" when close). */
 export function airingLine(airing, nowMs, isRtl) {
   if (!airing?.airingAt) return '';
-  const ep = airing.episode ? (isRtl ? `الحلقة ${airing.episode}` : `Ep ${airing.episode}`) : '';
+  const ep = airing.episode ? (isRtl ? `الحلقة ${airing.episode}` : `Ép. ${airing.episode}`) : '';
   const state = airingState(airing.airingAt, nowMs);
   let when;
-  if (state === 'aired') when = isRtl ? 'اتعرضت' : 'aired';
+  if (state === 'aired') when = isRtl ? 'اتعرضت' : 'diffusé';
   else if (state === 'soon') when = countdownText(airing.airingAt, nowMs, isRtl);
-  else if (state === 'nextWeek') when = `${isRtl ? 'الأسبوع الجاي' : 'next week'} ${formatAirClock(airing.airingAt, isRtl)}`;
+  else if (state === 'nextWeek') when = `${isRtl ? 'الأسبوع الجاي' : 'la semaine prochaine'} ${formatAirClock(airing.airingAt, isRtl)}`;
   else when = `${formatAirWeekday(airing.airingAt, isRtl)} ${formatAirClock(airing.airingAt, isRtl)}`;
   return [ep, when].filter(Boolean).join(' • ');
 }

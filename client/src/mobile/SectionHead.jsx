@@ -1,15 +1,14 @@
 import React from 'react';
 import BxIcon from './BxIcon.jsx';
 
-/** Row header: title + an optional short "All" link (never wraps). */
+/** Nuvio shelf header: title left, circular view-all arrow right (#1A1A1A, muted). */
 export default function SectionHead({ title, onMore, isRtl, moreLabel }) {
   return (
-    <div className="bx-section-head">
-      <h2 className="bx-section-title">{title}</h2>
+    <div className="bx-section-head nv-shelf-head">
+      <h2 className="bx-section-title nv-shelf-title">{title}</h2>
       {onMore ? (
-        <button type="button" className="bx-see-all" onClick={onMore}>
-          {moreLabel || (isRtl ? 'الكل' : 'See all')}
-          <BxIcon name={isRtl ? 'chevron-left' : 'chevron-right'} size="1em" />
+        <button type="button" className="nv-view-all" onClick={onMore} aria-label={moreLabel || (isRtl ? 'Voir tout' : 'View all')}>
+          <BxIcon name="chevron-right" size="1em" />
         </button>
       ) : null}
     </div>
