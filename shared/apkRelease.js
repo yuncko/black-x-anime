@@ -13,23 +13,30 @@
 import { PUBLIC_SITE_ORIGIN } from './publicSite.js';
 
 export const APK_RELEASE = Object.freeze({
-  version: '18.1',
+  version: '19.0',
   minSupported: '15.0',
   url: `${PUBLIC_SITE_ORIGIN}/BLACK-X-Mobile-120Hz.apk`,
-  publishedAt: '2026-10-17',
+  publishedAt: '2026-10-18',
   notesAr: Object.freeze([
-    'التطبيق بقى بيكلّم عنوان الموقع الجديد black-x-anime.ai.studio — الدخول والمزامنة رجعوا يشتغلوا',
-    'تقدر تمسح حسابك بنفسك: حسابي ← الخصوصية والأمان ← مسح الحساب',
-    'البوستات واللايكات والردود مابقتش تضيع لو اتنين كتبوا في نفس اللحظة',
-    'سياسة الخصوصية وشروط الاستخدام في حسابي ← عن BLACK X',
-    'لوحة المطور اتعملت من جديد وفيها تقارير الأعطال'
+    'واجهة جديدة بالكامل مستوحاة من Nuvio — تصميم عصري موحّد على كل الشاشات',
+    'اللغة الافتراضية بقت الفرنسية — كل القوائم والأزرار بالفرنسية',
+    'الهيرو الجديد: VISIONQUEST والبحث والاستمرار في المشاهدة ببطاقات أفقية',
+    'تفاصيل الأنمي الجديدة: زر Lire الواسع + معلومات IMDb والمخرج',
+    'الأداء والتوافق كما هم — نفس الخوادم والحسابات'
   ]),
   notesEn: Object.freeze([
-    'The app now talks to the new website address black-x-anime.ai.studio — sign-in and sync work again',
-    'You can delete your account yourself: Profile → Privacy & security → Delete account',
-    'Posts, likes and replies are no longer lost when two people write at the same moment',
-    'Privacy policy and terms of use under Profile → About',
-    'Rebuilt developer panel with crash reports'
+    'Completely new interface inspired by Nuvio — unified modern design on every screen',
+    'Default language is now French — all menus and buttons in French',
+    'New hero: VISIONQUEST, search and Continue Watching with landscape cards',
+    'New anime details: wide Lire button + IMDb and director info',
+    'Performance and compatibility unchanged — same servers and accounts'
+  ]),
+  notesFr: Object.freeze([
+    'Nouvelle interface inspirée de Nuvio — design moderne unifié sur tous les écrans',
+    'Langue par défaut désormais le français — tous les menus et boutons en français',
+    'Nouveau hero : VISIONQUEST, recherche et Continuer à regarder en cartes paysage',
+    'Nouveaux détails anime : large bouton Lire + infos IMDb et réalisateur',
+    'Performances et compatibilité inchangées — mêmes serveurs et comptes'
   ])
 });
 
