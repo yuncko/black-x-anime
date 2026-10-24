@@ -2,7 +2,7 @@
  * Ecchi, Harem and Isekai are hidden from the whole app (owner's decision, 2026-10-16; the
  * website hides them too). The rules themselves live in shared/contentFilter.js (also used by
  * the server and the website pages); this file adds what only the app needs: the cached ids of
- * hidden BLACK X 1 titles, because saved entries (favorites, history, follows) carry no genres.
+ * hidden Hearbor 1 titles, because saved entries (favorites, history, follows) carry no genres.
  *
  * Titles carrying a hidden genre never show up in the app: home rows, search and its filters,
  * schedule, recommendations, similar titles, typed search, manga lists, saved lists (hidden on
@@ -23,7 +23,7 @@ export {
   withAlgoliaExclusions
 } from '../../../shared/contentFilter.js';
 
-/* ---- Hidden BLACK X 1 ids: saved entries (favorites, history, follows) carry no genres ---- */
+/* ---- Hidden Hearbor 1 ids: saved entries (favorites, history, follows) carry no genres ---- */
 
 const IDS_KEY = 'bx_mob_hidden_ids_v1';
 const IDS_TTL_MS = 24 * 60 * 60 * 1000;
@@ -48,7 +48,7 @@ export function getHiddenIds() {
 }
 
 /**
- * Loads the ids of every hidden BLACK X 1 title (one query per tag, each well under Algolia's
+ * Loads the ids of every hidden Hearbor 1 title (one query per tag, each well under Algolia's
  * 1,000-hit page cap) at most once a day. `rawQuery(index, body)` must be the Algolia query
  * WITHOUT the exclusions. Resolves to the new Set, or null when nothing changed.
  */

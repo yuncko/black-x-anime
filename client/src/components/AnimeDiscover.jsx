@@ -139,8 +139,8 @@ export default function AnimeDiscover({ compact = false }) {
             <span className="bx-discover-eyebrow__dot" />
             <span>
               {isAr
-                ? 'BLACK X // بروتوكول الاكتشاف الغامض'
-                : 'BLACK X // LIQUID GLASS DISCOVERY PROTOCOL'}
+                ? 'Hearbor // بروتوكول الاكتشاف الغامض'
+                : 'Hearbor // LIQUID GLASS DISCOVERY PROTOCOL'}
             </span>
           </div>
 
@@ -150,7 +150,7 @@ export default function AnimeDiscover({ compact = false }) {
 
           <p className="bx-discover-subtitle">
             {isAr
-              ? 'اختر التصنيفات التي تفضلها، وسيقوم محرك BLACK X باستحضار عمل أنمي واحد مختار بعناية من أعماق الأرشيف الياباني.'
+              ? 'اختر التصنيفات التي تفضلها، وسيقوم محرك Hearbor باستحضار عمل أنمي واحد مختار بعناية من أعماق الأرشيف الياباني.'
               : 'Select your desired genre frequencies. The Liquid Glass monolith will synthesize and reveal a single curated anime from the vault.'}
           </p>
         </header>

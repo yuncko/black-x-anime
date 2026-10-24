@@ -19,7 +19,7 @@ class ApkErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    console.error('[BLACK X APK]', error, info);
+    console.error('[Hearbor APK]', error, info);
     reportClientError(error, { kind: 'react', componentStack: info?.componentStack || '' });
   }
 
@@ -28,7 +28,7 @@ class ApkErrorBoundary extends React.Component {
     return (
       <div style={{ minHeight: '100vh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', textAlign: 'center' }}>
         <div style={{ width: 56, height: 56, borderRadius: '18px', background: '#fff', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.75rem', marginBottom: '1rem' }}>X</div>
-        <h2 style={{ margin: '0 0 0.5rem', fontSize: '1.0625rem', fontWeight: 800 }}>BLACK X</h2>
+        <h2 style={{ margin: '0 0 0.5rem', fontSize: '1.0625rem', fontWeight: 800 }}>Hearbor</h2>
         <p style={{ margin: '0 0 1rem', fontSize: '0.9375rem', color: 'rgba(255,255,255,0.72)' }}>حصلت مشكلة مؤقتة في الواجهة — اضغط لإعادة التشغيل</p>
         <button
           type="button"

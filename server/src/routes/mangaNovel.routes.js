@@ -7,7 +7,7 @@ import { mangaNovelController } from '../controllers/mangaNovel.controller.js';
 
 const router = Router();
 
-// Search: Aggregates BLACK X 1, BLACK X 2, and BLACK X 3 Manga & Manhwa Engines
+// Search: Aggregates Hearbor 1, Hearbor 2, and Hearbor 3 Manga & Manhwa Engines
 router.get('/search', mangaNovelController.search);
 
 // Manga & Manhwa Routes
@@ -28,7 +28,7 @@ router.post('/tracking/history', mangaNovelController.updateReadingHistory);
 router.get('/tracking/history', mangaNovelController.getReadingHistory);
 router.get('/tracking/notifications', mangaNovelController.getNotifications);
 
-// Image Proxy (Anti-hotlink & CORS bypass for BLACK X 1 / 2 / 3)
+// Image Proxy (Anti-hotlink & CORS bypass for Hearbor 1 / 2 / 3)
 router.get('/proxy/image', mangaNovelController.imageProxy);
 
 export default router;

@@ -10,7 +10,7 @@ const router = Router();
  */
 router.get('/footer', (req, res) => {
   const tagline = getSetting('footer_tagline', 'Stream every episode. Track your shows. Own the night.');
-  const notice = getSetting('footer_notice', 'BLACK X — The ultimate interactive anime experience.');
+  const notice = getSetting('footer_notice', 'Hearbor — The ultimate interactive anime experience.');
   res.json({ tagline, notice });
 });
 
@@ -152,7 +152,7 @@ router.get('/diagnostics', requireDeveloper, async (req, res) => {
     const t0 = Date.now();
     const r = await fetch('https://graphql.anilist.co', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'User-Agent': 'BLACK-X-Diagnostics/1.0' },
+      headers: { 'Content-Type': 'application/json', 'User-Agent': 'HEARBOR-Diagnostics/1.0' },
       body: JSON.stringify({ query: '{ SiteStatistics { anime { count } } }' }),
       signal: AbortSignal.timeout(6000)
     });
@@ -176,7 +176,7 @@ router.get('/diagnostics', requireDeveloper, async (req, res) => {
     const t0 = Date.now();
     const r = await fetch('https://images.witanime.site', {
       method: 'HEAD',
-      headers: { 'User-Agent': 'BLACK-X-Diagnostics/1.0' },
+      headers: { 'User-Agent': 'HEARBOR-Diagnostics/1.0' },
       signal: AbortSignal.timeout(5000)
     }).catch(() => null);
     checks.push({

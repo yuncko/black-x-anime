@@ -26,7 +26,7 @@ function permissionText(isRtl) {
 
 /**
  * New-episode alerts, as they really work (episodeAlerts.js): only the titles the user follows
- * (my list + "watching" / "planned"), checked while BLACK X is open — every 30 minutes, and every
+ * (my list + "watching" / "planned"), checked while Hearbor is open — every 30 minutes, and every
  * 10 minutes for a while after one of them airs in Japan (real air times, airingSchedule.js).
  * The test button sends a notification that says it is a test.
  */
@@ -43,8 +43,8 @@ export default function AlertsSheet({ open, onClose, isRtl, followed, airingMap,
       <div className="bx-alerts-how">
         <p>
           {isRtl
-            ? 'بيوصلك إشعار لما حلقة جديدة تنزل على BLACK X من الأعمال اللي بتتابعها (قائمتي + بتتفرج + ناوي تتفرج). الفحص بيحصل وBLACK X مفتوح: كل ٣٠ دقيقة، وكل ١٠ دقايق لمدة ٦ ساعات بعد ميعاد عرض حلقة من أعمالك في اليابان.'
-            : 'You get a notification when a new episode of a title you follow (my list + watching + planned) reaches BLACK X. Checks run while BLACK X is open: every 30 minutes, and every 10 minutes for 6 hours after one of your titles airs in Japan.'}
+            ? 'بيوصلك إشعار لما حلقة جديدة تنزل على Hearbor من الأعمال اللي بتتابعها (قائمتي + بتتفرج + ناوي تتفرج). الفحص بيحصل وHearbor مفتوح: كل ٣٠ دقيقة، وكل ١٠ دقايق لمدة ٦ ساعات بعد ميعاد عرض حلقة من أعمالك في اليابان.'
+            : 'You get a notification when a new episode of a title you follow (my list + watching + planned) reaches Hearbor. Checks run while Hearbor is open: every 30 minutes, and every 10 minutes for 6 hours after one of your titles airs in Japan.'}
         </p>
         <p className="bx-alerts-native" data-bx-native={nativeAlarmsSupported() ? 'on' : isWebApp() ? 'web' : 'old'}>
           <BxIcon name="bell-ring" size="1em" className="bx-ico-lead" />

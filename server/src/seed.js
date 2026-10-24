@@ -4,7 +4,7 @@ import { fetchShow, fetchLatest } from './witanime.js';
 import { fetchTrending, currentSeasonInfo, fetchSeason } from './anilist.js';
 
 /*
- * BLACK X seed — streaming platform edition
+ * Hearbor seed — streaming platform edition
  * Users + favorites (watchlist) + continue-watching progress.
  * Show metadata is pulled live from witanime.site; discovery data from AniList.
  */
@@ -13,7 +13,7 @@ const USERS = [
   {
     username: 'kuro', email: 'kuro@blackx.app', password: 'blackx2026',
     display_name: 'Kuro', avatar_color: '#22d3ee', role: 'admin',
-    bio: 'Founder of BLACK X. Binge-watcher & subtitle perfectionist. | مؤسس BLACK X. مدمن مشاهدة ومثالي في الترجمة.'
+    bio: 'Founder of Hearbor. Binge-watcher & subtitle perfectionist. | مؤسس Hearbor. مدمن مشاهدة ومثالي في الترجمة.'
   },
   {
     username: 'zero', email: 'zero@blackx.app', password: 'blackx2026',
@@ -79,7 +79,7 @@ const PROGRESS = [
 ];
 
 export async function main({ quick = false } = {}) {
-  console.log(`🌱 Seeding BLACK X (streaming${quick ? ', quick' : ''}) …`);
+  console.log(`🌱 Seeding Hearbor (streaming${quick ? ', quick' : ''}) …`);
 
   // 1) warm discovery caches (AniList) — best effort (skipped in quick mode)
   if (!quick) {

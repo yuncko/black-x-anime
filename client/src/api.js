@@ -1,5 +1,5 @@
 /**
- * BLACK X API Client — Hybrid Web + Capacitor Android APK Edition
+ * Hearbor API Client — Hybrid Web + Capacitor Android APK Edition
  * Supports dynamic cloud backend URL resolution for the native Android APK.
  */
 import { findPublicCacheRoute } from '../../shared/publicCacheRoutes.js';

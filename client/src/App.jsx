@@ -29,12 +29,12 @@ function serverFourSearchItems(animeData, mangaData, query) {
   return [
     ...(animeData?.items || []).map((a) => ({
       id: a.slug, kind: 'ANIME', badgeAr: 'أنمي', badgeEn: 'ANIME',
-      title: a.titleEn, poster: a.poster || '/blackx-logo.png', meta: 'BLACK X 4',
+      title: a.titleEn, poster: a.poster || '/blackx-logo.png', meta: 'Hearbor 4',
       to: `/show/${encodeURIComponent(a.slug)}?source=aniproject`
     })),
     ...(mangaData?.manga || []).map((m) => ({
       id: m.id, kind: 'MANGA', badgeAr: 'مانجا', badgeEn: 'MANGA',
-      title: m.title_en, poster: m.poster || '/blackx-logo.png', meta: 'BLACK X 4',
+      title: m.title_en, poster: m.poster || '/blackx-logo.png', meta: 'Hearbor 4',
       to: `/browse?q=${encodeURIComponent(query)}&server=bx4`
     }))
   ];
@@ -66,11 +66,11 @@ function SpotlightSearchModal({ open, onClose }) {
   ];
 
   const serverOptions = [
-    { id: 'all', animeSrc: 'all', mangaSrv: 'all', ar: 'جميع سيرفرات BLACK X', en: 'All BLACK X Servers' },
-    { id: 'bx1', animeSrc: 'witanime', mangaSrv: 'bx1', ar: 'سيرفر BLACK X 1', en: 'BLACK X Server 1' },
-    { id: 'bx2', animeSrc: 'anime3rb', mangaSrv: 'bx2', ar: 'سيرفر BLACK X 2', en: 'BLACK X Server 2' },
-    { id: 'bx3', animeSrc: 'english', mangaSrv: 'bx3', ar: 'سيرفر BLACK X 3', en: 'BLACK X Server 3' },
-    { id: 'bx4', animeSrc: 'aniproject', mangaSrv: 'bx4', ar: 'سيرفر BLACK X 4 (بحث فقط)', en: 'BLACK X Server 4 (Search only)', disabled: !serverFourEnabled }
+    { id: 'all', animeSrc: 'all', mangaSrv: 'all', ar: 'جميع سيرفرات Hearbor', en: 'All Hearbor Servers' },
+    { id: 'bx1', animeSrc: 'witanime', mangaSrv: 'bx1', ar: 'سيرفر Hearbor 1', en: 'Hearbor Server 1' },
+    { id: 'bx2', animeSrc: 'anime3rb', mangaSrv: 'bx2', ar: 'سيرفر Hearbor 2', en: 'Hearbor Server 2' },
+    { id: 'bx3', animeSrc: 'english', mangaSrv: 'bx3', ar: 'سيرفر Hearbor 3', en: 'Hearbor Server 3' },
+    { id: 'bx4', animeSrc: 'aniproject', mangaSrv: 'bx4', ar: 'سيرفر Hearbor 4 (بحث فقط)', en: 'Hearbor Server 4 (Search only)', disabled: !serverFourEnabled }
   ];
 
   useEffect(() => {
@@ -153,7 +153,7 @@ function SpotlightSearchModal({ open, onClose }) {
         if (activeCat.genre) variables.genre = activeCat.genre;
         if (activeCat.country) variables.country = activeCat.country;
 
-        // In the all-server search, surface real BLACK X 4 matches alongside
+        // In the all-server search, surface real Hearbor 4 matches alongside
         // AniList discovery results; a failed metadata lookup must not hide
         // playable/readable source matches.
         const [json, bx4Anime, bx4Manga] = await Promise.all([
@@ -398,7 +398,7 @@ function SpotlightSearchModal({ open, onClose }) {
           })}
         </div>
 
-        {/* Unified Server Selector (BLACK X 1 / 2 / 3) */}
+        {/* Unified Server Selector (Hearbor 1 / 2 / 3) */}
         <div
           style={{
             display: 'flex',
@@ -770,7 +770,7 @@ function WebsiteMiniFloatingPlayer() {
         ) : (
           <iframe
             src={session.url}
-            title={session.title || 'BLACK X Mini Player'}
+            title={session.title || 'Hearbor Mini Player'}
             allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
             allowFullScreen
             style={{ width: '100%', height: '100%', border: 'none', background: '#000' }}
@@ -996,7 +996,7 @@ function ScrollToTop() {
 function Footer() {
   const { t, lang } = useI18n();
   const [footerText, setFooterText] = useState(null);
-  // Every device gets the BLACK X app interface by default (webUi.js, owner's decision of
+  // Every device gets the Hearbor app interface by default (webUi.js, owner's decision of
   // 2026-10-17); whoever chose these classic pages can go back to it from here.
 
   useEffect(() => {
@@ -1033,7 +1033,7 @@ function Footer() {
         >
           <img
             src="/blackx-logo.png"
-            alt="BLACK X"
+            alt="Hearbor"
             style={{
               width: '28px',
               height: '28px',
@@ -1043,7 +1043,7 @@ function Footer() {
             }}
           />
           <span style={{ fontWeight: 900, fontSize: '0.96rem', letterSpacing: '0.03em', color: '#ffffff' }}>
-            BLACK X <span style={{ fontWeight: 500, opacity: 0.75 }}>original • slothUI Pro 2.0</span>
+            Hearbor <span style={{ fontWeight: 500, opacity: 0.75 }}>original • slothUI Pro 2.0</span>
           </span>
         </div>
         <div style={{ fontSize: '0.94rem', fontWeight: 700, color: '#ffffff' }}>
@@ -1076,7 +1076,7 @@ function Footer() {
             cursor: 'pointer'
           }}
         >
-          {lang === 'ar' ? 'واجهة BLACK X الجديدة' : 'New BLACK X interface'}
+          {lang === 'ar' ? 'واجهة Hearbor الجديدة' : 'New Hearbor interface'}
         </button>
       </div>
     </footer>
@@ -1129,7 +1129,7 @@ class MobileErrorBoundary extends React.Component {
           >
             X
           </div>
-          <h2 style={{ margin: '0 0 0.5rem', fontSize: '1.15rem', fontWeight: 900 }}>BLACK X MOBILE 120Hz</h2>
+          <h2 style={{ margin: '0 0 0.5rem', fontSize: '1.15rem', fontWeight: 900 }}>Hearbor MOBILE 120Hz</h2>
           <p style={{ margin: '0 0 1rem', fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>
             تم اكتشاف خطأ مؤقت في الذاكرة المحلية — اضغط لإعادة تشغيل الواجهة فوراً
           </p>

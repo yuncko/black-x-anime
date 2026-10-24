@@ -1,5 +1,5 @@
 /**
- * Manga & Novel Controller — BLACK X Multi-Server Edition (BLACK X 1 / 2 / 3)
+ * Manga & Novel Controller — Hearbor Multi-Server Edition (Hearbor 1 / 2 / 3)
  */
 
 import axios from 'axios';
@@ -161,7 +161,7 @@ export const mangaNovelController = {
         const details = await anilistService.getDetails(id);
         return res.json(details);
       }
-      return res.json({ id, message: 'Use /chapters to get chapters for this BLACK X Manga ID' });
+      return res.json({ id, message: 'Use /chapters to get chapters for this Hearbor Manga ID' });
     } catch (error) {
       return res.status(500).json({ error: 'Failed to fetch manga details' });
     }
@@ -181,7 +181,7 @@ export const mangaNovelController = {
         const chapters = await aniprojectService.getMangaChapters(id);
         return res.json({
           chapters,
-          availableServers: [{ id: 'bx4', name: 'سيرفر BLACK X 4', labelEn: 'BLACK X Server 4' }],
+          availableServers: [{ id: 'bx4', name: 'سيرفر Hearbor 4', labelEn: 'Hearbor Server 4' }],
           activeServer: 'bx4'
         });
       }
@@ -191,22 +191,22 @@ export const mangaNovelController = {
       if (handles.bx1) {
         availableServers.push({
           id: 'bx1',
-          name: 'سيرفر BLACK X 1 (مانهوا عربية)',
-          labelEn: 'BLACK X 1 (AR Manhwa)'
+          name: 'سيرفر Hearbor 1 (مانهوا عربية)',
+          labelEn: 'Hearbor 1 (AR Manhwa)'
         });
       }
       if (handles.bx2) {
         availableServers.push({
           id: 'bx2',
-          name: 'سيرفر BLACK X 2 (مانجا عربية)',
-          labelEn: 'BLACK X 2 (AR Manga)'
+          name: 'سيرفر Hearbor 2 (مانجا عربية)',
+          labelEn: 'Hearbor 2 (AR Manga)'
         });
       }
       if (handles.bx3) {
         availableServers.push({
           id: 'bx3',
-          name: 'سيرفر BLACK X 3 (المكتبة العالمية الشاملة)',
-          labelEn: 'BLACK X 3 (Global HD)'
+          name: 'سيرفر Hearbor 3 (المكتبة العالمية الشاملة)',
+          labelEn: 'Hearbor 3 (Global HD)'
         });
       }
 
@@ -244,13 +244,13 @@ export const mangaNovelController = {
 
   /**
    * GET /api/manga/chapter/:chapter_id/download?title=...&chapter=...&server=bx1|bx2|bx3
-   * Generates a standalone offline-ready BLACK X Chapter Reader HTML file containing all chapter pages.
+   * Generates a standalone offline-ready Hearbor Chapter Reader HTML file containing all chapter pages.
    */
   async downloadChapter(req, res) {
     try {
       const { chapter_id } = req.params;
       const preferredServer = String(req.query.server || '').trim().toLowerCase();
-      const title = String(req.query.title || 'BLACK X Manga').trim().slice(0, 120);
+      const title = String(req.query.title || 'Hearbor Manga').trim().slice(0, 120);
       const chapterNum = String(req.query.chapter || '1').trim().slice(0, 30);
       if (isAniProjectChapterId(chapter_id) && !isAniProjectConfigured()) {
         return res.status(503).json({ error: 'source_unavailable' });
@@ -281,7 +281,7 @@ export const mangaNovelController = {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${escapeHtml(title)} - الفصل ${escapeHtml(chapterNum)} | BLACK X</title>
+  <title>${escapeHtml(title)} - الفصل ${escapeHtml(chapterNum)} | Hearbor</title>
   <style>
     body { margin: 0; background: #000; color: #fff; font-family: system-ui, -apple-system, sans-serif; text-align: center; }
     header { position: sticky; top: 0; z-index: 10; background: rgba(5,5,8,0.92); backdrop-filter: blur(12px); padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); display: flex; justify-content: space-between; align-items: center; }
@@ -294,7 +294,7 @@ export const mangaNovelController = {
 </head>
 <body>
   <header>
-    <div class="brand">BLACK X MANGA</div>
+    <div class="brand">Hearbor MANGA</div>
     <div>${escapeHtml(title)} — الفصل ${escapeHtml(chapterNum)} (${pages.length} صفحة)</div>
   </header>
   <div class="container">
@@ -304,7 +304,7 @@ export const mangaNovelController = {
 </html>`;
 
       res.set('Content-Type', 'text/html; charset=utf-8');
-      res.set('Content-Disposition', `attachment; filename="BLACK-X-Chapter-${encodeURIComponent(chapterNum)}.html"`);
+      res.set('Content-Disposition', `attachment; filename="HEARBOR-Chapter-${encodeURIComponent(chapterNum)}.html"`);
       return res.send(htmlDoc);
     } catch (error) {
       console.error('Chapter download error:', error.message);
@@ -356,7 +356,7 @@ export const mangaNovelController = {
 
   /**
    * GET /api/proxy/image?url=...&download=1&filename=...
-   * Host-aware image proxy for BLACK X 1 (OlympusStaff), BLACK X 2 (3asq), and BLACK X 3 (WeebCentral / MangaDex).
+   * Host-aware image proxy for Hearbor 1 (OlympusStaff), Hearbor 2 (3asq), and Hearbor 3 (WeebCentral / MangaDex).
    */
   async imageProxy(req, res) {
     try {
@@ -394,7 +394,7 @@ export const mangaNovelController = {
       console.error('Image Proxy Error:', error.message);
       const fallbackSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
         <rect width="100%" height="100%" fill="#05070e"/>
-        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-size="20">BLACK X CDN — اضغط لإعادة المحاولة أو بدّل السيرفر</text>
+        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-size="20">Hearbor CDN — اضغط لإعادة المحاولة أو بدّل السيرفر</text>
       </svg>`;
       res.set('Content-Type', 'image/svg+xml');
       return res.status(200).send(fallbackSvg);

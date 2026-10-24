@@ -219,10 +219,10 @@ export async function getLibrary(req, res) {
       return {
         ...it,
         source: availableServers.includes('bx1')
-          ? 'BLACK X 1'
+          ? 'Hearbor 1'
           : availableServers.includes('bx2')
-          ? 'BLACK X 2'
-          : 'BLACK X 3',
+          ? 'Hearbor 2'
+          : 'Hearbor 3',
         availableServers
       };
     });
@@ -231,7 +231,7 @@ export async function getLibrary(req, res) {
       items = items.filter((it) => Array.isArray(it.availableServers) && it.availableServers.includes(server));
     }
 
-    // Dynamically enrich with live catalogs from BLACK X 1 (MangaMello Plus 14,331 + Azorafly 2,453 + Olympus) & BLACK X 2 (MangaSwat 1,669 + Dilar 9,164 + 3asq)
+    // Dynamically enrich with live catalogs from Hearbor 1 (MangaMello Plus 14,331 + Azorafly 2,453 + Olympus) & Hearbor 2 (MangaSwat 1,669 + Dilar 9,164 + 3asq)
     const page = Math.max(1, Number(req.query.page) || 1);
     const dynamicTasks = [];
     if (q) {
@@ -322,7 +322,7 @@ export async function getLibraryItemDetail(req, res) {
         const chapters = await aniprojectService.getMangaChapters(id);
         return res.json({ success: true, item: {
           ...(await markHiddenManga(item)), chapters_count: chapters.length,
-          availableServers: [{ id: 'bx4', name: 'سيرفر BLACK X 4', labelEn: 'BLACK X Server 4' }],
+          availableServers: [{ id: 'bx4', name: 'سيرفر Hearbor 4', labelEn: 'Hearbor Server 4' }],
           activeServer: 'bx4',
           chapters: chapters.map((chapter) => ({ ...chapter, number: chapter.chapterNumber }))
         } });
@@ -341,13 +341,13 @@ export async function getLibraryItemDetail(req, res) {
     const handles = await mangalikService.resolveSeriesHandles(id);
     const availableServers = [];
     if (handles.bx1) {
-      availableServers.push({ id: 'bx1', name: 'سيرفر BLACK X 1 (مانهوا عربية)', labelEn: 'BLACK X 1 (AR Manhwa)' });
+      availableServers.push({ id: 'bx1', name: 'سيرفر Hearbor 1 (مانهوا عربية)', labelEn: 'Hearbor 1 (AR Manhwa)' });
     }
     if (handles.bx2) {
-      availableServers.push({ id: 'bx2', name: 'سيرفر BLACK X 2 (مانجا عربية)', labelEn: 'BLACK X 2 (AR Manga)' });
+      availableServers.push({ id: 'bx2', name: 'سيرفر Hearbor 2 (مانجا عربية)', labelEn: 'Hearbor 2 (AR Manga)' });
     }
     if (handles.bx3) {
-      availableServers.push({ id: 'bx3', name: 'سيرفر BLACK X 3 (المكتبة العالمية الشاملة)', labelEn: 'BLACK X 3 (Global HD)' });
+      availableServers.push({ id: 'bx3', name: 'سيرفر Hearbor 3 (المكتبة العالمية الشاملة)', labelEn: 'Hearbor 3 (Global HD)' });
     }
 
     let chapters = [];
@@ -777,7 +777,7 @@ async function fetchLiveAniListByGenres(canonicalGenres = []) {
         title_ar: null,
         cover_url: m.coverImage?.extraLarge || m.coverImage?.large || '',
         banner_url: m.bannerImage || null,
-        description: cleanDesc || 'A critically acclaimed Japanese anime series streaming on BLACK X.',
+        description: cleanDesc || 'A critically acclaimed Japanese anime series streaming on Hearbor.',
         description_ar: null,
         genres: baseGenres,
         score: m.averageScore || null,

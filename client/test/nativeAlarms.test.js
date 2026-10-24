@@ -33,7 +33,7 @@ test('one reminder per followed title with a real air time in the next 8 days', 
   assert.equal(list[0].at, NOW + 600_000, 'soonest first');
   assert.match(list[0].body, /^الحلقة الجديدة بتتعرض دلوقتي في اليابان/);
   assert.equal(list[1].title, 'ميعاد Blue Box Season 2');
-  assert.match(list[1].body, /^الحلقة 3 بتتعرض دلوقتي في اليابان\. هتنزل على BLACK X لما تتترجم\.$/);
+  assert.match(list[1].body, /^الحلقة 3 بتتعرض دلوقتي في اليابان\. هتنزل على Hearbor لما تتترجم\.$/);
   const en = buildAlarmList({ followed, airingMap: airing, now: NOW, isRtl: false });
   assert.match(en[1].body, /^Episode 3 is airing in Japan now\./);
   assert.deepEqual(buildAlarmList({ followed, airingMap: null, now: NOW }), []);

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 /**
- * Maps any BLACK X frameStyle or bannerStyle id to its living creature archetype & palette.
+ * Maps any Hearbor frameStyle or bannerStyle id to its living creature archetype & palette.
  */
 export function resolveCreatureTheme(styleId = 'dragon') {
   const id = String(styleId || '').toLowerCase();

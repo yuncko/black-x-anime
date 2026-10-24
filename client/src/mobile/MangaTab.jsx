@@ -409,8 +409,8 @@ export default function MangaTab({
               <div>
                 {mangaPagesError === 'network'
                   ? isRtl
-                    ? 'تعذّر الاتصال بسيرفرات BLACK X — تأكد من الإنترنت ثم أعد المحاولة.'
-                    : 'Could not reach the BLACK X servers — check your connection and retry.'
+                    ? 'تعذّر الاتصال بسيرفرات Hearbor — تأكد من الإنترنت ثم أعد المحاولة.'
+                    : 'Could not reach the Hearbor servers — check your connection and retry.'
                   : isRtl
                     ? `مفيش صفحات للفصل ده على ${mangaServerLabel(activeMangaChapter?.server || mangaActiveServer)} دلوقتي — جرّب سيرفر تاني`
                     : `No pages for this chapter on ${mangaServerLabel(activeMangaChapter?.server || mangaActiveServer)} right now — try another server on the title page.`}
@@ -804,7 +804,7 @@ export default function MangaTab({
                     X
                   </span>
                   <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>
-                    {mangaActiveServer ? mangaServerLabel(mangaActiveServer) : selectedManga.sourceLabel || 'BLACK X MANGA'}
+                    {mangaActiveServer ? mangaServerLabel(mangaActiveServer) : selectedManga.sourceLabel || 'Hearbor MANGA'}
                   </span>
                 </div>
               </div>
@@ -881,7 +881,7 @@ export default function MangaTab({
                   <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', fontWeight: 600 }}>{isRtl ? 'الحالة' : 'Status'}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.8125rem', fontWeight: 700 }}>{mangaActiveServer ? mangaServerLabel(mangaActiveServer).replace('BLACK X ', 'BX ') : '—'}</div>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 700 }}>{mangaActiveServer ? mangaServerLabel(mangaActiveServer).replace('Hearbor ', 'BX ') : '—'}</div>
                   <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', fontWeight: 600 }}>{isRtl ? 'السيرفر' : 'Server'}</div>
                 </div>
               </div>
@@ -960,7 +960,7 @@ export default function MangaTab({
                   </button>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.76)', lineHeight: 1.55 }}>
-                  {(selectedManga.story_ar || selectedManga.story?.ar || selectedManga.story_en || (isRtl ? 'عمل مانهوا ومانجا حصري مترجم بالكامل بجودة عالية عبر سيرفرات BLACK X.' : 'Exclusive translated Manga & Manhwa series on BLACK X.')).slice(0, 280)}
+                  {(selectedManga.story_ar || selectedManga.story?.ar || selectedManga.story_en || (isRtl ? 'عمل مانهوا ومانجا حصري مترجم بالكامل بجودة عالية عبر سيرفرات Hearbor.' : 'Exclusive translated Manga & Manhwa series on Hearbor.')).slice(0, 280)}
                 </p>
               </div>
 
@@ -1127,12 +1127,12 @@ export default function MangaTab({
               <div style={{ marginBottom: '0.7rem' }}>
                 {mangaChaptersError === 'network'
                   ? isRtl
-                    ? 'تعذّر الاتصال بسيرفرات BLACK X — تأكد من الإنترنت ثم أعد المحاولة.'
-                    : 'Could not reach the BLACK X servers — check your connection and retry.'
+                    ? 'تعذّر الاتصال بسيرفرات Hearbor — تأكد من الإنترنت ثم أعد المحاولة.'
+                    : 'Could not reach the Hearbor servers — check your connection and retry.'
                   : mangaChaptersError === 'not_found'
                     ? isRtl
-                      ? 'لم نجد هذا العمل على سيرفرات BLACK X — ابحث عنه بالاسم من مكتبة المانجا.'
-                      : 'This title was not found on the BLACK X servers — search for it in the library.'
+                      ? 'لم نجد هذا العمل على سيرفرات Hearbor — ابحث عنه بالاسم من مكتبة المانجا.'
+                      : 'This title was not found on the Hearbor servers — search for it in the library.'
                     : isRtl
                       ? 'مفيش فصول على السيرفر ده دلوقتي — جرّب سيرفر تاني من فوق.'
                       : 'No chapters on this server right now — try another server above.'}
@@ -1479,7 +1479,7 @@ export default function MangaTab({
                 <div style={{ marginBottom: '1.05rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.55rem' }}>
                     <span style={{ fontWeight: 700, fontSize: '0.9375rem' }}>
-                      <BxIcon name="zap" className="bx-ico-lead" />{isRtl ? 'مختارات من سيرفرات BLACK X' : 'Picks from the BLACK X servers'}
+                      <BxIcon name="zap" className="bx-ico-lead" />{isRtl ? 'مختارات من سيرفرات Hearbor' : 'Picks from the Hearbor servers'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -1558,8 +1558,8 @@ export default function MangaTab({
                 >
                   {mangaSource === 'bx4' && !mangaQuery.trim()
                     ? isRtl
-                      ? <><BxIcon name="search" className="bx-ico-lead" />{"سيرفر BLACK X 4 للبحث فقط — اكتب اسم العمل في خانة البحث."}</>
-                      : <><BxIcon name="search" className="bx-ico-lead" />{"BLACK X 4 is search-only — type a title in the search box."}</>
+                      ? <><BxIcon name="search" className="bx-ico-lead" />{"سيرفر Hearbor 4 للبحث فقط — اكتب اسم العمل في خانة البحث."}</>
+                      : <><BxIcon name="search" className="bx-ico-lead" />{"Hearbor 4 is search-only — type a title in the search box."}</>
                     : isRtl
                       ? 'مفيش نتايج على السيرفر ده دلوقتي — جرّب سيرفر تاني من فوق.'
                       : 'No results on this server right now — try another server above.'}

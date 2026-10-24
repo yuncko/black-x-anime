@@ -1,7 +1,7 @@
 import { apiGet as cacheGet, apiGetStale, apiSet as cacheSet, upsertAnime, getAnimeRow, parseAnimeRow } from './db.js';
 import { ANILIST_EXCLUSION_ARGS, hasBlockedGenre } from '../../shared/contentFilter.js';
 
-// Ecchi / Harem / Isekai are hidden from BLACK X (shared/contentFilter.js): list queries ask
+// Ecchi / Harem / Isekai are hidden from Hearbor (shared/contentFilter.js): list queries ask
 // AniList to drop them; lists that cannot be filtered in the query (the airing schedule) are
 // checked against genres + tags.
 const HIDE = ANILIST_EXCLUSION_ARGS;

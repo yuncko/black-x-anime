@@ -30,46 +30,46 @@ import {
 
 const router = Router();
 
-/** GET /api/stream/sources — list available anime streaming sources under BLACK X */
+/** GET /api/stream/sources — list available anime streaming sources under Hearbor */
 router.get('/sources', (req, res) => {
   res.json({
     sources: [
       {
         id: 'all',
-        nameAr: '🌟 جميع سيرفرات BLACK X (الكل)',
-        nameEn: 'All BLACK X Servers',
-        badge: 'BLACK X'
+        nameAr: '🌟 جميع سيرفرات Hearbor (الكل)',
+        nameEn: 'All Hearbor Servers',
+        badge: 'Hearbor'
       },
       {
         id: 'witanime',
-        nameAr: '👑 سيرفر BLACK X 1',
-        nameEn: 'BLACK X Server 1',
-        badge: 'BLACK X 1'
+        nameAr: '👑 سيرفر Hearbor 1',
+        nameEn: 'Hearbor Server 1',
+        badge: 'Hearbor 1'
       },
       {
         id: 'anime3rb',
-        nameAr: '⚡ سيرفر BLACK X 2',
-        nameEn: 'BLACK X Server 2',
-        badge: 'BLACK X 2'
+        nameAr: '⚡ سيرفر Hearbor 2',
+        nameEn: 'Hearbor Server 2',
+        badge: 'Hearbor 2'
       },
       {
         id: 'english',
-        nameAr: '🌐 سيرفر BLACK X 3',
-        nameEn: 'BLACK X Server 3',
-        badge: 'BLACK X 3'
+        nameAr: '🌐 سيرفر Hearbor 3',
+        nameEn: 'Hearbor Server 3',
+        badge: 'Hearbor 3'
       },
       ...(isAniProjectConfigured() ? [{
         id: 'aniproject',
-        nameAr: 'سيرفر BLACK X 4 (بحث)',
-        nameEn: 'BLACK X Server 4 (Search)',
-        badge: 'BLACK X 4',
+        nameAr: 'سيرفر Hearbor 4 (بحث)',
+        nameEn: 'Hearbor Server 4 (Search)',
+        badge: 'Hearbor 4',
         searchOnly: true
       }] : [])
     ]
   });
 });
 
-/** GET /api/stream/catalog — catalog of anime across all BLACK X servers (total reported by BLACK X 1 when available) */
+/** GET /api/stream/catalog — catalog of anime across all Hearbor servers (total reported by Hearbor 1 when available) */
 router.get('/catalog', async (req, res) => {
   const source = (req.query.source || 'all').toLowerCase();
   const page = Math.max(1, Number(req.query.page) || 1);
@@ -77,7 +77,7 @@ router.get('/catalog', async (req, res) => {
   const genre = String(req.query.genre || '').trim();
 
   // AniProject v3 exposes a searchable provider, not a browsable streaming
-  // catalog. Never present AniList metadata as playable BLACK X 4 entries.
+  // catalog. Never present AniList metadata as playable Hearbor 4 entries.
   if (source === 'aniproject') {
     return res.json({ items: [], count: 0, totalCount: 0, totalPages: 0, hasNext: false, page });
   }
@@ -99,8 +99,8 @@ router.get('/catalog', async (req, res) => {
             return (awCatalog?.items || []).map((a) => ({
               ...a,
               source: 'witanime',
-              sourceName: 'سيرفر BLACK X 1',
-              sourceLabel: 'سيرفر BLACK X 1'
+              sourceName: 'سيرفر Hearbor 1',
+              sourceLabel: 'سيرفر Hearbor 1'
             }));
           })
           .catch(() =>
@@ -109,8 +109,8 @@ router.get('/catalog', async (req, res) => {
                 (witaBrowse?.items || []).map((a) => ({
                   ...a,
                   source: 'witanime',
-                  sourceName: 'سيرفر BLACK X 1',
-                  sourceLabel: 'سيرفر BLACK X 1'
+                  sourceName: 'سيرفر Hearbor 1',
+                  sourceLabel: 'سيرفر Hearbor 1'
                 }))
               )
               .catch(() => [])
@@ -126,8 +126,8 @@ router.get('/catalog', async (req, res) => {
             (a3rbList || []).map((a) => ({
               ...a,
               source: 'anime3rb',
-              sourceName: 'سيرفر BLACK X 2',
-              sourceLabel: 'سيرفر BLACK X 2'
+              sourceName: 'سيرفر Hearbor 2',
+              sourceLabel: 'سيرفر Hearbor 2'
             }))
           )
           .catch(() => [])
@@ -142,8 +142,8 @@ router.get('/catalog', async (req, res) => {
             (enLatest || []).map((a) => ({
               ...a,
               source: 'english',
-              sourceName: 'سيرفر BLACK X 3',
-              sourceLabel: 'سيرفر BLACK X 3'
+              sourceName: 'سيرفر Hearbor 3',
+              sourceLabel: 'سيرفر Hearbor 3'
             }))
           )
           .catch(() => [])
@@ -154,14 +154,14 @@ router.get('/catalog', async (req, res) => {
     for (const group of results) {
       items = items.concat(group);
     }
-    // Ecchi / Harem / Isekai (shared/contentFilter.js). BLACK X 1 already excludes them in the
+    // Ecchi / Harem / Isekai (shared/contentFilter.js). Hearbor 1 already excludes them in the
     // Algolia query, so its total and pages stay real.
     items = await filterAnimeList(items);
 
     res.json({
       items,
       count: items.length,
-      // Real catalog size from BLACK X 1's search index; null when that source
+      // Real catalog size from Hearbor 1's search index; null when that source
       // did not answer (never the page size presented as a total).
       totalCount: totalCount || null,
       totalPages,
@@ -174,7 +174,7 @@ router.get('/catalog', async (req, res) => {
 });
 
 /**
- * GET /api/stream/stats — real catalog size reported by BLACK X 1's search
+ * GET /api/stream/stats — real catalog size reported by Hearbor 1's search
  * index, used by every "N anime" label on the site. Answers 503 (never a
  * guessed number) when the index is unreachable; the CDN then keeps serving
  * the last good value thanks to stale-if-error.
@@ -204,7 +204,7 @@ router.get('/diagnostics', async (req, res) => {
   }
 });
 
-/** GET /api/stream/latest — latest episodes grid across BLACK X Server 1, 2 & 3 */
+/** GET /api/stream/latest — latest episodes grid across Hearbor Server 1, 2 & 3 */
 router.get('/latest', async (req, res) => {
   const source = (req.query.source || 'all').toLowerCase();
   const page = Math.max(1, Number(req.query.page) || 1);
@@ -232,7 +232,7 @@ router.get('/latest', async (req, res) => {
               mergedWita.push({
                 ...it,
                 source: 'witanime',
-                sourceLabel: 'سيرفر BLACK X 1'
+                sourceLabel: 'سيرفر Hearbor 1'
               });
             }
             witaItems = mergedWita;
@@ -249,7 +249,7 @@ router.get('/latest', async (req, res) => {
             a3rbItems = (a || []).map((it) => ({
               ...it,
               source: 'anime3rb',
-              sourceLabel: 'سيرفر BLACK X 2'
+              sourceLabel: 'سيرفر Hearbor 2'
             }));
           })
           .catch(() => {})
@@ -264,7 +264,7 @@ router.get('/latest', async (req, res) => {
             enItems = (en || []).map((it) => ({
               ...it,
               source: 'english',
-              sourceLabel: 'سيرفر BLACK X 3'
+              sourceLabel: 'سيرفر Hearbor 3'
             }));
           })
           .catch(() => {})
@@ -345,14 +345,14 @@ router.get('/search', async (req, res) => {
           const fromAw = (awList || []).map((it) => ({
             ...it,
             source: 'witanime',
-            sourceLabel: 'سيرفر BLACK X 1'
+            sourceLabel: 'سيرفر Hearbor 1'
           }));
           const fromW = (w || [])
             .filter((it) => isTitleMatch(q, it.titleEn || it.titleAr, it.slug))
             .map((it) => ({
               ...it,
               source: 'witanime',
-              sourceLabel: 'سيرفر BLACK X 1'
+              sourceLabel: 'سيرفر Hearbor 1'
             }));
           const fromS = (sList || [])
             .filter((s) => s.slug && isTitleMatch(q, s.name, s.slug))
@@ -364,7 +364,7 @@ router.get('/search', async (req, res) => {
               poster: s.img || '',
               url: `/anime/${s.slug}`,
               source: 'witanime',
-              sourceLabel: 'سيرفر BLACK X 1'
+              sourceLabel: 'سيرفر Hearbor 1'
             }));
           witaResults = [...fromAw, ...fromW, ...fromS];
         })
@@ -379,7 +379,7 @@ router.get('/search', async (req, res) => {
             a3rbResults = (a || []).map((it) => ({
               ...it,
               source: 'anime3rb',
-              sourceLabel: 'سيرفر BLACK X 2'
+              sourceLabel: 'سيرفر Hearbor 2'
             }));
           })
           .catch(() => {})
@@ -395,7 +395,7 @@ router.get('/search', async (req, res) => {
               ...it,
               source: 'english',
               hasAutoArabicSub: true,
-              sourceLabel: 'سيرفر BLACK X 3'
+              sourceLabel: 'سيرفر Hearbor 3'
             }));
           })
           .catch(() => {})
@@ -453,22 +453,22 @@ router.get('/show/:slug', async (req, res) => {
         show = await fetchWitcherShow(spacedTitle || slug).catch(() => null);
       }
     } else {
-      // 1) Primary source: BLACK X Server 1 (Anime Witcher 6,973-anime Cloud Engine)
+      // 1) Primary source: Hearbor Server 1 (Anime Witcher 6,973-anime Cloud Engine)
       try {
         show = await fetchWitcherShow(slug);
         if (show) {
           show.source = 'witanime';
-          show.sourceName = 'سيرفر BLACK X 1';
+          show.sourceName = 'سيرفر Hearbor 1';
         }
       } catch (_) {}
 
-      // 2) Secondary BLACK X 1 lookup via WitAnime direct slug or search
+      // 2) Secondary Hearbor 1 lookup via WitAnime direct slug or search
       if (!show) {
         try {
           show = await fetchShow(slug);
           if (show) {
             show.source = 'witanime';
-            show.sourceName = 'سيرفر BLACK X 1';
+            show.sourceName = 'سيرفر Hearbor 1';
           }
         } catch (_) {}
       }
@@ -482,20 +482,20 @@ router.get('/show/:slug', async (req, res) => {
             show = await fetchShow(verified.slug);
             if (show) {
               show.source = 'witanime';
-              show.sourceName = 'سيرفر BLACK X 1';
+              show.sourceName = 'سيرفر Hearbor 1';
             }
           }
         } catch (_) {}
       }
 
-      // 3) Check BLACK X Server 2 (Animeify v4 API) with strict title verification
+      // 3) Check Hearbor Server 2 (Animeify v4 API) with strict title verification
       if (!show) {
         try {
           show = await anime3rbService.getShow(slug);
         } catch (_) {}
       }
 
-      // 4) Fallback to BLACK X Server 3
+      // 4) Fallback to Hearbor Server 3
       if (!show) {
         try {
           show = await englishAnimeService.getShow(slug);
@@ -532,7 +532,7 @@ router.get('/episode/:slug/:ep', optionalAuth, async (req, res) => {
       data = await aniprojectService.getEpisode(req.params.slug, episode);
     } else if (sourceParam === 'english' || req.params.slug.startsWith('en-') || req.params.slug.startsWith('mal-') || req.params.slug.startsWith('en_anime:')) {
       data = await englishAnimeService.getEpisode(req.params.slug, episode);
-      // Cross-enrich with BLACK X 1 (Anime Witcher) Arabic 1080p MP4 servers if available
+      // Cross-enrich with Hearbor 1 (Anime Witcher) Arabic 1080p MP4 servers if available
       if (data) {
         try {
           const awEp = await fetchWitcherEpisode(req.params.slug, episode).catch(() => null);
@@ -550,7 +550,7 @@ router.get('/episode/:slug/:ep', optionalAuth, async (req, res) => {
       }
     } else if (sourceParam === 'anime3rb' || req.params.slug.startsWith('a3rb-') || sourceParam === 'okanime' || req.params.slug.startsWith('ok-') || sourceParam === 'animeblkom' || req.params.slug.startsWith('blkom-')) {
       data = await anime3rbService.getEpisode(cleanSlug, episode);
-      // Cross-enrich with BLACK X Server 1 (Anime Witcher + WitAnime) if title matches
+      // Cross-enrich with Hearbor Server 1 (Anime Witcher + WitAnime) if title matches
       if (data) {
         try {
           const searchTitle = cleanSlug.replace(/^x/, '').replace(/([a-z])([A-Z])/g, '$1 $2');
@@ -571,7 +571,7 @@ router.get('/episode/:slug/:ep', optionalAuth, async (req, res) => {
         data = await fetchWitcherEpisode(spacedTitle || cleanSlug, episode).catch(() => null);
       }
     } else {
-      // 1) Primary source: BLACK X Server 1 (Anime Witcher 1080p/720p/480p Direct MP4 + WitAnime) + cross-linked BLACK X Server 2
+      // 1) Primary source: Hearbor Server 1 (Anime Witcher 1080p/720p/480p Direct MP4 + WitAnime) + cross-linked Hearbor Server 2
       const [awEp, witaEp, bx2Ep] = await Promise.all([
         fetchWitcherEpisode(cleanSlug, episode).catch(() => null),
         !cleanSlug.startsWith('aw-') ? fetchEpisode(cleanSlug, episode).catch(() => null) : Promise.resolve(null),
@@ -605,7 +605,7 @@ router.get('/episode/:slug/:ep', optionalAuth, async (req, res) => {
         };
       }
 
-      // 2) Fallback to BLACK X Server 3 if not on Server 1 or 2
+      // 2) Fallback to Hearbor Server 3 if not on Server 1 or 2
       if (!data || !data.entries?.length) {
         try {
           data = await englishAnimeService.getEpisode(cleanSlug, episode);
@@ -634,13 +634,13 @@ router.get('/episode/:slug/:ep', optionalAuth, async (req, res) => {
         ...e,
         isVipOnly: false,
         isFastCdn,
-        serverTag: isFastCdn ? '⚡ BLACK X Fast CDN' : null
+        serverTag: isFastCdn ? '⚡ Hearbor Fast CDN' : null
       };
     });
 
     // VIP (Basic and Monarch) only changes the order: direct/CDN servers first (stable sort).
     // There is no 4K / HDR / 60 fps server. Monarch used to get a synthetic
-    // «👑 BLACK X Monarch 4K HDR (60fps Ultra)» entry that replayed the first real server
+    // «👑 Hearbor Monarch 4K HDR (60fps Ultra)» entry that replayed the first real server
     // under a fake quality label; it was removed with the owner's OK (2026-10-16).
     // Never add invented servers or quality labels here.
     const entries = prioritizedEntries;
@@ -679,7 +679,7 @@ router.post('/resolve', async (req, res) => {
     }
   }
 
-  // If this is an Anime Witcher (BLACK X 1) entry, resolve via resolveWitcherEntry
+  // If this is an Anime Witcher (Hearbor 1) entry, resolve via resolveWitcherEntry
   if (String(entryId).startsWith('aw-')) {
     try {
       const awSource = await resolveWitcherEntry(String(slug), ep, String(entryId));
@@ -754,7 +754,7 @@ router.post('/resolve-download', async (req, res) => {
     }
   }
 
-  // If this is an Anime Witcher (BLACK X 1) download entry
+  // If this is an Anime Witcher (Hearbor 1) download entry
   if (String(entryId).startsWith('dl-aw-')) {
     try {
       const awDl = await resolveWitcherDownloadEntry(String(slug), ep, String(entryId));
@@ -851,7 +851,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
     const cloudHosts = [];
     const seenUrls = new Set();
 
-    // 0) Check BLACK X Server 1 (Anime Witcher 1080p/720p/480p Direct MP4 downloads) first
+    // 0) Check Hearbor Server 1 (Anime Witcher 1080p/720p/480p Direct MP4 downloads) first
     try {
       const awData = await fetchWitcherEpisode(slug, ep);
       if (awData?.downloads?.length) {
@@ -867,7 +867,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
             seenUrls.add(finalUrl);
             cloudHosts.push({
               id: dl.id,
-              server: dl.server || '📥 سيرفر تحميل BLACK X 1 المباشر',
+              server: dl.server || '📥 سيرفر تحميل Hearbor 1 المباشر',
               quality: dl.quality || 'FHD 1080p',
               url: finalUrl,
               directUrl: finalUrl,
@@ -878,7 +878,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
       }
     } catch (_) {}
 
-    // 1) Check BLACK X Server 2 direct MP4 download sources
+    // 1) Check Hearbor Server 2 direct MP4 download sources
     try {
       const a3rbData = await anime3rbService.getEpisode(slug, ep);
       if (a3rbData?.downloads?.length) {
@@ -888,7 +888,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
           if (downloadUrl) seenUrls.add(downloadUrl);
           cloudHosts.push({
             id: dl.id,
-            server: dl.server || '📥 سيرفر تحميل BLACK X المباشر',
+            server: dl.server || '📥 سيرفر تحميل Hearbor المباشر',
             quality: dl.quality || 'FHD',
             url: downloadUrl,
             directUrl: downloadUrl,
@@ -898,7 +898,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
       }
     } catch (_) {}
 
-    // 2) Check BLACK X Server 1 WitAnime downloads
+    // 2) Check Hearbor Server 1 WitAnime downloads
     try {
       const payload = !slug.startsWith('aw-') ? await fetchEpisode(slug, ep).catch(() => null) : null;
       const rawDownloads = payload?.downloads || [];
@@ -914,7 +914,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
         if (finalUrl) seenUrls.add(finalUrl);
         cloudHosts.push({
           id: dl.id,
-          server: dl.server || '📥 سيرفر تحميل BLACK X',
+          server: dl.server || '📥 سيرفر تحميل Hearbor',
           quality: dl.quality || 'FHD',
           url: resolved?.downloadUrl || null,
           directUrl: resolved?.directUrl || null,
@@ -939,7 +939,7 @@ router.get('/download-sources/:slug/:ep', async (req, res) => {
         seenUrls.add(linkUrl);
         cloudHosts.push({
           id: `scraper-dl-${slug}-${ep}-${qCode}-${idx}`,
-          server: `📥 سيرفر تحميل BLACK X ${idx + 1} (${qCode})`,
+          server: `📥 سيرفر تحميل Hearbor ${idx + 1} (${qCode})`,
           quality: qCode,
           qualityLabel: qualityGroup,
           url: linkUrl,
@@ -1552,7 +1552,7 @@ router.get('/hls-player', (req, res) => {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BLACK X HLS Player</title>
+<title>Hearbor HLS Player</title>
 <style>
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
   video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }
@@ -1562,7 +1562,7 @@ router.get('/hls-player', (req, res) => {
 </head>
 <body>
 <video id="v" controls autoplay playsinline crossorigin="anonymous">
-  ${subUrl ? `<track kind="subtitles" srclang="ar" label="العربية (BLACK X AI)" src="${subUrl.replace(/"/g, '&quot;')}" default />` : ''}
+  ${subUrl ? `<track kind="subtitles" srclang="ar" label="العربية (Hearbor AI)" src="${subUrl.replace(/"/g, '&quot;')}" default />` : ''}
   ${proxiedSubEn ? `<track kind="subtitles" srclang="en" label="English" src="${proxiedSubEn.replace(/"/g, '&quot;')}" />` : ''}
 </video>
 <script>
@@ -1607,7 +1607,7 @@ router.get('/mp4-player', (req, res) => {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BLACK X Direct Player</title>
+<title>Hearbor Direct Player</title>
 <style>
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; }
   video { width: 100%; height: 100%; object-fit: contain; background: #000; outline: none; }

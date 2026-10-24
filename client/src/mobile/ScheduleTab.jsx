@@ -209,8 +209,8 @@ export default function ScheduleTab({
             <p className="bx-sched-note">
               <BxIcon name="info" size="1em" className="bx-ico-lead" />
               {isRtl
-                ? 'المواعيد هي ميعاد عرض الحلقة في اليابان بتوقيت جهازك (من AniList)، والحلقة المترجمة بتنزل على BLACK X بعدها.'
-                : 'Times are the Japanese broadcast in your time zone (from AniList); the subtitled episode reaches BLACK X after that.'}
+                ? 'المواعيد هي ميعاد عرض الحلقة في اليابان بتوقيت جهازك (من AniList)، والحلقة المترجمة بتنزل على Hearbor بعدها.'
+                : 'Times are the Japanese broadcast in your time zone (from AniList); the subtitled episode reaches Hearbor after that.'}
             </p>
           ) : null}
         </>

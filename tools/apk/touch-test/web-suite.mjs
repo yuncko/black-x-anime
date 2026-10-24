@@ -1,4 +1,4 @@
-// BLACK X website — real-touch suite for the website. Since 2026-10-17 every device gets the app
+// Hearbor website — real-touch suite for the website. Since 2026-10-17 every device gets the app
 // interface (client/src/webUi.js; client/src/mobile/webApp.js, laid out for wide screens by
 // desktop.css); the classic website pages stay one tap away (`?ui=site`).
 // Run it with ./run-web.sh (builds the website into /tmp). `ONLY=links,back ./run-web.sh` runs some.
@@ -125,7 +125,7 @@ scenario('boot', async (browser) => {
   await page.goto(`${LOCAL}/`, { waitUntil: 'domcontentloaded' });
   await waitWebReady(page);
   check(G, '…and the choice is remembered (bx_web_ui_v2)', (await iface(page)) === 'site', await page.evaluate(() => localStorage.getItem('bx_web_ui_v2')));
-  const back = await page.evaluate(() => [...document.querySelectorAll('footer a, footer button')].find((e) => /واجهة BLACK X الجديدة|New BLACK X interface/.test(e.textContent))?.textContent.trim() || '');
+  const back = await page.evaluate(() => [...document.querySelectorAll('footer a, footer button')].find((e) => /واجهة Hearbor الجديدة|New Hearbor interface/.test(e.textContent))?.textContent.trim() || '');
   check(G, 'the classic footer offers the new interface back', Boolean(back), back);
   await page.goto(`${LOCAL}/?ui=app`, { waitUntil: 'domcontentloaded' });
   await waitWebReady(page);
@@ -138,7 +138,7 @@ scenario('boot', async (browser) => {
 
   // The APK's update card never shows on the website (it is always the latest version).
   ({ page, ctx } = await openWeb(browser, { route: '/', wait: false }));
-  ctx.apkOverride = { version: '99.0', versionCode: 9900, url: '/BLACK-X-Mobile-120Hz.apk', notesAr: ['x'], notesEn: ['x'] };
+  ctx.apkOverride = { version: '99.0', versionCode: 9900, url: '/HEARBOR-Mobile-120Hz.apk', notesAr: ['x'], notesEn: ['x'] };
   await page.reload({ waitUntil: 'domcontentloaded' });
   await waitWebReady(page);
   await sleep(1200);
@@ -365,10 +365,10 @@ scenario('profile', async (browser) => {
     items: [...document.querySelectorAll('main .bx-perks-list strong')].map((e) => e.textContent.trim()),
     href: document.querySelector('main .bx-perks a.bx-btn')?.getAttribute('href') || ''
   }));
-  check(G, 'the Android row opens «ليه تنزل التطبيق؟»: the APK-only features + a download from this site', perks.href === '/BLACK-X-Mobile-120Hz.apk' && perks.items.length >= 4 && perks.items.some((t) => /والتطبيق مقفول/.test(t)), `${perks.href} | ${perks.items.join(' / ')}`);
+  check(G, 'the Android row opens «ليه تنزل التطبيق؟»: the APK-only features + a download from this site', perks.href === '/HEARBOR-Mobile-120Hz.apk' && perks.items.length >= 4 && perks.items.some((t) => /والتطبيق مقفول/.test(t)), `${perks.href} | ${perks.items.join(' / ')}`);
   await browserBack(page);
   const foot = await page.evaluate(() => ({ text: document.querySelector('.bxp-foot')?.textContent || '', host: location.host }));
-  check(G, 'footer shows this site\'s own address (no app version)', foot.text.includes(foot.host) && !/BLACK X · v\d/.test(foot.text), foot.text);
+  check(G, 'footer shows this site\'s own address (no app version)', foot.text.includes(foot.host) && !/Hearbor · v\d/.test(foot.text), foot.text);
 
   // Google: the web popup (Firebase), not the APK's OAuth window.
   const popups = [];
@@ -550,17 +550,17 @@ scenario('desktop', async (browser) => {
   const hiddenSlug = slugOf(HIDDEN_ANIME[0].name);
   for (const route of [`/show/${hiddenSlug}`, `/watch/${hiddenSlug}/1`]) {
     ({ page, ctx } = await openWeb(browser, { route, phone: false, ui: 'site' }));
-    const ok = await waitFor(page, () => /مش متاح على BLACK X/.test(document.querySelector('.app-shell')?.innerText || ''), null, 10000);
+    const ok = await waitFor(page, () => /مش متاح على Hearbor/.test(document.querySelector('.app-shell')?.innerText || ''), null, 10000);
     check(G, `${route.split('/')[1]} page of a hidden title: «مش متاح»`, ok);
     await page.close();
   }
   ({ page, ctx } = await openWeb(browser, { route: `/show/${slugOf('Test Anime 2')}`, phone: false, ui: 'site' }));
   const normal = await waitFor(page, () => /Test Anime 2/.test(document.querySelector('.app-shell h1')?.textContent || ''), null, 10000);
-  check(G, 'a normal title page still opens', normal && !(await page.evaluate(() => /مش متاح على BLACK X/.test(document.body.innerText))));
+  check(G, 'a normal title page still opens', normal && !(await page.evaluate(() => /مش متاح على Hearbor/.test(document.body.innerText))));
   const detail = await page.evaluate(() => document.querySelector('.detail-hero')?.innerText || '');
   const invented = ['120Hz', '4K Ultra', 'FHD 1080p', '1.4K', '24.8K', '98%', 'تطابق', '24 دقيقة', 'مانجا يابانية', 'يعرض الآن'].filter((f) => detail.includes(f));
   check(G, 'title page: no invented likes, views, match %, quality, duration or source', invented.length === 0, invented.join(', ') || 'clean');
-  check(G, 'title page: real facts (type, year, rating, server)', /مسلسل/.test(detail) && /2022/.test(detail) && /★ 6\.7/.test(detail) && /BLACK X 1/.test(detail), detail.replace(/\n/g, ' / ').slice(0, 220));
+  check(G, 'title page: real facts (type, year, rating, server)', /مسلسل/.test(detail) && /2022/.test(detail) && /★ 6\.7/.test(detail) && /Hearbor 1/.test(detail), detail.replace(/\n/g, ' / ').slice(0, 220));
   const showPage = await page.evaluate(() => ({
     text: document.querySelector('.app-shell')?.innerText || '',
     latest: [...document.querySelectorAll('.ep-chip')].filter((b) => b.querySelector('.ep-chip__latest')).map((b) => b.innerText.replace(/\n/g, ' '))
@@ -811,7 +811,7 @@ scenario('features', async (browser) => {
   check(G, 'manga: that AniList query excludes the hidden genres', popQ.length === 1 && /genre_not_in/.test(popQ[0]) && /tag_not_in/.test(popQ[0]), `${popQ.length} queries`);
   check(G, 'manga: «كمّل قراءة» has no invented 68 % progress bar', await page.evaluate(() => ![...document.querySelectorAll('main div')].some((d) => d.style && d.style.width === '68%')));
   const tools2 = await page.evaluate(() => ({ serverChips: document.querySelectorAll('main .bx-mob-scroll button[style*="999px"]').length, tools: document.querySelector('.bx-manga-tools')?.innerText.replace(/\n/g, ' ') || '' }));
-  check(G, 'manga: one «فلترة» button replaces the two chip rows', /فلترة/.test(tools2.tools) && /جميع سيرفرات BLACK X/.test(tools2.tools), tools2.tools);
+  check(G, 'manga: one «فلترة» button replaces the two chip rows', /فلترة/.test(tools2.tools) && /جميع سيرفرات Hearbor/.test(tools2.tools), tools2.tools);
   await tapEl(page, '.bx-manga-tools .bx-chip');
   await waitFor(page, () => /السيرفر/.test(document.querySelector('.bx-bottom-sheet')?.innerText || ''), null, 4000);
   await sleep(700);
@@ -1151,16 +1151,16 @@ scenario('bundle', async (browser) => {
   await waitFor(page, () => document.querySelectorAll('.bx-rank-row:not(.is-skeleton)').length >= 5, null, 10000);
   const rk = await page.evaluate(() => [...document.querySelectorAll('.bx-rank-row')].map((r) => r.innerText.replace(/\s+/g, ' ').trim()));
   check(G, '/rankings: the app\'s ranking page (AniList average on every row)', rk.length === 6 && rk[0].includes('Test Anime 3') && /\b9\b/.test(rk[0]) && /AniList/.test(rk[0]), rk.slice(0, 2).join(' | '));
-  check(G, '…BLACK X votes only where someone voted', /4 صوت على BLACK X/.test(rk[1] || '') && !/صوت/.test(rk[0] || '') && !/صوت/.test(rk[2] || ''), rk.slice(0, 3).join(' | '));
+  check(G, '…Hearbor votes only where someone voted', /4 صوت على Hearbor/.test(rk[1] || '') && !/صوت/.test(rk[0] || '') && !/صوت/.test(rk[2] || ''), rk.slice(0, 3).join(' | '));
   check(G, '…members\' average on the 10-point scale (85 from the API → 8.5)', /8\.5\s*4 صوت/.test(rk[1] || '') && !/\b85\b/.test(rk[1] || ''), rk[1]);
   await clickEl(page, '.bx-rank-row', { text: 'Test Anime 5' });
   await waitFor(page, () => Boolean(document.querySelector('.bx-details-sheet')), null, 8000);
-  check(G, '…a row opens that title on BLACK X', /Test Anime 5/.test(await detailsTitle(page)), await detailsTitle(page));
+  check(G, '…a row opens that title on Hearbor', /Test Anime 5/.test(await detailsTitle(page)), await detailsTitle(page));
   await browserBack(page);
   await waitFor(page, () => document.querySelectorAll('.bx-rank-row').length >= 5, null, 6000);
   await clickEl(page, '.bx-rank-row', { text: 'Only On AniList' });
   await sleep(2000);
-  check(G, '…a title BLACK X does not have opens the search for it, nothing else', !(await detailsOpen(page)) && /\/trending\?q=Only/.test(await here(page)), await here(page));
+  check(G, '…a title Hearbor does not have opens the search for it, nothing else', !(await detailsOpen(page)) && /\/trending\?q=Only/.test(await here(page)), await here(page));
   await page.close();
 
   // ---- «ملخصك»
@@ -1359,7 +1359,7 @@ scenario('closeout', async (browser) => {
   ({ page, ctx } = await openWeb(browser, { route: '/profile' }));
   await waitFor(page, () => Boolean(document.querySelector('.bxp.is-root')), null, 10000);
   const legalRows = await page.evaluate(() => [...document.querySelectorAll('.bxp-row')].map((r) => r.innerText.trim()).filter((t) => /سياسة الخصوصية|شروط الاستخدام/.test(t)));
-  check(G, 'profile: «عن BLACK X» has the privacy policy and the terms', legalRows.length === 2, legalRows.join(' | '));
+  check(G, 'profile: «عن Hearbor» has the privacy policy and the terms', legalRows.length === 2, legalRows.join(' | '));
   await page.close();
   ({ page, ctx } = await openWeb(browser, { route: '/profile/privacy' }));
   await waitFor(page, () => Boolean(document.querySelector('.bxp.is-sub')), null, 10000);
@@ -1382,7 +1382,7 @@ scenario('closeout', async (browser) => {
   await clearStorage(browser); // forget the classic-pages choice (bx_web_ui_v2)
 
   // ---- developer panel (developer session only)
-  const dev = { id: 'u_dev', username: 'blackx', displayName: 'BLACK X', email: 'mz0970mmz@gmail.com', role: 'developer', isDeveloper: true, vipTier: 'vip_monarch' };
+  const dev = { id: 'u_dev', username: 'blackx', displayName: 'Hearbor', email: 'mz0970mmz@gmail.com', role: 'developer', isDeveloper: true, vipTier: 'vip_monarch' };
   ({ page, ctx } = await openWeb(browser, { route: '/profile', seed: sessionOf(dev), ctx: { developer: true, userPatch: dev } }));
   await waitFor(page, () => [...document.querySelectorAll('.bxp-row')].some((r) => /لوحة المطور/.test(r.innerText)), null, 12000);
   await tapEl(page, '.bxp-row', { text: 'لوحة المطور' });
@@ -1486,7 +1486,7 @@ scenario('closeout', async (browser) => {
   ({ page, ctx } = await openWeb(browser, { route: '/discover' }));
   await waitFor(page, () => document.title.startsWith('المواعيد'), null, 8000);
   const meta = await page.evaluate(() => ({ title: document.title, desc: document.querySelector('meta[name="description"]')?.content || '' }));
-  check(G, 'every tab has its own title; the description has no old «Prediction Engine» claim', meta.title === 'المواعيد — BLACK X' && /الأنمي والمانجا/.test(meta.desc) && !/Prediction/.test(meta.desc), JSON.stringify(meta));
+  check(G, 'every tab has its own title; the description has no old «Prediction Engine» claim', meta.title === 'المواعيد — Hearbor' && /الأنمي والمانجا/.test(meta.desc) && !/Prediction/.test(meta.desc), JSON.stringify(meta));
   await page.close();
 });
 

@@ -10,7 +10,7 @@ export default function LegalPage({ id }) {
   const doc = LEGAL_DOCS[id];
   const other = id === 'policy' ? 'terms' : 'policy';
   useEffect(() => {
-    if (doc) document.title = `${lang === 'ar' ? doc.titleAr : doc.titleEn} — BLACK X`;
+    if (doc) document.title = `${lang === 'ar' ? doc.titleAr : doc.titleEn} — Hearbor`;
   }, [doc, lang]);
   if (!doc) return null;
   return (

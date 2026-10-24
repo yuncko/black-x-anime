@@ -46,7 +46,7 @@ async function syncWebsiteUserToSharedCloud(u) {
       id: String(u.id || u.firebaseUid || existing?.id || `u_${Date.now()}`),
       username: String(u.username || u.email?.split('@')[0] || 'user').toLowerCase(),
       email: String(u.email || existing?.email || '').toLowerCase(),
-      displayName: u.displayName || existing?.displayName || u.username || 'BLACK X User',
+      displayName: u.displayName || existing?.displayName || u.username || 'Hearbor User',
       photoUrl: u.photoUrl || u.photoURL || existing?.photoUrl || '',
       avatarColor: u.avatarColor || existing?.avatarColor || '#ffffff',
       bio: u.bio !== undefined ? u.bio : existing?.bio || '',

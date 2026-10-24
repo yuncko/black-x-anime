@@ -1,5 +1,5 @@
 /**
- * «ملخصك» (website, 2026-10-17): your year on BLACK X, from what this device and your
+ * «ملخصك» (website, 2026-10-17): your year on Hearbor, from what this device and your
  * account really recorded. Nothing is estimated and nothing has a minimum — the classic
  * page's «Wrapped» showed at least 12 hours, 48 episodes and level 75 to everybody.
  *

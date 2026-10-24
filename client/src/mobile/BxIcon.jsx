@@ -147,7 +147,7 @@ import {
 } from 'lucide-react';
 
 /**
- * BLACK X mobile icon set (lucide, monochrome stroke icons).
+ * Hearbor mobile icon set (lucide, monochrome stroke icons).
  * Every pictogram in the APK UI goes through this component — the app ships no emoji.
  * Icons inherit `currentColor` and scale with the surrounding font-size (1em based).
  */

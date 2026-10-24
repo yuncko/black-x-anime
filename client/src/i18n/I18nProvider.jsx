@@ -24,7 +24,7 @@ export function I18nProvider({ children }) {
     const dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
-    document.title = lang === 'ar' ? 'BLACK X — أنمي ومانجا' : 'BLACK X — Anime & Manga';
+    document.title = lang === 'ar' ? 'Hearbor — أنمي ومانجا' : 'Hearbor — Anime & Manga';
   }, [lang]);
 
   const t = useCallback(

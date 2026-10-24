@@ -25,8 +25,8 @@ export default function WatchPartyPanel() {
       <h3 style={{ margin: '0 0 0.4rem', fontSize: '1.05rem' }}>{ar ? '🍿 حفلة المشاهدة' : '🍿 Watch party'}</h3>
       <p style={{ margin: '0 0 0.8rem', lineHeight: 1.7, opacity: 0.85 }}>
         {ar
-          ? 'اتفرجوا مع بعض في نفس اللحظة: صاحب الغرفة بيشغّل ويوقف والكل بيمشي معاه، وفيه شات حقيقي بين اللي في الغرفة. الحفلة موجودة في واجهة BLACK X الجديدة — هتفتح الحلقة دي هناك وتدوس «حفلة مشاهدة».'
-          : 'Watch together at the same moment: the host plays and pauses for everyone, with a real chat for the room. Parties live in the new BLACK X interface — this opens the same episode there; then press «Watch party».'}
+          ? 'اتفرجوا مع بعض في نفس اللحظة: صاحب الغرفة بيشغّل ويوقف والكل بيمشي معاه، وفيه شات حقيقي بين اللي في الغرفة. الحفلة موجودة في واجهة Hearbor الجديدة — هتفتح الحلقة دي هناك وتدوس «حفلة مشاهدة».'
+          : 'Watch together at the same moment: the host plays and pauses for everyone, with a real chat for the room. Parties live in the new Hearbor interface — this opens the same episode there; then press «Watch party».'}
       </p>
       <button type="button" className="btn btn--primary" onClick={openInApp}>
         {ar ? 'افتح الحلقة في الواجهة الجديدة' : 'Open this episode in the new interface'}

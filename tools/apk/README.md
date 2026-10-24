@@ -1,6 +1,6 @@
-# Rebuilding the BLACK X APK
+# Rebuilding the Hearbor APK
 
-`client/public/BLACK-X-Mobile-120Hz.apk` is a Capacitor shell (`app.blackx.mobile`,
+`client/public/HEARBOR-Mobile-120Hz.apk` is a Capacitor shell (`app.blackx.mobile`,
 minSdk 22, targetSdk 34) whose whole UI is the Vite build in `assets/public/`.
 There is no Gradle project in this repository. To ship new mobile code, rebuild
 the web bundle and repack it into the existing shell; the native part (dex files,
@@ -27,7 +27,7 @@ The script:
    targeting API 30+ whose `resources.arsc` is not stored and 4-byte aligned, and
    the `apksigner` CLI keeps alignment but does not create it;
 3. signs with v1 + v2 + v3 (`apksigner` picks the schemes from minSdk 22);
-4. verifies the signature and copies the result over `client/public/BLACK-X-Mobile-120Hz.apk`.
+4. verifies the signature and copies the result over `client/public/HEARBOR-Mobile-120Hz.apk`.
 
 After building, check that `apksigner verify` says `Verifies`, that every stored entry
 (especially `resources.arsc`) starts on a 4-byte boundary, and that the native entries
@@ -80,8 +80,8 @@ and have the owner try the feature on a phone before publishing.
 
 - The release key is **not** in this repository and must never be committed (the repo
   is public). The owner keeps `blackx-release.p12` and its password in a private Google
-  Drive folder named «BLACK X — مفتاح توقيع التطبيق (سري — لا تشاركه)».
-- Certificate: `CN=BLACK X Mobile, OU=Mobile, O=BLACK X, L=Cairo, ST=Cairo, C=EG`,
+  Drive folder named «Hearbor — مفتاح توقيع التطبيق (سري — لا تشاركه)».
+- Certificate: `CN=Hearbor Mobile, OU=Mobile, O=Hearbor, L=Cairo, ST=Cairo, C=EG`,
   SHA-256 `2b2f63d1a5c633bc8c2e676b82438d671b50f2b517a1b0127ad5c845e0bbc281`, alias `blackx`.
 - APK v14 and older were signed with a different key that was never saved, so moving
   from v14 to v15 needs one uninstall + reinstall. Every later build signed with the

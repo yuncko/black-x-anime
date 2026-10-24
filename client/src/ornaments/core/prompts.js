@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  BLACK X — Prompt engineering kit (Midjourney v7 / Runway Gen-4 / Luma)
+ *  Hearbor — Prompt engineering kit (Midjourney v7 / Runway Gen-4 / Luma)
  * ============================================================================
  *  These strings are the *production* versions of the reference guide:
  *  they are what the UI shows in the copy-blocks, and they are written so the

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../api.js';
 
 /**
- * Real catalog size from GET /api/stream/stats (BLACK X 1's search index).
+ * Real catalog size from GET /api/stream/stats (Hearbor 1's search index).
  * One request per page load, shared by every label that shows the count.
  * Labels must hide the number while it is unknown: never show a guess.
  */

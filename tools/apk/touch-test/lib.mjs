@@ -1,4 +1,4 @@
-// Headless real-touch harness for the BLACK X APK web bundle (assets/public of the built APK)
+// Headless real-touch harness for the Hearbor APK web bundle (assets/public of the built APK)
 // and for the website build (the phone website runs the same app interface; see web-suite.mjs).
 // The bundle is served from a local server; every network call the app makes (website API,
 // Algolia catalogue, Firestore, AniList) is answered by in-memory mocks, so nothing here
@@ -318,7 +318,7 @@ function api(req, url, ctx) {
       items: ANIME.slice(0, 8).map((a, i) => ({
         ...webShow(a),
         status: a.details.state,
-        // Like the live feed: BLACK X 1 and 2 do not always say which episode is new.
+        // Like the live feed: Hearbor 1 and 2 do not always say which episode is new.
         episode: i === 1 ? null : i + 3
       }))
     });
@@ -350,7 +350,7 @@ function api(req, url, ctx) {
     return json(req, { days, weekStart: now, weekEnd: now + 7 * 86400 });
   }
   // AniList's top-rated titles (/api/anime/rankings): names match catalogue records so a row
-  // opens the title; BLACK X votes only on #2 (the page shows them only when someone voted).
+  // opens the title; Hearbor votes only on #2 (the page shows them only when someone voted).
   if (p === '/api/anime/rankings') {
     const rows = [3, 5, 8, 12, 15].map((n, i) => ({
       id: 8000 + n,
@@ -418,7 +418,7 @@ function api(req, url, ctx) {
     (ctx.telemetry || (ctx.telemetry = [])).push(safeJson(req.postData()) || {});
     return req.respond({ status: 204, headers: CORS, body: '' });
   }
-  if (p === '/api/health') return json(req, { ok: true, name: 'BLACK X API', database: 'ok', authentication: 'ok', firestoreAuth: ctx.firestoreAuth || 'api_key', time: new Date().toISOString() });
+  if (p === '/api/health') return json(req, { ok: true, name: 'Hearbor API', database: 'ok', authentication: 'ok', firestoreAuth: ctx.firestoreAuth || 'api_key', time: new Date().toISOString() });
   // Developer panel (client/src/mobile/profile/DeveloperPanel.jsx): only for a developer session.
   if (p.startsWith('/api/app/admin/')) {
     if (!auth || !ctx.developer) return json(req, { error: 'forbidden' }, 403);
@@ -448,13 +448,13 @@ function api(req, url, ctx) {
   if ((m = p.match(/^\/api\/stream\/show\/([^/]+)$/))) {
     const slug = decodeURIComponent(m[1]);
     if (slug.includes('missing')) return json(req, { error: 'not_found' }, 404);
-    // BLACK X 1 slugs name a catalogue record (same rule as the server's toWitcherSlug()).
+    // Hearbor 1 slugs name a catalogue record (same rule as the server's toWitcherSlug()).
     const record = [...HIDDEN_ANIME, ...ANIME].find((a) => `aw-${a.objectID.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}` === slug);
     return json(req, {
       show: {
         slug,
         title: record ? record.name : slug,
-        ...(record ? { titleEn: record.name, titleRomaji: record.name, tagsAr: record.tags, type: record.type, year: Number(record.details.year), rating: record.details.mal_mean, sourceName: 'سيرفر BLACK X 1' } : {}),
+        ...(record ? { titleEn: record.name, titleRomaji: record.name, tagsAr: record.tags, type: record.type, year: Number(record.details.year), rating: record.details.mal_mean, sourceName: 'سيرفر Hearbor 1' } : {}),
         ...(slug === 'a3rb-sneaky-isekai' ? { genres: ['عالم مختلف', 'اكشن'] } : {}),
         poster: `${LOCAL}/poster/1.svg`,
         banner: `${LOCAL}/wide/1.svg`,
@@ -465,7 +465,7 @@ function api(req, url, ctx) {
   }
   if ((m = p.match(/^\/api\/stream\/episode\/([^/]+)\/(\d+)$/))) {
     ctx.episodes.push(`${decodeURIComponent(m[1])}:${m[2]}`);
-    const payload = { entries: [{ id: `e-${m[2]}`, server: 'BLACK X 1', serverCode: 'PD_DEV', quality: '1080p', directUrl: VIDEO_URL }], resolved: {} };
+    const payload = { entries: [{ id: `e-${m[2]}`, server: 'Hearbor 1', serverCode: 'PD_DEV', quality: '1080p', directUrl: VIDEO_URL }], resolved: {} };
     // ctx.episodeDelayMs holds the servers back, to test the page while they are still loading.
     if (ctx.episodeDelayMs) return new Promise((r) => setTimeout(r, ctx.episodeDelayMs)).then(() => json(req, payload));
     return json(req, payload);

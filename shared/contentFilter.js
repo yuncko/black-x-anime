@@ -1,5 +1,5 @@
 /**
- * Genres hidden from the whole of BLACK X (owner's decisions, 2026-10-16): Ecchi, Harem and
+ * Genres hidden from the whole of Hearbor (owner's decisions, 2026-10-16): Ecchi, Harem and
  * Isekai — first in the APK, then on the website too (phones and computers). Reincarnation
  * («تناسخ») stays.
  *
@@ -7,11 +7,11 @@
  * pages and the app (client/src/mobile/contentFilter.js adds the app's saved-id cache). Pure
  * functions only: no window, no localStorage, no network.
  *
- * - BLACK X 1 (the Algolia anime index) is filtered at the source with negative facet filters,
+ * - Hearbor 1 (the Algolia anime index) is filtered at the source with negative facet filters,
  *   so totals and pagination stay real (2026-10-16: 7,009 -> 6,034 titles).
  * - Other servers are filtered by the genre names they report. Servers that send placeholder
- *   genres (BLACK X 2's fixed list, some manga sources) cannot be classified by genre; the
- *   server also matches their titles against the hidden BLACK X 1 titles.
+ *   genres (Hearbor 2's fixed list, some manga sources) cannot be classified by genre; the
+ *   server also matches their titles against the hidden Hearbor 1 titles.
  * - AniList excludes them itself (genre_not_in / tag_not_in).
  *
  * To hide another genre: add its exact Algolia `tags` value below (check the real spelling with
@@ -79,7 +79,7 @@ function genreName(value) {
   return value;
 }
 
-/** True for a genre/tag name that BLACK X hides (any spelling). */
+/** True for a genre/tag name that Hearbor hides (any spelling). */
 export function isBlockedGenre(value) {
   const name = normalizeGenre(genreName(value));
   if (name.length < 2) return false;
@@ -111,7 +111,7 @@ export const ANILIST_EXCLUSION_ARGS = `genre_not_in: ${JSON.stringify(ANILIST_GE
 const NO_IDS = new Set();
 
 /**
- * Anime card, saved entry, website show object or AniList media. `ids`: hidden BLACK X 1
+ * Anime card, saved entry, website show object or AniList media. `ids`: hidden Hearbor 1
  * objectIDs (saved entries carry no genres). `bxHidden: true` is the server's own verdict.
  */
 export function isHiddenAnime(item, ids = NO_IDS) {

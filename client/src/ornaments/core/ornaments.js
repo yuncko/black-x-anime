@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  BLACK X — 3D Ornaments · presets catalog (framework-agnostic)
+ *  Hearbor — 3D Ornaments · presets catalog (framework-agnostic)
  * ============================================================================
  *  Every preset is a plain data object. It is consumed by:
  *    • `OrnamentEngine` (Three.js)  → geometry / materials / particles / bloom

@@ -11,7 +11,7 @@
  */
 import { switchWebUi } from '../webUi.js';
 
-export const WEB_APK_PATH = '/BLACK-X-Mobile-120Hz.apk';
+export const WEB_APK_PATH = '/HEARBOR-Mobile-120Hz.apk';
 
 export function isWebApp() {
   return typeof window !== 'undefined' && window.__BLACKX_WEB_APP__ === true;

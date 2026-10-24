@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- BLACK X main pages (static file, served from client/public). Title pages (/show/…) are
+<!-- Hearbor main pages (static file, served from client/public). Title pages (/show/…) are
      reached from these through links. Update <lastmod> when the pages change. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://black-x-anime.ai.studio/</loc><lastmod>2026-10-17</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>

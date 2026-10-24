@@ -225,7 +225,7 @@ export default function AccessMenu({
         >
           <img src="/blackx-logo.png" alt="" style={{ width: '30px', height: '30px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.22)' }} />
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: '0.8125rem' }}>BLACK X</div>
+            <div style={{ fontWeight: 700, fontSize: '0.8125rem' }}>Hearbor</div>
             <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.55)' }}>
               {isWeb
                 ? `${PUBLIC_SITE_HOST}${bxAnimeTotal ? ` • ${formatBxCount(bxAnimeTotal)} ${isRtl ? 'أنمي' : 'anime'}` : ''}`

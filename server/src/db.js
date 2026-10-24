@@ -59,7 +59,7 @@ try {
     dbInstance.pragma('foreign_keys = ON');
   } catch (fallbackError) {
     console.error('[db] SQLite initialization failed:', err?.message || err);
-    throw new Error('BLACK X requires a working SQLite driver.', { cause: fallbackError });
+    throw new Error('Hearbor requires a working SQLite driver.', { cause: fallbackError });
   }
 }
 
@@ -304,7 +304,7 @@ try {
   `).run();
   db.prepare(`
     INSERT OR IGNORE INTO site_settings (key, value) 
-    VALUES ('footer_notice', 'BLACK X — The ultimate interactive anime experience.')
+    VALUES ('footer_notice', 'Hearbor — The ultimate interactive anime experience.')
   `).run();
 } catch (err) {
   console.warn('Settings init note:', err.message);
@@ -333,7 +333,7 @@ try {
       'developer',
       'announcement',
       '👑 إعلان المطور',
-      'مرحباً بكم جميعاً في مجتمع BLACK X الرسمي! 🖤✨\n\nهنا مساحتكم الخاصة كعشاق ومتابعي الأنمي لمشاركة الآراء، النقاشات حول الحلقات الأسبوعية، النظريات، المراجعات، والتوصيات.\n\nيسعدنا تفاعلكم ومشاركاتكم، واستمتعوا بتجربة المشاهدة والتواصل!',
+      'مرحباً بكم جميعاً في مجتمع Hearbor الرسمي! 🖤✨\n\nهنا مساحتكم الخاصة كعشاق ومتابعي الأنمي لمشاركة الآراء، النقاشات حول الحلقات الأسبوعية، النظريات، المراجعات، والتوصيات.\n\nيسعدنا تفاعلكم ومشاركاتكم، واستمتعوا بتجربة المشاهدة والتواصل!',
       1,
       7,
       1

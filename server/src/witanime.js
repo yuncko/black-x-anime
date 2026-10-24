@@ -229,7 +229,7 @@ export async function fetchBrowseAnimeList(page = 1) {
       score,
       url: `/show/${slug}?source=witanime`,
       source: 'witanime',
-      sourceLabel: 'سيرفر BLACK X 1'
+      sourceLabel: 'سيرفر Hearbor 1'
     });
   });
 
@@ -312,7 +312,7 @@ async function searchOnce(q) {
       poster,
       url: `/${kind}/${slug}`,
       source: 'witanime',
-      sourceLabel: 'سيرفر BLACK X 1'
+      sourceLabel: 'سيرفر Hearbor 1'
     });
     if (items.length >= 24) break;
   }
@@ -385,12 +385,12 @@ function manifestEntryId(slug, episode, e, idx) {
 function formatBlackXServerName(rawLabel, quality, idx) {
   const s = String(rawLabel || '').toLowerCase();
   const q = quality ? ` (${quality})` : '';
-  if (s.includes('videa')) return `🎬 BLACK X Stream ${idx}${q}`;
-  if (s.includes('mp4upload')) return `⚡ BLACK X Direct ${idx}${q}`;
-  if (s.includes('yonaplay')) return `☁️ BLACK X Cloud ${idx}${q}`;
-  if (s.includes('hgcloud')) return `🚀 BLACK X HLS ${idx}${q}`;
-  if (s.includes('4shared')) return `🌐 BLACK X Server ${idx}${q}`;
-  return `🌐 BLACK X Server ${idx}${q}`;
+  if (s.includes('videa')) return `🎬 Hearbor Stream ${idx}${q}`;
+  if (s.includes('mp4upload')) return `⚡ Hearbor Direct ${idx}${q}`;
+  if (s.includes('yonaplay')) return `☁️ Hearbor Cloud ${idx}${q}`;
+  if (s.includes('hgcloud')) return `🚀 Hearbor HLS ${idx}${q}`;
+  if (s.includes('4shared')) return `🌐 Hearbor Server ${idx}${q}`;
+  return `🌐 Hearbor Server ${idx}${q}`;
 }
 
 function orderEntries(entries) {
@@ -452,7 +452,7 @@ export async function fetchEpisode(slug, episode, { fresh = false } = {}) {
         id: `dl-${slug}-${episode}-${(item.label || 'srv')}-${quality || ''}-${dIdx}`,
         token: item.token,
         rawServer: item.label || `download-${dIdx}`,
-        server: `📥 سيرفر تحميل BLACK X ${dIdx}${quality ? ` (${quality})` : ''}`,
+        server: `📥 سيرفر تحميل Hearbor ${dIdx}${quality ? ` (${quality})` : ''}`,
         quality: quality || null,
         version: item.version || 'sub',
         lang: item.lang || 'jp'

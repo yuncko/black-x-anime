@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * Pure Monochrome Liquid Glass SVG Vector Icon Pack for BLACK X Website
+ * Pure Monochrome Liquid Glass SVG Vector Icon Pack for Hearbor Website
  * Zero OS emojis — adapts automatically to currentColor (#000000 or #ffffff).
  */
 export default function BxIcon({ name, size = 18, active = false, style }) {

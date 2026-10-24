@@ -1,5 +1,5 @@
 /**
- * Shared Cloud Sync Bridge between BLACK X Website & BLACK X Mobile 120Hz APK
+ * Shared Cloud Sync Bridge between Hearbor Website & Hearbor Mobile 120Hz APK
  * Syncs users (including Google Sign-In users), profiles, favorites, watch progress,
  * and community posts via Firebase Cloud Firestore
  * (spry-oxide-1h7sp / ai-studio-blackxanime-e47e1ba2-315f-4c3b-8557-71352813f36c)

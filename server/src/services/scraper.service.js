@@ -168,7 +168,7 @@ export const scraperService = {
           'الظلال المحيطة به بدأت تستجيب، وتتمايل كأنها حية. بابتسامة خفيفة، همس بصوت منخفض: «الآن، حان وقت البداية الحقيقية»...',
           'وهكذا انطلقت أولى خطواته نحو عرش القوة المطلقة.'
         ],
-        translatorNote: 'تمت الترجمة والتدقيق حصرياً لشبكة BLACK X العربية.',
+        translatorNote: 'تمت الترجمة والتدقيق حصرياً لشبكة Hearbor العربية.',
         nextChapterId: `${parts[0]}-ch-${parseInt(num, 10) + 1}`,
         prevChapterId: parseInt(num, 10) > 1 ? `${parts[0]}-ch-${parseInt(num, 10) - 1}` : null
       };

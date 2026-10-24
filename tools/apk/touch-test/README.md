@@ -65,7 +65,7 @@ the site's same-origin `/api/*` goes to the mock, Google Fonts are answered with
 Arabic renders in screenshots). A 412×915 touch phone with a phone browser user agent, or a 1440×900
 computer with a mouse; since 2026-10-17 both get the app interface. Scenarios: `boot` (phone and
 computer → app interface, the computer's side rail, an old saved «site» choice ignored, `?ui=site` →
-classic pages remembered under `bx_web_ui_v2`, footer «واجهة BLACK X الجديدة» back, no APK update card),
+classic pages remembered under `bx_web_ui_v2`, footer «واجهة Hearbor الجديدة» back, no APK update card),
 `links` (`/show`, `/watch`, `/discover`, `/browse`, `/community`, `/trending?q=`, `/profile/...`,
 `/mylist`, manga chapter links, hidden and dead links), `sync` (the address bar follows the page),
 `back` (browser back steps back one app level, leaves the site at home, no piled-up history, no entry
@@ -90,14 +90,14 @@ centred dialogs, the title page next to the rail, the player capped to the scree
 →, M, F and a mouse click, the classic-website link) and `bundle` (what only the website has: the mouse
 preview card and its buttons, middle click / Ctrl+click → new tab, Ctrl+K and «/» quick search,
 «?» shortcuts, cinema mode beside / under the video with its button and «T», `/rankings` with
-BLACK X votes only where someone voted (shown out of 10: the API's `communityScore` is 0–100, so the mock
+Hearbor votes only where someone voted (shown out of 10: the API's `communityScore` is 0–100, so the mock
 sends 85 for an 8.5 average) and a row that opens the title or the search, «ملخصك» from
 seeded positions and its image, the empty state, and a watch party between TWO browsers sharing the
 Firestore mock: room by code, the invite link in the address bar, the guest following the host's
 position and pause, chat, two messages at once, reactions, the people line, the host ending it, only
 `json` + `updatedAt` stored; the classic «ملخص 2026» card) and `closeout` (2026-10-17: two browsers posting
 and liking the same post at the same moment — both posts and both likes survive, the older post is kept —;
-`/privacy` and `/terms` in Arabic with their tab titles, the profile's «عن BLACK X» rows, `/profile/privacy`
+`/privacy` and `/terms` in Arabic with their tab titles, the profile's «عن Hearbor» rows, `/profile/privacy`
 still the settings page, the consent line on the sign-in page, the classic `/privacy` page and its footer
 links; the developer panel (4 stats, 5 tabs, codes, members' requests, crash reports with their count and
 the phase-2 status from `/api/health`) and no developer row for a normal visitor; one anonymous crash report

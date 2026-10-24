@@ -1,5 +1,5 @@
 /**
- * BLACK X 1 — Anime Witcher Cloud Engine (6,973 Arabic Anime Series, Movies & OVAs)
+ * Hearbor 1 — Anime Witcher Cloud Engine (6,973 Arabic Anime Series, Movies & OVAs)
  * Powered by Algolia Multi-Index Search (QVHT7NPEJG) + Firebase Cloud Firestore (animewitcher-1c66d)
  * Direct Multi-Quality MP4 Resolvers: PixelDrain (PD), FireStream (SF), MediaFire (MF/MF2), StreamTape (ST), KrakenFiles (KF), UpStream (US)
  */
@@ -194,8 +194,8 @@ function formatAlgoliaHit(hit) {
     rating: malScore > 0 ? Number(malScore.toFixed(1)) : null,
     youtubeTrailerId: hit.youtube_video_id || null,
     source: 'witanime',
-    sourceName: 'سيرفر BLACK X 1',
-    sourceLabel: 'سيرفر BLACK X 1'
+    sourceName: 'سيرفر Hearbor 1',
+    sourceLabel: 'سيرفر Hearbor 1'
   };
 }
 
@@ -367,7 +367,7 @@ export async function fetchWitcherLatest(page = 1, hitsPerPage = 48) {
 }
 
 /**
- * Every hidden BLACK X 1 title (Ecchi / Harem / Isekai): objectID, slug and names. One query
+ * Every hidden Hearbor 1 title (Ecchi / Harem / Isekai): objectID, slug and names. One query
  * per tag, each well under Algolia's 1,000-hit page cap. Used by server/src/lib/hiddenTitles.js
  * to recognise the same titles on other servers and in saved lists (which carry no genres).
  */
@@ -533,8 +533,8 @@ export async function fetchWitcherShow(slugOrObjectId) {
       ? episodes
       : [{ episode: 1, number: 1, docId: '001', title: 'الحلقة 1', titleAr: 'الحلقة 1' }],
     source: 'witanime',
-    sourceName: 'سيرفر BLACK X 1',
-    sourceLabel: 'سيرفر BLACK X 1'
+    sourceName: 'سيرفر Hearbor 1',
+    sourceLabel: 'سيرفر Hearbor 1'
   };
 
   showCache.set(cacheKey, { value: show, expiresAt: Date.now() + SHOW_TTL_MS });
@@ -664,16 +664,16 @@ export async function resolveWitcherDirectVideoUrl(serverCode, rawLink) {
 }
 
 const SERVER_DISPLAY_NAMES = {
-  PD: '👑 BLACK X 1 — PixelDrain Ultra',
-  SF: '⚡ BLACK X 1 — FireStream CDN',
-  MF2: '🚀 BLACK X 1 — MediaFire Pro CDN',
-  MF: '🚀 BLACK X 1 — MediaFire Cloud',
-  BU: '💎 BLACK X 1 — BunnyCDN Direct',
-  ST: '🎬 BLACK X 1 — StreamTape HD',
-  KF: '🔥 BLACK X 1 — KrakenFiles Direct',
-  US: '🌐 BLACK X 1 — UpStream Direct',
-  VT: '📺 BLACK X 1 — VidTube Cloud',
-  MG: '☁️ BLACK X 1 — Mega Cloud'
+  PD: '👑 Hearbor 1 — PixelDrain Ultra',
+  SF: '⚡ Hearbor 1 — FireStream CDN',
+  MF2: '🚀 Hearbor 1 — MediaFire Pro CDN',
+  MF: '🚀 Hearbor 1 — MediaFire Cloud',
+  BU: '💎 Hearbor 1 — BunnyCDN Direct',
+  ST: '🎬 Hearbor 1 — StreamTape HD',
+  KF: '🔥 Hearbor 1 — KrakenFiles Direct',
+  US: '🌐 Hearbor 1 — UpStream Direct',
+  VT: '📺 Hearbor 1 — VidTube Cloud',
+  MG: '☁️ Hearbor 1 — Mega Cloud'
 };
 
 const SERVER_PRIORITY = {
@@ -816,7 +816,7 @@ export async function fetchWitcherEpisode(slugOrObjectId, episodeNumber) {
         : parseQualityScore(quality) >= 720
         ? 'HD 720p'
         : quality;
-    const baseLabel = SERVER_DISPLAY_NAMES[code] || `⚡ BLACK X 1 — ${code}`;
+    const baseLabel = SERVER_DISPLAY_NAMES[code] || `⚡ Hearbor 1 — ${code}`;
     const entryId = `aw-${code.toLowerCase()}-${quality}-${idx}`;
     const dlId = `dl-${entryId}`;
     const safeFile = `${slug}-ep-${epNum}-${quality}.mp4`;
@@ -922,7 +922,7 @@ export async function fetchWitcherEpisode(slugOrObjectId, episodeNumber) {
     downloads,
     resolvedDownloads,
     source: 'witanime',
-    sourceName: 'سيرفر BLACK X 1'
+    sourceName: 'سيرفر Hearbor 1'
   };
 
   episodeCache.set(cacheKey, { value: payload, expiresAt: Date.now() + EPISODE_TTL_MS });

@@ -12,7 +12,7 @@ import { mangalikService } from './mangalik.service.js';
 
 export const ANIPROJECT_ANIME_SOURCE = 'aniproject';
 export const ANIPROJECT_MANGA_SERVER = 'bx4';
-const LABEL = 'سيرفر BLACK X 4';
+const LABEL = 'سيرفر Hearbor 4';
 const MAX_ID_LENGTH = 180;
 const MAX_QUERY_LENGTH = 100;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -141,7 +141,7 @@ function mangaFromRow(row) {
     status: String(row.status || ''),
     rating: Number(row.rating) || null,
     chapters_count: null,
-    source: 'BLACK X 4',
+    source: 'Hearbor 4',
     server: ANIPROJECT_MANGA_SERVER,
     availableServers: [ANIPROJECT_MANGA_SERVER]
   };
@@ -217,12 +217,12 @@ export const aniprojectService = {
             directUrl: proxied ? `/api/stream/proxy?url=${encodeURIComponent(url)}${refParam}` : url,
             browserDirect: !proxied, isHls: false
           };
-      entries.push({ id, server: 'BLACK X 4', quality: String(row.quality || 'Auto'), version: 'sub', ...source });
+      entries.push({ id, server: 'Hearbor 4', quality: String(row.quality || 'Auto'), version: 'sub', ...source });
       resolved[id] = source;
     });
     const downloadUrl = safeUrl(result?.download);
     const downloads = downloadUrl ? [{
-      id: 'dl-ap-0', server: 'BLACK X 4', quality: 'Download', downloadUrl
+      id: 'dl-ap-0', server: 'Hearbor 4', quality: 'Download', downloadUrl
     }] : [];
     return {
       slug, episode: number, title: `${show.titleEn} - ${number}`,
@@ -256,7 +256,7 @@ export const aniprojectService = {
     if (cached?.expiry > Date.now()) return cached.item;
     return {
       id, mangalikSlug: id, title: 'Manga', title_ar: 'مانجا', title_en: 'Manga',
-      source: 'BLACK X 4', server: ANIPROJECT_MANGA_SERVER,
+      source: 'Hearbor 4', server: ANIPROJECT_MANGA_SERVER,
       availableServers: [ANIPROJECT_MANGA_SERVER]
     };
   },

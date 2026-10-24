@@ -539,7 +539,7 @@ export function ReferralPanel() {
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
             <a
               href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                `انضم معي إلى منصة BLACK X لمشاهدة وقراءة أحدث الأنمي والمانجا بجودة فائقة! ${refData.referralLink}`
+                `انضم معي إلى منصة Hearbor لمشاهدة وقراءة أحدث الأنمي والمانجا بجودة فائقة! ${refData.referralLink}`
               )}`}
               target="_blank"
               rel="noreferrer"
@@ -550,7 +550,7 @@ export function ReferralPanel() {
             </a>
             <a
               href={`https://t.me/share/url?url=${encodeURIComponent(refData.referralLink)}&text=${encodeURIComponent(
-                'انضم معي إلى منصة BLACK X واستمتع بمشاهدة أحدث الأنمي مجاناً!'
+                'انضم معي إلى منصة Hearbor واستمتع بمشاهدة أحدث الأنمي مجاناً!'
               )}`}
               target="_blank"
               rel="noreferrer"

@@ -5,7 +5,7 @@
  * `BlackXNativeAuth.scheduleEpisodeAlarms(json)` (android-native/smali/.../EpisodeAlarms.smali)
  * replaces every alarm with `json` = [{ id, title, body, at }] (at = epoch ms) and puts them
  * back after a reboot. Each alarm is the real next air time AniList reports for a followed
- * title (airingSchedule.js) — the Japanese broadcast. The episode reaches BLACK X once it is
+ * title (airingSchedule.js) — the Japanese broadcast. The episode reaches Hearbor once it is
  * subtitled, which the in-app episode alerts (episodeAlerts.js) keep checking when the app
  * is open; the reminder text says exactly that.
  *
@@ -45,14 +45,14 @@ export function buildAlarmList({ followed = [], airingMap, now = Date.now(), isR
     const at = Number(airing?.airingAt) * 1000;
     if (!Number.isFinite(at) || at <= now || at - now > HORIZON_MS) continue;
     seen.add(mal);
-    const name = String(t.titleEn || t.titleAr || t.titleRomaji || '').trim() || 'BLACK X';
+    const name = String(t.titleEn || t.titleAr || t.titleRomaji || '').trim() || 'Hearbor';
     const ep = Number(airing.episode) > 0 ? Number(airing.episode) : null;
     out.push({
       id: alarmIdFor(`${mal}:${ep || at}`),
       title: isRtl ? `ميعاد ${name}` : `${name} is airing`,
       body: isRtl
-        ? `${ep ? `الحلقة ${ep}` : 'الحلقة الجديدة'} بتتعرض دلوقتي في اليابان. هتنزل على BLACK X لما تتترجم.`
-        : `${ep ? `Episode ${ep}` : 'The new episode'} is airing in Japan now. It reaches BLACK X once it is subtitled.`,
+        ? `${ep ? `الحلقة ${ep}` : 'الحلقة الجديدة'} بتتعرض دلوقتي في اليابان. هتنزل على Hearbor لما تتترجم.`
+        : `${ep ? `Episode ${ep}` : 'The new episode'} is airing in Japan now. It reaches Hearbor once it is subtitled.`,
       at
     });
   }

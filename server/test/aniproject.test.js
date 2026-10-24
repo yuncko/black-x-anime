@@ -134,15 +134,15 @@ test('source is opt-in and disabled requests do not contact upstream', async () 
   process.env.ANIPROJECT_API_URL = upstream;
 });
 
-test('anime title search, show and episodes retain BLACK X branding and encoded IDs', async () => {
+test('anime title search, show and episodes retain Hearbor branding and encoded IDs', async () => {
   const sources = await get('/api/stream/sources');
-  assert.equal(sources.body.sources.at(-1).badge, 'BLACK X 4');
+  assert.equal(sources.body.sources.at(-1).badge, 'Hearbor 4');
   const result = await get('/api/stream/search?source=aniproject&q=One%20Piece%20%26%20More');
   assert.equal(result.status, 200);
   assert.equal(result.body.items.length, 1);
   const showSlug = result.body.items[0].slug;
   assert.match(showSlug, /^ap-[a-zA-Z0-9_-]+$/);
-  assert.equal(result.body.items[0].sourceLabel, 'سيرفر BLACK X 4');
+  assert.equal(result.body.items[0].sourceLabel, 'سيرفر Hearbor 4');
   assert.equal(requests.at(-1).url.searchParams.get('query'), 'One Piece & More');
   assert.equal(requests.at(-1).options.redirect, 'manual');
 
@@ -153,7 +153,7 @@ test('anime title search, show and episodes retain BLACK X branding and encoded 
 
   process.env.ANIPROJECT_MEDIA_HOSTS = 'media.example';
   const episode = await get(`/api/stream/episode/${showSlug}/1?source=aniproject`);
-  assert.deepEqual(episode.body.entries.map((e) => e.server), ['BLACK X 4', 'BLACK X 4']);
+  assert.deepEqual(episode.body.entries.map((e) => e.server), ['Hearbor 4', 'Hearbor 4']);
   assert.equal(episode.body.entries[0].isFastCdn, false);
   assert.equal(episode.body.resolved['ap-0'].isHls, true);
   assert.match(episode.body.resolved['ap-0'].directUrl, /^\/api\/stream\/hls-proxy\?url=/);

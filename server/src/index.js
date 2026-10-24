@@ -124,7 +124,7 @@ app.get('/api/health', async (req, res) => {
     }
     res.json({
       ok: true,
-      name: 'BLACK X API',
+      name: 'Hearbor API',
       database: 'ok',
       authentication: isAuthConfigured() ? 'ok' : 'unavailable',
       firestoreAuth: getFirestoreAuthStatus(),
@@ -140,7 +140,7 @@ app.get('/api/health', async (req, res) => {
     }));
     res.status(503).json({
       ok: false,
-      name: 'BLACK X API',
+      name: 'Hearbor API',
       database: 'error',
       requestId,
       time: new Date().toISOString()
@@ -166,7 +166,7 @@ app.get('/api/proxy-image', async (req, res) => {
       return res.status(400).json({ error: 'bad_host', message: 'Host not allowed' });
     }
     const upstream = await fetch(url.href, {
-      headers: { 'User-Agent': 'BLACK-X/1.0 (color-extraction)' },
+      headers: { 'User-Agent': 'HEARBOR/1.0 (color-extraction)' },
       signal: AbortSignal.timeout(8000)
     });
     if (!upstream.ok) return res.status(upstream.status).end();
@@ -179,7 +179,7 @@ app.get('/api/proxy-image', async (req, res) => {
   }
 });
 
-app.use('/api/app', apkAppRoutes); // BLACK X APK v16+: config, accounts, sync, VIP, developer tools
+app.use('/api/app', apkAppRoutes); // Hearbor APK v16+: config, accounts, sync, VIP, developer tools
 app.use('/api/telemetry', telemetryRoutes); // anonymous crash reports (developer panel «الأخطاء»)
 app.use('/api/auth', authRoutes);
 app.use('/api/anime', animeRoutes);
@@ -250,10 +250,10 @@ if (!process.env.VERCEL) {
   // Express 5 passes listen errors (e.g. EADDRINUSE) to this callback.
   app.listen(PORT, '0.0.0.0', (err) => {
     if (err) {
-      console.error(`\n  ✖ BLACK X API could not listen on port ${PORT}: ${err.message}\n`);
+      console.error(`\n  ✖ Hearbor API could not listen on port ${PORT}: ${err.message}\n`);
       process.exit(1);
     }
-    console.log(`\n  ⚡ BLACK X API listening on http://0.0.0.0:${PORT}\n`);
+    console.log(`\n  ⚡ Hearbor API listening on http://0.0.0.0:${PORT}\n`);
   });
 }
 

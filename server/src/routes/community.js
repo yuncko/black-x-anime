@@ -106,7 +106,7 @@ router.post('/posts', requireAuth, (req, res) => {
     }
 
     const effectiveUid = req.user.id;
-    const effectiveAuthor = req.user.displayName || req.user.display_name || req.user.username || 'BLACK X user';
+    const effectiveAuthor = req.user.displayName || req.user.display_name || req.user.username || 'Hearbor user';
     const effectiveUsername = req.user.username || '';
     const effectiveAvatar = req.user.photoURL || req.user.photo_url || '';
     const isDev = req.user.role === 'developer';
@@ -248,7 +248,7 @@ router.post('/posts/:id/comments', requireAuth, (req, res) => {
     }
 
     const effectiveUserId = req.user.id;
-    const effectiveAuthor = req.user.displayName || req.user.display_name || req.user.username || 'BLACK X user';
+    const effectiveAuthor = req.user.displayName || req.user.display_name || req.user.username || 'Hearbor user';
     const effectiveAvatar = req.user.photoURL || req.user.photo_url || '';
     const effectiveRole = req.user.role === 'developer' ? 'developer' : 'user';
 

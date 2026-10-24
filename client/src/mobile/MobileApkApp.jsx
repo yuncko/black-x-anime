@@ -130,21 +130,21 @@ import {
 } from './bxServers.js';
 
 /**
- * BLACK X Mobile (Android APK)
+ * Hearbor Mobile (Android APK)
  * Completely independent Smartphone UI inspired by Anime Witcher, elevated with Pure AMOLED Pitch-Black (#000000)
  * Same catalogue, servers and accounts as the website; tabs live in HomeTab/ScheduleTab + this file,
- * Webtoon Reader, and Real-Time Cloud Sync with the BLACK X Website Users & Anime Database.
+ * Webtoon Reader, and Real-Time Cloud Sync with the Hearbor Website Users & Anime Database.
  *
  * Servers: since v15 every anime episode/server and manga chapter/page request goes through the
  * website API (./bxServers.js), so the app always lists the same servers as the website.
  */
 
-// 1. Anime catalogue index (the same Algolia index the website's BLACK X 1 catalogue reads)
+// 1. Anime catalogue index (the same Algolia index the website's Hearbor 1 catalogue reads)
 const ALGOLIA_APP_ID = 'QVHT7NPEJG';
 const ALGOLIA_API_KEY = 'ce13098070fa521b536571bafbcfc083';
 const ALGOLIA_BASE = `https://${ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes`;
 
-// 2. Shared BLACK X Website Users, Favorites, Watch Progress & Community Cloud Database
+// 2. Shared Hearbor Website Users, Favorites, Watch Progress & Community Cloud Database
 const BX_PROJECT = 'spry-oxide-1h7sp';
 const BX_DB = 'ai-studio-blackxanime-e47e1ba2-315f-4c3b-8557-71352813f36c';
 const BX_KEY = 'AIzaSyD4yG_ljN1S8TfwC33E4Z0o499MYC71eUE';
@@ -226,14 +226,14 @@ const STUDIO_FILTERS = [
 // Display names of the episode servers (no speed / quality claims: the player shows each
 // server's real quality next to its name).
 const SERVER_LABELS = {
-  PD_DEV: { nameAr: 'BLACK X 1 Ultra', nameEn: 'BLACK X 1 Ultra' },
-  PD_NET: { nameAr: 'BLACK X 2 Mirror', nameEn: 'BLACK X 2 Mirror' },
-  SF: { nameAr: 'BLACK X 3 Turbo', nameEn: 'BLACK X 3 Turbo' },
-  AA: { nameAr: 'BLACK X 4 Cloud', nameEn: 'BLACK X 4 Cloud' },
-  PD: { nameAr: 'BLACK X 5 Direct', nameEn: 'BLACK X 5 Direct' },
-  MF2: { nameAr: 'BLACK X 6 Pro', nameEn: 'BLACK X 6 Pro' },
-  MF: { nameAr: 'BLACK X 7 Plus', nameEn: 'BLACK X 7 Plus' },
-  ST: { nameAr: 'BLACK X 8 HD', nameEn: 'BLACK X 8 HD' }
+  PD_DEV: { nameAr: 'Hearbor 1 Ultra', nameEn: 'Hearbor 1 Ultra' },
+  PD_NET: { nameAr: 'Hearbor 2 Mirror', nameEn: 'Hearbor 2 Mirror' },
+  SF: { nameAr: 'Hearbor 3 Turbo', nameEn: 'Hearbor 3 Turbo' },
+  AA: { nameAr: 'Hearbor 4 Cloud', nameEn: 'Hearbor 4 Cloud' },
+  PD: { nameAr: 'Hearbor 5 Direct', nameEn: 'Hearbor 5 Direct' },
+  MF2: { nameAr: 'Hearbor 6 Pro', nameEn: 'Hearbor 6 Pro' },
+  MF: { nameAr: 'Hearbor 7 Plus', nameEn: 'Hearbor 7 Plus' },
+  ST: { nameAr: 'Hearbor 8 HD', nameEn: 'Hearbor 8 HD' }
 };
 
 /** Scroll to the top at once (html has `scroll-behavior: smooth`, which a tab switch must skip). */
@@ -295,7 +295,7 @@ async function fetchAnimeRecord(objectID) {
 /** Shown when a hidden title is reached anyway (old saved entry, other server). */
 const hiddenTitleMessage = () => {
   const ar = (localStorage.getItem('bx_mob_lang') || 'ar') === 'ar';
-  if (isWebApp()) return ar ? 'العمل ده مش متاح على BLACK X' : 'This title is not available on BLACK X';
+  if (isWebApp()) return ar ? 'العمل ده مش متاح على Hearbor' : 'This title is not available on Hearbor';
   return ar ? 'العمل ده مش متاح في التطبيق' : 'This title is not available in the app';
 };
 
@@ -353,7 +353,7 @@ export function dispatchPhoneNotification(title, body, notifId = 0) {
     }
     if (typeof window !== 'undefined' && window.BlackXNativeAuth?.sendPhoneNotification) {
       window.BlackXNativeAuth.sendPhoneNotification(
-        String(title || 'BLACK X'),
+        String(title || 'Hearbor'),
         String(body || ''),
         Number(notifId) || Math.floor(Date.now() % 100000)
       );
@@ -364,7 +364,7 @@ export function dispatchPhoneNotification(title, body, notifId = 0) {
   try {
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'granted') {
-        new Notification(String(title || 'BLACK X'), {
+        new Notification(String(title || 'Hearbor'), {
           body: String(body || ''),
           icon: '/blackx-logo.png'
         });
@@ -372,7 +372,7 @@ export function dispatchPhoneNotification(title, body, notifId = 0) {
       } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then((p) => {
           if (p === 'granted') {
-            new Notification(String(title || 'BLACK X'), {
+            new Notification(String(title || 'Hearbor'), {
               body: String(body || ''),
               icon: '/blackx-logo.png'
             });
@@ -481,7 +481,7 @@ export default function MobileApkApp() {
   const longPressTimerRef = useRef(null);
   const gestureHudTimerRef = useRef(null);
 
-  // Manga States (served by the website API: the same BLACK X manga servers as the website)
+  // Manga States (served by the website API: the same Hearbor manga servers as the website)
   const [mangaList, setMangaList] = useState([]);
   const [mangaSource, setMangaSource] = useState('all'); // website server id: 'all' | 'bx1' | 'bx2' | 'bx3' | 'bx4' (search only)
   const [mangaFilterType, setMangaFilterType] = useState('ALL'); // 'ALL' | 'MANHWA' | 'MANGA'
@@ -569,7 +569,7 @@ export default function MobileApkApp() {
       return [];
     }
   });
-  // Hidden BLACK X 1 ids (contentFilter.js) for saved entries that carry no genres.
+  // Hidden Hearbor 1 ids (contentFilter.js) for saved entries that carry no genres.
   const [hiddenIds, setHiddenIds] = useState(() => getHiddenIds());
   const [userXp, setUserXp] = useState(() => Number(localStorage.getItem('bx_mob_xp') || 0));
   const [communityPosts, setCommunityPosts] = useState([]);
@@ -1121,7 +1121,7 @@ export default function MobileApkApp() {
         } catch (_) {}
       } else {
         lastBackPressRef.current = now;
-        showToast(lang === 'ar' ? 'دوس رجوع تاني عشان تخرج' : 'Press back again to exit BLACK X');
+        showToast(lang === 'ar' ? 'دوس رجوع تاني عشان تخرج' : 'Press back again to exit Hearbor');
       }
       return true;
     };
@@ -1482,7 +1482,7 @@ export default function MobileApkApp() {
       dataUrl = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = dataUrl;
-      a.download = `BLACK-X-${selectedAnime.titleEn.replace(/[^a-z0-9]/gi, '_')}-Ep${activeEpisode.number}-${mm}m${ss}s.png`;
+      a.download = `HEARBOR-${selectedAnime.titleEn.replace(/[^a-z0-9]/gi, '_')}-Ep${activeEpisode.number}-${mm}m${ss}s.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1613,7 +1613,7 @@ export default function MobileApkApp() {
       const newComment = {
         id: sharedItemId('tc'),
         sec: curSec,
-        author: user?.displayName || 'أوتاكو BLACK X',
+        author: user?.displayName || 'أوتاكو Hearbor',
         text
       };
       const dKey = cleanCloudKey('danmaku', `${selectedAnime.objectID}_${activeEpisode.docId}`);
@@ -1658,8 +1658,8 @@ export default function MobileApkApp() {
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new window.MediaMetadata({
           title: `${selectedAnime.titleEn} - ${activeEpisode.name}`,
-          artist: 'BLACK X',
-          album: 'BLACK X Cinema',
+          artist: 'Hearbor',
+          album: 'Hearbor Cinema',
           artwork: selectedAnime.poster ? [{ src: selectedAnime.poster, sizes: '512x512', type: 'image/jpeg' }] : []
         });
         navigator.mediaSession.setActionHandler('play', () => videoRef.current?.play().catch(() => {}));
@@ -1713,7 +1713,7 @@ export default function MobileApkApp() {
   const handleExportVaultBackup = useCallback(() => {
     try {
       const backupPayload = {
-        app: `BLACK X Mobile ${BX_APK_VERSION}`,
+        app: `Hearbor Mobile ${BX_APK_VERSION}`,
         exportedAt: new Date().toISOString(),
         favorites,
         watchlistMap,
@@ -1728,7 +1728,7 @@ export default function MobileApkApp() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `BLACK-X-Vault-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = `HEARBOR-Vault-Backup-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1870,7 +1870,7 @@ export default function MobileApkApp() {
               storyAr: matchAnime.storyAr,
               devNote:
                 String(devPinNoteInput || '').trim() ||
-                'ترشيح إدارة BLACK X الرسمي لليوم — عمل أسطوري لا يفوتكم!',
+                'ترشيح إدارة Hearbor الرسمي لليوم — عمل أسطوري لا يفوتكم!',
               pinnedAt: new Date().toISOString()
             };
           }
@@ -2098,7 +2098,7 @@ export default function MobileApkApp() {
     let cancelled = false;
     const t = setTimeout(async () => {
       try {
-        // Same manga search the website runs (all BLACK X manga servers)
+        // Same manga search the website runs (all Hearbor manga servers)
         const hits = await fetchMobileMangaList({ server: 'all', query: q, page: 1 });
         if (cancelled) return;
         setUniversalMangaHits(hits.slice(0, 8));
@@ -2182,7 +2182,7 @@ export default function MobileApkApp() {
   }, []);
 
   // Catalog browsing (sort/genre/type/state/studio) reads the same Algolia index as the website's
-  // BLACK X 1 catalogue. Typed searches use the website search across every BLACK X anime server.
+  // Hearbor 1 catalogue. Typed searches use the website search across every Hearbor anime server.
   useEffect(() => {
     let alive = true;
     const q = searchQuery.trim();
@@ -2406,7 +2406,7 @@ export default function MobileApkApp() {
     loadCommunityFeed();
   }, [activeTab, loadCommunityFeed]);
 
-  // Sync User Profile, Favorites & Watch History with BLACK X Shared Cloud Firestore
+  // Sync User Profile, Favorites & Watch History with Hearbor Shared Cloud Firestore
   // Account sync (v16): favorites + history + resume positions + XP go to /api/app/state
   // with the server session, debounced. Pull happens at start, after sign-in and when the
   // app returns to the foreground (v15 wrote Firestore directly and polled it every 8 s).
@@ -3218,7 +3218,7 @@ export default function MobileApkApp() {
       const curSrc = String(img.getAttribute('src') || '');
       if (curSrc.endsWith('/blackx-logo.png') || img.dataset.bxHealed === 'done') return;
 
-      // Immediately show official BLACK X logo so a broken image icon never appears
+      // Immediately show official Hearbor logo so a broken image icon never appears
       img.src = '/blackx-logo.png';
       img.dataset.bxHealed = 'pending';
 
@@ -3315,10 +3315,10 @@ export default function MobileApkApp() {
           fetchEpisodes: async (t) => (await fetchMobileEpisodes(t))?.episodes || [],
           notify: (t, ep) => {
             const ar = (localStorage.getItem('bx_mob_lang') || 'ar') === 'ar';
-            const name = t.titleEn || t.titleAr || 'BLACK X';
+            const name = t.titleEn || t.titleAr || 'Hearbor';
             dispatchPhoneNotification(
               ar ? `نزلت الحلقة ${ep} من ${name}` : `${name}: episode ${ep} is out`,
-              ar ? 'اضغط عشان تتفرج على BLACK X' : 'Tap to watch on BLACK X',
+              ar ? 'اضغط عشان تتفرج على Hearbor' : 'Tap to watch on Hearbor',
               Math.floor(Date.now() % 90000) + 1000
             );
           }
@@ -3431,7 +3431,7 @@ export default function MobileApkApp() {
       const avgScore = Number(((revStoryScore + revAnimScore + revOstScore + revCharScore) / 4).toFixed(1));
       const rev = {
         id: sharedItemId('rev'),
-        author: user?.displayName || (lang === 'ar' ? 'أوتاكو BLACK X' : 'BLACK X Otaku'),
+        author: user?.displayName || (lang === 'ar' ? 'أوتاكو Hearbor' : 'Hearbor Otaku'),
         sovereignTitle: selectedSovereignTitle,
         role: user?.role || 'user',
         score: avgScore || newReviewScore,
@@ -3512,7 +3512,7 @@ export default function MobileApkApp() {
     [user, sessionToken, editDisplayName, editBio, editPhotoUrl, showToast, lang, closeProfilePage]
   );
 
-  // Handle Login & Register against Shared BLACK X Cloud Firestore
+  // Handle Login & Register against Shared Hearbor Cloud Firestore
   // Username/password accounts are checked by the server (bcrypt). v15 compared an
   // unsalted SHA-256 on the phone and let "register" overwrite existing accounts.
   const handleAuthSubmit = async (e) => {
@@ -4048,7 +4048,7 @@ export default function MobileApkApp() {
   const watchedIds = useMemo(() => watchHistory.map((h) => h.objectID).filter(Boolean), [watchHistory]);
 
   // ==================== TITLE LOOKUPS (links, watch party, rankings, «ملخصك») ====================
-  // A website slug → the app's record: the catalogue (Algolia) record for BLACK X 1 titles, so
+  // A website slug → the app's record: the catalogue (Algolia) record for Hearbor 1 titles, so
   // lists / history / positions use the same objectID as in-app opens; else the server's show.
   const resolveAnimeBySlug = useCallback(async (slug, sourceHint = '') => {
     const source = sourceHint === 'aniproject' ? 'aniproject' : inferAnimeSource({ slug });
@@ -4261,7 +4261,7 @@ export default function MobileApkApp() {
           return;
         }
       }
-      showToast(isRtl ? 'مش لاقيين العمل ده على BLACK X — دوّرنا عليه في البحث' : 'Introuvable sur BLACK X — recherche en cours', 'search');
+      showToast(isRtl ? 'مش لاقيين العمل ده على Hearbor — دوّرنا عليه في البحث' : 'Introuvable sur Hearbor — recherche en cours', 'search');
       setSearchQuery(names[0] || '');
       goToTab('catalog');
     },
@@ -4730,7 +4730,7 @@ export default function MobileApkApp() {
         >
           <img
             src="/blackx-logo.png"
-            alt="BLACK X"
+            alt="Hearbor"
             style={{
               width: '72px',
               height: '72px',
@@ -4740,7 +4740,7 @@ export default function MobileApkApp() {
             }}
           />
           <h2 style={{ margin: '0 0 0.35rem', fontSize: '1.0625rem', fontWeight: 800 }}>
-            <BxIcon name="lock" className="bx-ico-lead" />{isRtl ? 'قفل حماية BLACK X مفعل' : 'Verrouillage PIN BLACK X'}
+            <BxIcon name="lock" className="bx-ico-lead" />{isRtl ? 'قفل حماية Hearbor مفعل' : 'Verrouillage PIN Hearbor'}
           </h2>
           <p style={{ margin: '0 0 1.2rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
             {isRtl ? 'أدخل رمز الـ PIN المكون من 4 أرقام لفتح التطبيق:' : 'Saisissez votre code PIN à 4 chiffres :'}
@@ -4825,7 +4825,7 @@ export default function MobileApkApp() {
         onTest={() => {
           haptic('tap');
           const sent = dispatchPhoneNotification(
-            isRtl ? 'إشعار تجربة من BLACK X' : 'Notification de test BLACK X',
+            isRtl ? 'إشعار تجربة من Hearbor' : 'Notification de test Hearbor',
             isRtl ? 'لو شايف الإشعار ده يبقى الإشعارات شغالة على جهازك.' : 'Si vous voyez ceci, les notifications fonctionnent.',
             Math.floor(Date.now() % 90000) + 1000
           );
@@ -4990,7 +4990,7 @@ export default function MobileApkApp() {
         />
       )}
 
-      {/* ==================== TAB 2: SEARCH (every BLACK X anime server, like the website) ==================== */}
+      {/* ==================== TAB 2: SEARCH (every Hearbor anime server, like the website) ==================== */}
       {activeTab === 'catalog' && !selectedAnime && (
         <main className={`${pageCls} bx-search-page`} style={{ padding: '0.25rem 1rem 1rem' }}>
           <div className="bx-search-bar">
@@ -5198,7 +5198,7 @@ export default function MobileApkApp() {
         />
       )}
 
-      {/* ==================== TAB 3: MANGA & MANHWA (website BLACK X manga servers + FULLSCREEN 120Hz READER) ==================== */}
+      {/* ==================== TAB 3: MANGA & MANHWA (website Hearbor manga servers + FULLSCREEN 120Hz READER) ==================== */}
       {activeTab === 'manga' && !selectedAnime && (
         <MangaTab
           {...{
@@ -5395,8 +5395,8 @@ export default function MobileApkApp() {
               showToast(
                 isWeb
                   ? isRtl
-                    ? 'بينزّل تطبيق BLACK X للأندرويد…'
-                    : 'Downloading the BLACK X Android app…'
+                    ? 'بينزّل تطبيق Hearbor للأندرويد…'
+                    : 'Downloading the Hearbor Android app…'
                   : isRtl
                   ? 'بينزّل آخر نسخة من التطبيق…'
                   : 'Downloading the latest app…',
@@ -5734,7 +5734,7 @@ export default function MobileApkApp() {
                         pointerEvents: videoTouchLocked ? 'none' : 'auto'
                       }}
                     />
-                    {/* BLACK X controls: play/pause, ±10 s, seek bar with intro/outro marks, next, full screen */}
+                    {/* Hearbor controls: play/pause, ±10 s, seek bar with intro/outro marks, next, full screen */}
                     {!playerMinimized && (
                       <PlayerControls
                         videoRef={videoRef}
@@ -5915,7 +5915,7 @@ export default function MobileApkApp() {
                     {episodeServers.length === 0
                       ? isRtl
                         ? 'مفيش سيرفر شغال للحلقة دي دلوقتي'
-                        : 'No direct stream for this episode on the BLACK X servers right now'
+                        : 'No direct stream for this episode on the Hearbor servers right now'
                       : isRtl
                         ? 'تعذّر تشغيل هذا السيرفر — اختر سيرفر آخر من الأسفل'
                         : 'This server could not play — pick another one below'}
@@ -6379,7 +6379,7 @@ export default function MobileApkApp() {
                     </div>
                   )}
 
-                  {/* BLACK X Exclusive Server & Quality Selector Pills */}
+                  {/* Hearbor Exclusive Server & Quality Selector Pills */}
                   <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600, marginBottom: '0.35rem' }}>
                     {isRtl
                       ? 'السيرفر'
@@ -6388,8 +6388,8 @@ export default function MobileApkApp() {
                   <div className="bx-mob-scroll" style={{ display: 'flex', gap: '0.45rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
                     {episodeServers.map((srv, idx) => {
                       const meta = SERVER_LABELS[srv.name] || {
-                        nameAr: `BLACK X ${idx + 1}`,
-                        nameEn: `BLACK X ${idx + 1}`
+                        nameAr: `Hearbor ${idx + 1}`,
+                        nameEn: `Hearbor ${idx + 1}`
                       };
                       const active = selectedServer === srv;
                       return (
@@ -6884,11 +6884,11 @@ export default function MobileApkApp() {
                     <div style={{ marginBottom: '0.7rem' }}>
                       {episodesError === 'network'
                         ? isRtl
-                          ? 'تعذّر الاتصال بسيرفرات BLACK X — تأكد من الإنترنت ثم أعد المحاولة.'
-                          : 'Could not reach the BLACK X servers — check your connection and retry.'
+                          ? 'تعذّر الاتصال بسيرفرات Hearbor — تأكد من الإنترنت ثم أعد المحاولة.'
+                          : 'Could not reach the Hearbor servers — check your connection and retry.'
                         : isRtl
                           ? 'مفيش حلقات متاحة للعمل ده دلوقتي.'
-                          : 'No episodes for this title on the BLACK X servers right now.'}
+                          : 'No episodes for this title on the Hearbor servers right now.'}
                     </div>
                     <button
                       type="button"

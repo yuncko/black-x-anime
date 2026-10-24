@@ -1,5 +1,5 @@
 /**
- * Accounts for the BLACK X APK (and the shared website/APK account mirror in
+ * Accounts for the Hearbor APK (and the shared website/APK account mirror in
  * Firestore `settings/user_*` + `settings/email_*`).
  *
  * Passwords: new and migrated accounts keep a bcrypt hash in `passBcrypt`. Old

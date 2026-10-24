@@ -1,5 +1,5 @@
 /**
- * BLACK X members' votes on the rankings page (/api/anime/rankings).
+ * Hearbor members' votes on the rankings page (/api/anime/rankings).
  *
  * Up to 2026-10-17 the votes lived in SQLite (`community_ratings`), which on Vercel is a file in
  * the function's /tmp: every instance had its own copy, a redeploy or a cold start emptied it,

@@ -5,7 +5,7 @@ import { pushToast } from '../hooks/hooks.js';
 import { auth } from '../firebase.js';
 
 /**
- * Calls the shared BLACK X app API (/api/app/*) with the signed-in Google user's
+ * Calls the shared Hearbor app API (/api/app/*) with the signed-in Google user's
  * Firebase ID token. VIP codes, enforcement and requests live in Firestore but are
  * only read and written by the server now (the browser no longer touches
  * settings/global_vip_system directly).
@@ -856,7 +856,7 @@ export function DevVipCodeGenerator() {
 
   const copyWhatsAppMessage = (c) => {
     const planLabel = c.tier === 'vip_monarch' ? '🔮 VIP Monarch (إمبراطور الظلال)' : '⚡ VIP Basic (صياد النخبة)';
-    const msg = `🎉 مرحباً بك في منصة BLACK X!\nتم إصدار كود اشتراكك الرسمي:\n\n👑 الباقة: ${planLabel}\n🔑 كود التفعيل: ${c.code}\n⏳ المدة: ${c.durationDays >= 36500 ? 'مدى الحياة' : `${c.durationDays} يوم`}\n💰 القيمة: ${c.priceEgp} ج.م\n\nلتفعيل الكود: افتح حسابك في BLACK X ⬅️ قسم باقات VIP ⬅️ الصق الكود واضغط تفعيل الآن!`;
+    const msg = `🎉 مرحباً بك في منصة Hearbor!\nتم إصدار كود اشتراكك الرسمي:\n\n👑 الباقة: ${planLabel}\n🔑 كود التفعيل: ${c.code}\n⏳ المدة: ${c.durationDays >= 36500 ? 'مدى الحياة' : `${c.durationDays} يوم`}\n💰 القيمة: ${c.priceEgp} ج.م\n\nلتفعيل الكود: افتح حسابك في Hearbor ⬅️ قسم باقات VIP ⬅️ الصق الكود واضغط تفعيل الآن!`;
     navigator.clipboard?.writeText(msg);
     pushToast('💬 تم نسخ رسالة التفعيل الجاهزة لإرسالها للمشترك (واتساب / تيليجرام)!', 'success');
   };
@@ -1306,7 +1306,7 @@ export function GlobalVipEnforcementGate({ user, onVipUpdated, onOpenAuth }) {
         >
           <div>
             <div style={{ fontWeight: 900, fontSize: '1.05rem', color: '#fff' }}>
-              🔒 نظام عضوية BLACK X VIP مفعل حالياً على جميع النسخ
+              🔒 نظام عضوية Hearbor VIP مفعل حالياً على جميع النسخ
             </div>
             <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.68)' }}>
               اشترك في إحدى باقات VIP أو أدخل كود التفعيل الفوري، أو سجّل دخولك إذا كنت مشتركاً أو مطور المنصة.

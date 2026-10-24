@@ -1,4 +1,4 @@
-# BLACK X — production image (SnapDeploy, Render, Railway, Koyeb, Fly, any Docker host)
+# Hearbor — production image (SnapDeploy, Render, Railway, Koyeb, Fly, any Docker host)
 # Node 22 matches package.json "engines" (Node 20 is end-of-life).
 FROM node:22-slim
 

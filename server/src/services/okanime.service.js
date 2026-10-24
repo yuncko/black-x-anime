@@ -1,5 +1,5 @@
 /**
- * BLACK X Secondary Live Stream Delegate
+ * Hearbor Secondary Live Stream Delegate
  * Replaces legacy small static catalogs with live massive-library delegation.
  */
 import { anime3rbService } from './anime3rb.service.js';

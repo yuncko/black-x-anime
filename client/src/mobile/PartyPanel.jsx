@@ -89,8 +89,8 @@ export default function PartyPanel({ party, isRtl, isWeb, canHost, onClose, onTo
   const share = async () => {
     try {
       await navigator.share({
-        title: 'BLACK X',
-        text: isRtl ? `تعالى نتفرج سوا على ${party.room?.title || 'BLACK X'}` : `Watch ${party.room?.title || 'BLACK X'} with me`,
+        title: 'Hearbor',
+        text: isRtl ? `تعالى نتفرج سوا على ${party.room?.title || 'Hearbor'}` : `Watch ${party.room?.title || 'Hearbor'} with me`,
         url: party.link
       });
     } catch {

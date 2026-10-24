@@ -1,4 +1,4 @@
-# BLACK X — https://black-x-anime.ai.studio
+# Hearbor — https://black-x-anime.ai.studio
 # The player and the reader pages start video / image streams through the server, and /api is
 # data for the app: crawling them costs server time and adds nothing to search results.
 User-agent: *

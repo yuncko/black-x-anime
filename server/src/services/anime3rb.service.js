@@ -1,13 +1,13 @@
 /**
- * BLACK X Server 2 — Live Arabic Anime API Engine
+ * Hearbor Server 2 — Live Arabic Anime API Engine
  * -----------------------------------------------
  * Powered by the live Arabic Anime v4 API (thousands of Arabic-subtitled series & movies).
  * Features:
  *  - Massive dynamic catalog (latest, popular, top-rated, search, full episode lists)
  *  - Direct Arabic-subtitled MP4 extraction (1080p FHD, 720p HD, 480p SD via MediaFire & Sendvid)
- *  - Sandbox-free HTML5 & Embed players (BLACK X Direct, OK.ru, Sendvid, Google Drive, Mega)
+ *  - Sandbox-free HTML5 & Embed players (Hearbor Direct, OK.ru, Sendvid, Google Drive, Mega)
  *  - Working direct MP4 download servers for every episode
- *  - 100% pure BLACK X branding with zero mention of upstream sources
+ *  - 100% pure Hearbor branding with zero mention of upstream sources
  */
 import { apiGet, apiSet, streamGet, streamSet } from '../db.js';
 import { isTitleMatch } from '../witanime.js';
@@ -100,7 +100,7 @@ function normalizeAnimeItem(item, thumbBase) {
     description: `${titleAr}${item.Synonyms ? ` — ${item.Synonyms}` : ''}${genres.length ? ` (${genres.join(' • ')})` : ''}`,
     url: `/show/${slug}?source=anime3rb`,
     source: 'anime3rb',
-    sourceLabel: 'سيرفر BLACK X 2'
+    sourceLabel: 'سيرفر Hearbor 2'
   };
   apiSet(`bx2:record:v3:${animeId}`, norm, 6 * 60 * 60 * 1000);
   apiSet(`bx2:record:v3:${animeId.toLowerCase()}`, norm, 6 * 60 * 60 * 1000);
@@ -272,7 +272,7 @@ class Anime3rbService {
       .trim();
     if (!clean) return null;
 
-    // Native BLACK X 2 ids look like xSousounoFrieren. Anything else (e.g. words from a BLACK X 1
+    // Native Hearbor 2 ids look like xSousounoFrieren. Anything else (e.g. words from a Hearbor 1
     // slug) is a cross-server link and must name the very same show and season.
     const isNativeId = clean.startsWith('x') && /[A-Z]/.test(clean.slice(1));
     const cacheKey = isNativeId ? `bx2:record:v3:${clean}` : `bx2:xlink:v1:${clean.toLowerCase()}`;
@@ -333,7 +333,7 @@ class Anime3rbService {
         description: searchQuery,
         url: `/show/${toSlug(clean, searchQuery)}?source=anime3rb`,
         source: 'anime3rb',
-        sourceLabel: 'سيرفر BLACK X 2'
+        sourceLabel: 'سيرفر Hearbor 2'
       };
     }
 
@@ -393,7 +393,7 @@ class Anime3rbService {
       episodeCount: episodesList.length,
       episodes: episodesList,
       source: 'anime3rb',
-      sourceName: 'سيرفر BLACK X 2'
+      sourceName: 'سيرفر Hearbor 2'
     };
 
     apiSet(cacheKey, show, 30 * 60 * 1000);
@@ -471,7 +471,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '⚡ BLACK X Direct 720p HD',
+        server: '⚡ Hearbor Direct 720p HD',
         quality: '720p HD',
         version: 'sub',
         lang: 'ar',
@@ -487,7 +487,7 @@ class Anime3rbService {
       downloads.push({
         id: dlId,
         token: dlId,
-        server: '📥 سيرفر تحميل BLACK X المباشر (720p HD)',
+        server: '📥 سيرفر تحميل Hearbor المباشر (720p HD)',
         quality: '720p HD',
         version: 'sub',
         lang: 'ar',
@@ -503,7 +503,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '👑 BLACK X Direct 1080p FHD',
+        server: '👑 Hearbor Direct 1080p FHD',
         quality: '1080p FHD',
         version: 'sub',
         lang: 'ar',
@@ -519,7 +519,7 @@ class Anime3rbService {
       downloads.push({
         id: dlId,
         token: dlId,
-        server: '📥 سيرفر تحميل BLACK X المباشر (1080p FHD)',
+        server: '📥 سيرفر تحميل Hearbor المباشر (1080p FHD)',
         quality: '1080p FHD',
         version: 'sub',
         lang: 'ar',
@@ -535,7 +535,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '📱 BLACK X Direct 480p SD',
+        server: '📱 Hearbor Direct 480p SD',
         quality: '480p SD',
         version: 'sub',
         lang: 'ar',
@@ -551,7 +551,7 @@ class Anime3rbService {
       downloads.push({
         id: dlId,
         token: dlId,
-        server: '📥 سيرفر تحميل BLACK X المباشر (480p SD)',
+        server: '📥 سيرفر تحميل Hearbor المباشر (480p SD)',
         quality: '480p SD',
         version: 'sub',
         lang: 'ar',
@@ -568,7 +568,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '🎬 BLACK X Stream 1 (HD)',
+        server: '🎬 Hearbor Stream 1 (HD)',
         quality: '720p HD',
         version: 'sub',
         lang: 'ar',
@@ -589,7 +589,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '🌐 BLACK X Stream 2 (HD)',
+        server: '🌐 Hearbor Stream 2 (HD)',
         quality: '720p HD',
         version: 'sub',
         lang: 'ar',
@@ -611,7 +611,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '☁️ BLACK X Cloud 1 (FHD)',
+        server: '☁️ Hearbor Cloud 1 (FHD)',
         quality: '1080p FHD',
         version: 'sub',
         lang: 'ar',
@@ -632,7 +632,7 @@ class Anime3rbService {
       entries.push({
         id,
         token: id,
-        server: '☁️ BLACK X Cloud 2 (FHD)',
+        server: '☁️ Hearbor Cloud 2 (FHD)',
         quality: '1080p FHD',
         version: 'sub',
         lang: 'ar',
@@ -647,7 +647,7 @@ class Anime3rbService {
       downloads.push({
         id: dlId,
         token: dlId,
-        server: '📥 سيرفر تحميل BLACK X السحابي',
+        server: '📥 سيرفر تحميل Hearbor السحابي',
         quality: 'FHD',
         version: 'sub',
         lang: 'ar',
@@ -664,7 +664,7 @@ class Anime3rbService {
       resolved,
       resolvedDownloads,
       source: 'anime3rb',
-      sourceName: 'سيرفر BLACK X 2'
+      sourceName: 'سيرفر Hearbor 2'
     };
     streamSet(cacheKey, payload, 2 * 60 * 60 * 1000);
     return payload;

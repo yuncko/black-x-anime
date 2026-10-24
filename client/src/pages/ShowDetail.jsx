@@ -104,11 +104,11 @@ export default function ShowDetail({ onOpenAuth }) {
     );
   }
 
-  // Ecchi / Harem / Isekai are hidden from BLACK X (shared/contentFilter.js; the API marks them).
+  // Ecchi / Harem / Isekai are hidden from Hearbor (shared/contentFilter.js; the API marks them).
   if (isHiddenAnime(show)) {
     return (
       <div className="glass" style={{ padding: '2.5rem' }}>
-        <EmptyState icon="✕" title={lang === 'ar' ? 'العمل ده مش متاح على BLACK X' : 'This title is not available on BLACK X'}>
+        <EmptyState icon="✕" title={lang === 'ar' ? 'العمل ده مش متاح على Hearbor' : 'This title is not available on Hearbor'}>
           <button type="button" className="btn btn--ghost" onClick={() => navigate('/')}>{t('common.back')}</button>
         </EmptyState>
       </div>
@@ -129,7 +129,7 @@ export default function ShowDetail({ onOpenAuth }) {
   const episodeTotal = Number(show.episodeCount) > 0 ? Number(show.episodeCount) : eps.length;
   const ratingRaw = Number(show.rating) || (Number(show.score) > 0 ? Number(show.score) : 0);
   const ratingTen = ratingRaw > 0 ? (ratingRaw > 10 ? ratingRaw / 10 : ratingRaw).toFixed(1) : '';
-  const serverLabel = isAniProject ? 'BLACK X 4' : String(show.sourceName || show.sourceLabel || '').replace(/^سيرفر\s+/, '') || 'BLACK X';
+  const serverLabel = isAniProject ? 'Hearbor 4' : String(show.sourceName || show.sourceLabel || '').replace(/^سيرفر\s+/, '') || 'Hearbor';
   const facts = [
     { label: lang === 'ar' ? 'النوع' : 'Type', value: show.type || '' },
     { label: lang === 'ar' ? 'الحالة' : 'Status', value: show.status || '' },
@@ -179,7 +179,7 @@ export default function ShowDetail({ onOpenAuth }) {
           </div>
 
           <div>
-            {/* Official slothUI Pro [BLACK X] original Seal */}
+            {/* Official slothUI Pro [Hearbor] original Seal */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <div
                 style={{
@@ -194,11 +194,11 @@ export default function ShowDetail({ onOpenAuth }) {
               >
                 <img
                   src="/blackx-logo.png"
-                  alt="BLACK X"
+                  alt="Hearbor"
                   style={{ width: '22px', height: '22px', borderRadius: '6px', objectFit: 'cover' }}
                 />
                 <span style={{ fontSize: '0.74rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.02em' }}>
-                  BLACK X <span style={{ fontWeight: 500, opacity: 0.78 }}>original</span>
+                  Hearbor <span style={{ fontWeight: 500, opacity: 0.78 }}>original</span>
                 </span>
               </div>
               <span
@@ -237,8 +237,8 @@ export default function ShowDetail({ onOpenAuth }) {
             {isAniProject ? (
               <p style={{ margin: '0.95rem 0', color: 'rgba(255,255,255,0.72)', fontSize: '0.85rem' }}>
                 {lang === 'ar'
-                  ? 'الحلقات المتاحة من BLACK X 4 مدرجة أدناه. جودة البث والترجمة تعتمد على الخادم المصدر.'
-                  : 'Available BLACK X 4 episodes are listed below. Playback quality and subtitles depend on the upstream source.'}
+                  ? 'الحلقات المتاحة من Hearbor 4 مدرجة أدناه. جودة البث والترجمة تعتمد على الخادم المصدر.'
+                  : 'Available Hearbor 4 episodes are listed below. Playback quality and subtitles depend on the upstream source.'}
               </p>
             ) : null}
 
@@ -384,7 +384,7 @@ export default function ShowDetail({ onOpenAuth }) {
                 color: '#ffffff'
               }}
             >
-              {lang === 'ar' ? '🔎 الحلقات المتاحة من سيرفر BLACK X 4' : '🔎 Episodes available on BLACK X 4'}
+              {lang === 'ar' ? '🔎 الحلقات المتاحة من سيرفر Hearbor 4' : '🔎 Episodes available on Hearbor 4'}
             </span>
             )}
             <span className="chip" style={{ cursor: 'default' }}>{formatNumber(eps.length)} {t('common.episodes')}</span>

@@ -32,8 +32,8 @@ export default function NotificationBell() {
       id: 'n-manga',
       cat: 'manga',
       icon: '📖',
-      titleAr: 'فصل مانجا جديد متوفر الآن على BLACK X',
-      titleEn: 'New Manga Chapter Live on BLACK X',
+      titleAr: 'فصل مانجا جديد متوفر الآن على Hearbor',
+      titleEn: 'New Manga Chapter Live on Hearbor',
       bodyAr: 'تم تحديث فصول جديدة عالية الدقة باللغة العربية داخل المكتبة الموحدة.',
       bodyEn: 'New Arabic high-res chapters are now available in the unified Library.',
       timeAr: 'منذ 10 د',
@@ -45,8 +45,8 @@ export default function NotificationBell() {
       id: 'n-comm',
       cat: 'community',
       icon: '💬',
-      titleAr: 'تفاعل جديد في مجتمع BLACK X',
-      titleEn: 'New Interaction in BLACK X Community',
+      titleAr: 'تفاعل جديد في مجتمع Hearbor',
+      titleEn: 'New Interaction in Hearbor Community',
       bodyAr: 'أعجب الأعضاء بمنشورك الأخير وتركوا تعليقات صوتية وميمز جديدة.',
       bodyEn: 'Members reacted to your latest post and left voice notes & memes.',
       timeAr: 'منذ 25 د',
@@ -58,8 +58,8 @@ export default function NotificationBell() {
       id: 'n-wrapped',
       cat: 'reward',
       icon: '📈',
-      titleAr: 'بطاقة ملخصك العالمي (BLACK X Wrapped 2026)',
-      titleEn: 'Your 2026 BLACK X Wrapped Card is Ready',
+      titleAr: 'بطاقة ملخصك العالمي (Hearbor Wrapped 2026)',
+      titleEn: 'Your 2026 Hearbor Wrapped Card is Ready',
       bodyAr: 'شاهد وحمّل بطاقة إحصائياتك السنوية كصورة PNG وشاركها مع أصدقائك.',
       bodyEn: 'View and download your HD PNG stats card and share it with friends.',
       timeAr: 'منذ ساعة',
@@ -253,7 +253,7 @@ export default function NotificationBell() {
             type="button"
             onClick={async () => {
               const ok = await sendNativeDeviceNotification({
-                title: lang === 'ar' ? '🎬 إشعارات حلقات BLACK X مفعّلة!' : '🎬 BLACK X Episode Alerts Active!',
+                title: lang === 'ar' ? '🎬 إشعارات حلقات Hearbor مفعّلة!' : '🎬 Hearbor Episode Alerts Active!',
                 body:
                   lang === 'ar'
                     ? 'ستصلك إشعارات الحلقات الجديدة مباشرة على شاشة هاتفك أو جهاز الكمبيوتر فور نزولها.'

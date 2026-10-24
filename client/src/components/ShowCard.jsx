@@ -17,7 +17,7 @@ function Poster({ src, alt, cls = '' }) {
     <img
       className={cls}
       src={effectiveSrc}
-      alt={alt || 'BLACK X'}
+      alt={alt || 'Hearbor'}
       loading="lazy"
       referrerPolicy="no-referrer"
     />
@@ -192,7 +192,7 @@ export function EpisodeTile({ item, onClick, delay = 0, progress }) {
   const tilt = useLuxury3DTilt();
   const title = (lang === 'ar' ? item.titleAr : item.titleEn) || item.titleEn || item.slug;
   const [subbed, setSubbed] = useState(() => isAnimeEpisodeAlertEnabled(item.slug));
-  // Some feeds (BLACK X 1 and 2) do not say which episode is new. Then the card shows no
+  // Some feeds (Hearbor 1 and 2) do not say which episode is new. Then the card shows no
   // number (it used to say «الحلقة ٠») and opens the title page: /watch/<slug>/null broke.
   const epNum = Number(item.episode) > 0 ? Number(item.episode) : 0;
   const target = epNum

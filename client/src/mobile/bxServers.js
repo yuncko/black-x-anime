@@ -1,11 +1,11 @@
 /**
- * BLACK X APK <-> website server bridge.
+ * Hearbor APK <-> website server bridge.
  *
  * Up to v14 the APK scraped third-party catalogues straight from the phone,
  * with its own server list. When a title was missing it silently loaded the
  * chapters of an unrelated series, and broken pages were swapped for random
  * AniList covers. Since v15 every anime and manga server call goes through the
- * same public BLACK X API the website uses (shared/publicSite.js; since v18.1
+ * same public Hearbor API the website uses (shared/publicSite.js; since v18.1
  * https://black-x-anime.ai.studio/api, before that black-x-anime.me), so
  * the app and the website always list the same servers, episodes, chapters and
  * pages. Nothing here invents data: unknown values stay empty.
@@ -16,7 +16,7 @@ import { PUBLIC_SITE_ORIGIN } from '../../../shared/publicSite.js';
 import { ANILIST_GENRE_NOT_IN, ANILIST_TAG_NOT_IN, isHiddenAnime, isHiddenManga } from './contentFilter.js';
 
 export const BX_PUBLIC_ORIGIN = PUBLIC_SITE_ORIGIN;
-export const BX_APK_FILE_NAME = 'BLACK-X-Mobile-120Hz.apk';
+export const BX_APK_FILE_NAME = 'HEARBOR-Mobile-120Hz.apk';
 export const BX_APK_DOWNLOAD_URL = `${BX_PUBLIC_ORIGIN}/${BX_APK_FILE_NAME}`;
 // The version this APK was built as (the server reports the latest one in /api/app/config).
 export const BX_APK_VERSION = APK_RELEASE.version;
@@ -116,7 +116,7 @@ export async function bxRequestJson(path, { method = 'GET', body, timeoutMs = 15
       signal: controller ? controller.signal : undefined
     });
     if (!res.ok) {
-      const err = new Error(`BLACK X API ${res.status}`);
+      const err = new Error(`Hearbor API ${res.status}`);
       err.status = res.status;
       throw err;
     }
@@ -167,10 +167,10 @@ export function formatBxCount(value, locale = 'en-US') {
 /* -------------------------------------------------------------------------- */
 
 export const BX_ANIME_SOURCE_BADGES = Object.freeze({
-  witanime: 'BLACK X 1',
-  anime3rb: 'BLACK X 2',
-  english: 'BLACK X 3',
-  aniproject: 'BLACK X 4'
+  witanime: 'Hearbor 1',
+  anime3rb: 'Hearbor 2',
+  english: 'Hearbor 3',
+  aniproject: 'Hearbor 4'
 });
 
 /** Same slug rule as the server's toWitcherSlug(). */
@@ -244,7 +244,7 @@ export function mapShowToMobileAnime(show) {
   };
 }
 
-/** Same search the website runs: every BLACK X anime server at once. */
+/** Same search the website runs: every Hearbor anime server at once. */
 export async function fetchMobileAnimeSearch(query, { source = 'all' } = {}) {
   const q = String(query || '').trim();
   if (!q) return [];
@@ -427,17 +427,17 @@ export async function resolveMobileEpisodeServer(server) {
 
 /** Mirrors the website library tabs (client/src/pages/Browse.jsx). */
 export const BX_MANGA_SERVER_TABS = Object.freeze([
-  Object.freeze({ id: 'all', ar: 'جميع سيرفرات BLACK X', en: 'All BLACK X Servers' }),
-  Object.freeze({ id: 'bx1', ar: 'سيرفر BLACK X 1 (مانهوا عربية)', en: 'BLACK X 1 (AR Manhwa)' }),
-  Object.freeze({ id: 'bx2', ar: 'سيرفر BLACK X 2 (مانجا عربية)', en: 'BLACK X 2 (AR Manga)' }),
-  Object.freeze({ id: 'bx3', ar: 'سيرفر BLACK X 3 (الفهرس العالمي)', en: 'BLACK X 3 (Global Index)' })
+  Object.freeze({ id: 'all', ar: 'جميع سيرفرات Hearbor', en: 'All Hearbor Servers' }),
+  Object.freeze({ id: 'bx1', ar: 'سيرفر Hearbor 1 (مانهوا عربية)', en: 'Hearbor 1 (AR Manhwa)' }),
+  Object.freeze({ id: 'bx2', ar: 'سيرفر Hearbor 2 (مانجا عربية)', en: 'Hearbor 2 (AR Manga)' }),
+  Object.freeze({ id: 'bx3', ar: 'سيرفر Hearbor 3 (الفهرس العالمي)', en: 'Hearbor 3 (Global Index)' })
 ]);
 
 /** Shown only while the website exposes it (search-only, like on the website). */
 export const BX_MANGA_SEARCH_ONLY_TAB = Object.freeze({
   id: 'bx4',
-  ar: 'سيرفر BLACK X 4 (بحث فقط)',
-  en: 'BLACK X 4 (Search only)',
+  ar: 'سيرفر Hearbor 4 (بحث فقط)',
+  en: 'Hearbor 4 (Search only)',
   searchOnly: true
 });
 
@@ -452,13 +452,13 @@ const MANGA_TYPE_LABELS = Object.freeze({
 
 export function mangaServerLabel(serverId) {
   const m = String(serverId || '').match(/^bx(\d)$/i);
-  return m ? `BLACK X ${m[1]}` : 'BLACK X';
+  return m ? `Hearbor ${m[1]}` : 'Hearbor';
 }
 
 function serverIdFrom(value) {
   const s = String(value || '').toLowerCase().trim();
   if (/^bx\d$/.test(s)) return s;
-  const m = s.match(/black\s*x\s*(\d)/i);
+  const m = s.match(/hearbor\s*(\d)/i) || s.match(/black\s*x\s*(\d)/i);
   return m ? `bx${m[1]}` : '';
 }
 
@@ -505,7 +505,7 @@ export function mapBxMangaItem(raw, fallbackServer = '') {
     bxServer: server,
     bxServers: servers,
     source: 'bx',
-    sourceLabel: server ? mangaServerLabel(server) : 'BLACK X',
+    sourceLabel: server ? mangaServerLabel(server) : 'Hearbor',
     name: title,
     name_en: String(raw.title_en || raw.title || '').trim(),
     poster_uri: cover,
@@ -547,7 +547,7 @@ function mapAniListMedia(m) {
 
 /**
  * The website's "Master Global Index" (Browse.jsx fetchAniListMasterClient):
- * AniList titles whose chapters BLACK X 3 resolves on demand.
+ * AniList titles whose chapters Hearbor 3 resolves on demand.
  */
 export async function fetchAniListMasterPage(page = 1, country = null, search = '') {
   try {
@@ -682,7 +682,7 @@ export async function fetchMobileMangaList({ server = 'all', query = '', page = 
     return dedupeMangaHits([...rows.map((r) => mapBxMangaItem(r, srv)), ...master]).filter((m) => !isHiddenManga(m));
   }
 
-  // BLACK X 4 is search-only on the website as well.
+  // Hearbor 4 is search-only on the website as well.
   if (srv === 'bx4') return [];
 
   const tasks = [

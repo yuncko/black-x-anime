@@ -1,6 +1,6 @@
 // /api/stream/episode for every account type. VIP (Basic and Monarch) only changes the
 // order of the real servers (direct / CDN first). There is no 4K / HDR / 60 fps server:
-// the synthetic «👑 BLACK X Monarch 4K HDR (60fps Ultra)» entry, which replayed the first
+// the synthetic «👑 Hearbor Monarch 4K HDR (60fps Ultra)» entry, which replayed the first
 // real server under a fake quality label, was removed with the owner's OK on 2026-10-16.
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -29,8 +29,8 @@ function episodeFixture() {
     slug: SLUG,
     episode: 1,
     entries: [
-      { id: 'en-embed', server: 'BLACK X 3', quality: 'HD', embedUrl: 'https://embed.example/e/1' },
-      { id: 'en-direct', server: 'BLACK X 3', quality: '1080p', directUrl: 'https://cdn.example/1.mp4' }
+      { id: 'en-embed', server: 'Hearbor 3', quality: 'HD', embedUrl: 'https://embed.example/e/1' },
+      { id: 'en-direct', server: 'Hearbor 3', quality: '1080p', directUrl: 'https://cdn.example/1.mp4' }
     ],
     resolved: { 'en-embed': { embedUrl: 'https://embed.example/e/1' } },
     downloads: [],

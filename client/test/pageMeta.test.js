@@ -7,7 +7,7 @@ import { LEGAL_DOCS } from '../src/legal/legalContent.js';
 test('a title page uses its name and story; long stories are cut on a word', () => {
   const story = `${'كلمة '.repeat(60)}النهاية`;
   const m = pageMetaFor({ lang: 'ar', tab: 'home', show: { title: 'Frieren', story } });
-  assert.equal(m.title, 'Frieren — BLACK X');
+  assert.equal(m.title, 'Frieren — Hearbor');
   assert.ok(m.description.length <= 158);
   assert.ok(m.description.endsWith('…'));
   assert.ok(!m.description.includes('النهاية'));
@@ -17,16 +17,16 @@ test('a title page uses its name and story; long stories are cut on a word', () 
 });
 
 test('tabs, profile pages and the legal pages get their own titles', () => {
-  assert.equal(pageMetaFor({ lang: 'ar', tab: 'home' }).title, 'BLACK X — أنمي ومانجا');
-  assert.equal(pageMetaFor({ lang: 'en', tab: 'home' }).title, 'BLACK X — Anime & Manga');
-  assert.equal(pageMetaFor({ lang: 'ar', tab: 'schedule' }).title, 'المواعيد — BLACK X');
-  assert.equal(pageMetaFor({ lang: 'en', tab: 'community' }).title, 'Community — BLACK X');
-  assert.equal(pageMetaFor({ lang: 'ar', tab: 'profile' }).title, 'حسابي — BLACK X');
+  assert.equal(pageMetaFor({ lang: 'ar', tab: 'home' }).title, 'Hearbor — أنمي ومانجا');
+  assert.equal(pageMetaFor({ lang: 'en', tab: 'home' }).title, 'Hearbor — Anime & Manga');
+  assert.equal(pageMetaFor({ lang: 'ar', tab: 'schedule' }).title, 'المواعيد — Hearbor');
+  assert.equal(pageMetaFor({ lang: 'en', tab: 'community' }).title, 'Community — Hearbor');
+  assert.equal(pageMetaFor({ lang: 'ar', tab: 'profile' }).title, 'حسابي — Hearbor');
   const policy = pageMetaFor({ lang: 'ar', tab: 'profile', profileTitle: LEGAL_DOCS.policy.titleAr, profileDescription: LEGAL_DOCS.policy.introAr });
-  assert.equal(policy.title, 'سياسة الخصوصية — BLACK X');
+  assert.equal(policy.title, 'سياسة الخصوصية — Hearbor');
   assert.ok(policy.description.startsWith('الصفحة دي بتشرح'));
   // a manga page wins over its tab
-  assert.equal(pageMetaFor({ lang: 'en', tab: 'manga', manga: { title: 'Solo Leveling' } }).title, 'Solo Leveling — BLACK X');
+  assert.equal(pageMetaFor({ lang: 'en', tab: 'manga', manga: { title: 'Solo Leveling' } }).title, 'Solo Leveling — Hearbor');
 });
 
 test('legal documents: both languages, same sections, dated', () => {

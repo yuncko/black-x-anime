@@ -44,7 +44,7 @@ function WitSectionHeader({ icon, title, sub, linkTo, linkLabel }) {
       <div className="wit-sec-header__right" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         <img
           src="/blackx-logo.png"
-          alt="BLACK X"
+          alt="Hearbor"
           style={{
             width: '34px',
             height: '34px',
@@ -57,7 +57,7 @@ function WitSectionHeader({ icon, title, sub, linkTo, linkLabel }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '2px' }}>
             <span style={{ fontSize: '0.64rem', fontWeight: 900, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.68)' }}>
-              BLACK X ORIGINAL • SLOTHUI PRO
+              Hearbor ORIGINAL • SLOTHUI PRO
             </span>
           </div>
           <h2 className="wit-sec-header__title" style={{ margin: 0, fontSize: '1.22rem', fontWeight: 900 }}>
@@ -276,7 +276,7 @@ function Hero3DStage({ items = [], trending = [], onOpenAuth }) {
           }}
         />
 
-        {/* Top-Left Official "[BLACK X original | X]" Seal */}
+        {/* Top-Left Official "[Hearbor original | X]" Seal */}
         <div
           onClick={() => window.openBlackXSpotlight?.()}
           style={{
@@ -296,7 +296,7 @@ function Hero3DStage({ items = [], trending = [], onOpenAuth }) {
         >
           <img
             src="/blackx-logo.png"
-            alt="BLACK X"
+            alt="Hearbor"
             style={{
               width: '22px',
               height: '22px',
@@ -306,7 +306,7 @@ function Hero3DStage({ items = [], trending = [], onOpenAuth }) {
             }}
           />
           <span style={{ fontSize: '0.74rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.02em' }}>
-            BLACK X <span style={{ fontWeight: 500, opacity: 0.78 }}>original</span>
+            Hearbor <span style={{ fontWeight: 500, opacity: 0.78 }}>original</span>
           </span>
         </div>
 
@@ -347,7 +347,7 @@ function Hero3DStage({ items = [], trending = [], onOpenAuth }) {
               title={isRtl ? 'تنبيهات الحلقات الجديدة' : 'Episode Notifications'}
               onClick={async () => {
                 const ok = await sendNativeDeviceNotification({
-                  title: `BLACK X 120Hz: ${displayTitle}`,
+                  title: `Hearbor 120Hz: ${displayTitle}`,
                   body: isRtl
                     ? 'تم تفعيل تنبيهات الحلقات والفصول الجديدة على جهازك!'
                     : 'Live episode & chapter notifications enabled!',
@@ -1017,12 +1017,12 @@ function Hero3DStage({ items = [], trending = [], onOpenAuth }) {
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                   <img
                     src="/blackx-logo.png"
-                    alt="BLACK X"
+                    alt="Hearbor"
                     style={{ width: '28px', height: '28px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.4)' }}
                   />
                   <div>
                     <div style={{ fontSize: '0.76rem', fontWeight: 900, color: '#ffffff' }}>
-                      BLACK X
+                      Hearbor
                     </div>
                     <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.68)', fontWeight: 700 }}>
                       {(() => {
@@ -1492,7 +1492,7 @@ function LibraryShowcaseSection() {
       <WitSectionHeader
         icon={<BxIcon name="manga" size={18} />}
         title={lang === 'ar' ? 'من مكتبة المانجا' : 'From the manga library'}
-        sub={lang === 'ar' ? 'مانجا ومانهوا للقراءة على سيرفرات BLACK X' : 'Manga & manhwa to read on BLACK X servers'}
+        sub={lang === 'ar' ? 'مانجا ومانهوا للقراءة على سيرفرات Hearbor' : 'Manga & manhwa to read on Hearbor servers'}
         linkTo="/browse"
         linkLabel={lang === 'ar' ? 'دخول المكتبة ←' : 'Full Library →'}
       />

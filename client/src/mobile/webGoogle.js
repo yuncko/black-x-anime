@@ -3,7 +3,7 @@
  *
  * Firebase's web popup confirms the Google account and hands back a Firebase ID token; the
  * server's /api/app/auth/google verifies that token exactly like the APK's (same Firebase
- * project), then the BLACK X session takes over. The Firebase session itself is not kept.
+ * project), then the Hearbor session takes over. The Firebase session itself is not kept.
  *
  * Loaded on demand (only when a guest is on the profile / sign-in page) because the Firebase
  * Auth SDK is large; prepareWebGoogle() warms it up so the popup opens straight from the tap

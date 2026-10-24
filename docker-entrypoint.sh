@@ -1,5 +1,5 @@
 #!/bin/sh
-# BLACK X container entrypoint — boots an ephemeral PostgreSQL for the
+# Hearbor container entrypoint — boots an ephemeral PostgreSQL for the
 # social/gamification API (Prisma), syncs the schema, then starts Express.
 # The DB is provisioned on demand (identity bridge + content upserts), so an
 # empty database after a redeploy is expected and harmless.

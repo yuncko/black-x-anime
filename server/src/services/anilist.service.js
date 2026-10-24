@@ -13,7 +13,7 @@ async function anilistRequest(query, variables = {}) {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'User-Agent': 'BLACK-X/2.0 (Arabic Manga Engine)'
+      'User-Agent': 'HEARBOR/2.0 (Arabic Manga Engine)'
     },
     body: JSON.stringify({ query, variables }),
     // Never let a stalled AniList request hold up search/detail responses.

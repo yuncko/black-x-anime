@@ -6,7 +6,7 @@ import { LiquidLoader } from './Loading.jsx';
 
 /**
  * Mobile-First Interactive Manga & Manhwa Reader Component
- * Source: BLACK X Manga Engine
+ * Source: Hearbor Manga Engine
  * Features edge-to-edge vertical webtoon view, tap-to-toggle immersion,
  * auto-scroll hands-free reading, mobile bottom navigation dock, and chapter drawer.
  */
@@ -338,8 +338,8 @@ export default function MangaNovelReader({
   };
 
   const displayTitle = typeof details?.title === 'object'
-    ? (details?.title?.english || details?.title?.romaji || details?.title?.native || 'BLACK X Manga')
-    : (details?.title || item?.title || 'BLACK X Manga');
+    ? (details?.title?.english || details?.title?.romaji || details?.title?.native || 'Hearbor Manga')
+    : (details?.title || item?.title || 'Hearbor Manga');
 
   const displayCover = details?.coverImage?.large || details?.coverImage?.extraLarge || details?.coverUrl || item?.poster || 'https://io.mangalik.net/wp-content/app/lekmanganet/512.png';
 
@@ -445,7 +445,7 @@ export default function MangaNovelReader({
                   gap: '0.2rem'
                 }}
               >
-                ✓ منصة BLACK X
+                ✓ منصة Hearbor
               </span>
               {selectedChapter && (
                 <span
@@ -500,7 +500,7 @@ export default function MangaNovelReader({
                     cursor: 'pointer'
                   }}
                 >
-                  {srv.id === 'bx1' ? 'BLACK X 1' : srv.id === 'bx2' ? 'BLACK X 2' : srv.id === 'bx4' ? 'BLACK X 4' : 'BLACK X 3'}
+                  {srv.id === 'bx1' ? 'Hearbor 1' : srv.id === 'bx2' ? 'Hearbor 2' : srv.id === 'bx4' ? 'Hearbor 4' : 'Hearbor 3'}
                 </button>
               ))}
             </div>
@@ -618,10 +618,10 @@ export default function MangaNovelReader({
               <div style={{ padding: '6rem 1rem', textAlign: 'center' }}>
                 <LiquidLoader />
                 <p style={{ marginTop: '1.25rem', color: '#10b981', fontWeight: 700, fontSize: '0.9rem' }}>
-                  {lang === 'ar' ? 'جارٍ جلب صفحات الفصل من سيرفرات BLACK X بدقة فائقة...' : 'Loading BLACK X pages...'}
+                  {lang === 'ar' ? 'جارٍ جلب صفحات الفصل من سيرفرات Hearbor بدقة فائقة...' : 'Loading Hearbor pages...'}
                 </p>
                 <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                  {lang === 'ar' ? 'سيرفر الترجمة العربية المباشر (BLACK X CDN)' : 'Live Arabic translation server'}
+                  {lang === 'ar' ? 'سيرفر الترجمة العربية المباشر (Hearbor CDN)' : 'Live Arabic translation server'}
                 </span>
               </div>
             ) : chapterPages.length === 0 ? (
@@ -1159,7 +1159,7 @@ export default function MangaNovelReader({
                   📑 فصول العمل ({chapters.length})
                 </h4>
                 <span style={{ fontSize: '0.72rem', color: '#10b981' }}>
-                  ✓ ترجمة عربية كاملة - سيرفرات BLACK X
+                  ✓ ترجمة عربية كاملة - سيرفرات Hearbor
                 </span>
               </div>
               <button
@@ -1228,7 +1228,7 @@ export default function MangaNovelReader({
                         {ch.title || `الفصل ${ch.chapterNumber}`}
                       </div>
                       <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '0.15rem' }}>
-                        {ch.scanlationGroup || 'سيرفرات BLACK X الرسمية'}
+                        {ch.scanlationGroup || 'سيرفرات Hearbor الرسمية'}
                       </div>
                     </div>
                     {isActive && <span style={{ color: '#10b981', fontWeight: 800 }}>✓ قيد القراءة</span>}

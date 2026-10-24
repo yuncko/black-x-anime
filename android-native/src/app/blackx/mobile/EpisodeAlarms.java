@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Air-time reminders that reach the phone while BLACK X is closed (APK v18.0, 2026-10-17).
+ * Air-time reminders that reach the phone while Hearbor is closed (APK v18.0, 2026-10-17).
  *
  * READING COPY. The shipped code is assembled from
  * android-native/smali/app/blackx/mobile/EpisodeAlarms.smali by tools/apk/patch-native.sh
@@ -24,7 +24,7 @@ import org.json.JSONObject;
  * MainActivity.scheduleEpisodeAlarms(json) = [{"id":int,"title":str,"body":str,"at":epochMs}].
  * It replaces every alarm, is saved in SharedPreferences and armed again after a reboot or an
  * app update. An alarm intent carries only its id: the text shown is looked up in the saved
- * list, so another app cannot make BLACK X show its own text.
+ * list, so another app cannot make Hearbor show its own text.
  */
 public class EpisodeAlarms extends BroadcastReceiver {
     public static final String ACTION = "app.blackx.mobile.EPISODE_ALARM";
@@ -111,7 +111,7 @@ public class EpisodeAlarms extends BroadcastReceiver {
         for (int i = 0; i < arr.length(); i++) {
             JSONObject o = arr.optJSONObject(i);
             if (o != null && o.optInt("id", 0) == id) {
-                post(ctx, id, o.optString("title", "BLACK X"), o.optString("body", ""));
+                post(ctx, id, o.optString("title", "Hearbor"), o.optString("body", ""));
                 return;
             }
         }
@@ -123,7 +123,7 @@ public class EpisodeAlarms extends BroadcastReceiver {
         Notification.Builder b;
         if (Build.VERSION.SDK_INT >= 26) {
             // the same channel as the in-app notifications (MainActivity.sendPhoneNotification)
-            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "BLACK X Episode Alerts", 4));
+            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "Hearbor Episode Alerts", 4));
             b = new Notification.Builder(ctx, CHANNEL);
         } else {
             b = new Notification.Builder(ctx);
@@ -136,7 +136,7 @@ public class EpisodeAlarms extends BroadcastReceiver {
         Intent launch = ctx.getPackageManager().getLaunchIntentForPackage(ctx.getPackageName());
         if (launch != null) {
             int flags = Build.VERSION.SDK_INT >= 23 ? 0x0C000000 : 0x08000000;
-            b.setContentIntent(PendingIntent.getActivity(ctx, id, launch, flags)); // a tap opens BLACK X
+            b.setContentIntent(PendingIntent.getActivity(ctx, id, launch, flags)); // a tap opens Hearbor
         }
         nm.notify(id, b.build());
     }

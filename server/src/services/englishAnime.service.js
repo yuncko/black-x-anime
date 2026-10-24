@@ -1,12 +1,12 @@
 /**
- * BLACK X Server 3 — Complete Japanese Anime Library + AI Arabic Translation Engine
+ * Hearbor Server 3 — Complete Japanese Anime Library + AI Arabic Translation Engine
  * ---------------------------------------------------------------------------------
  * Provides complete coverage of Japanese anime released in Japan:
  *  - Complete Japanese Anime Catalog (countryOfOrigin: JP, status: FINISHED / RELEASING)
  *  - Direct 1080p/720p MP4 streaming & downloading (Zero Iframe Sandbox)
- *  - Cross-linked Arabic-subtitled streams from BLACK X 1 & BLACK X 2 (with strict title verification)
+ *  - Cross-linked Arabic-subtitled streams from Hearbor 1 & Hearbor 2 (with strict title verification)
  *  - Real-time English -> Arabic AI subtitle translation (.srt / .ass / .vtt)
- *  - 100% pure BLACK X branding with zero mention of upstream sources
+ *  - 100% pure Hearbor branding with zero mention of upstream sources
  */
 import { apiGet, apiSet, streamGet, streamSet } from '../db.js';
 import { translateTextToArabic, getTranslatedEpisodeSubtitles } from '../subtitleTranslator.js';
@@ -127,7 +127,7 @@ class EnglishAnimeService {
           url: `/show/${slug}?source=english`,
           source: 'english',
           hasAutoArabicSub: true,
-          sourceLabel: 'سيرفر BLACK X 3'
+          sourceLabel: 'سيرفر Hearbor 3'
         };
       });
 
@@ -196,7 +196,7 @@ class EnglishAnimeService {
           url: `/show/${slug}?source=english`,
           source: 'english',
           hasAutoArabicSub: true,
-          sourceLabel: 'سيرفر BLACK X 3'
+          sourceLabel: 'سيرفر Hearbor 3'
         };
       });
 
@@ -296,7 +296,7 @@ class EnglishAnimeService {
       episodes,
       hasAutoArabicSub: true,
       source: 'english',
-      sourceName: 'سيرفر BLACK X 3'
+      sourceName: 'سيرفر Hearbor 3'
     };
 
     apiSet(cacheKey, show, 30 * 60 * 1000);
@@ -654,7 +654,7 @@ class EnglishAnimeService {
       entries.push({
         id: idZokoFhd,
         token: idZokoFhd,
-        server: '👑 BLACK X Ultra 1080p FHD (مترجم عربي AI)',
+        server: '👑 Hearbor Ultra 1080p FHD (مترجم عربي AI)',
         quality: '1080p FHD',
         version: 'sub',
         lang: 'en->ar',
@@ -672,7 +672,7 @@ class EnglishAnimeService {
       entries.push({
         id: idZokoAuto,
         token: idZokoAuto,
-        server: '⚡ BLACK X Master HLS (تلقائي 1080p/720p/360p — مترجم)',
+        server: '⚡ Hearbor Master HLS (تلقائي 1080p/720p/360p — مترجم)',
         quality: '1080p / 720p',
         version: 'sub',
         lang: 'en->ar',
@@ -690,7 +690,7 @@ class EnglishAnimeService {
         entries.push({
           id: idZokoHd,
           token: idZokoHd,
-          server: '🎬 BLACK X Stream 720p HD (مترجم عربي AI)',
+          server: '🎬 Hearbor Stream 720p HD (مترجم عربي AI)',
           quality: '720p HD',
           version: 'sub',
           lang: 'en->ar',
@@ -709,7 +709,7 @@ class EnglishAnimeService {
         entries.push({
           id: idZokoSd,
           token: idZokoSd,
-          server: '📱 BLACK X Eco 360p SD (سريع للباقات — مترجم)',
+          server: '📱 Hearbor Eco 360p SD (سريع للباقات — مترجم)',
           quality: '360p SD',
           version: 'sub',
           lang: 'en->ar',
@@ -730,7 +730,7 @@ class EnglishAnimeService {
       entries.push({
         id: idZokoDub,
         token: idZokoDub,
-        server: '🎙️ BLACK X Dub 1080p (مدبلج إنجليزي + ترجمة عربية)',
+        server: '🎙️ Hearbor Dub 1080p (مدبلج إنجليزي + ترجمة عربية)',
         quality: '1080p FHD',
         version: 'dub',
         lang: 'en->ar',
@@ -743,7 +743,7 @@ class EnglishAnimeService {
       resolved[idZokoDub] = { embedUrl: embedZokoDub, directUrl: null };
     }
 
-    // 1) Cross-link BLACK X Server 2 (Arabic-subtitled direct MP4 1080p/720p/480p + OK.ru + Sendvid) with strict title check
+    // 1) Cross-link Hearbor Server 2 (Arabic-subtitled direct MP4 1080p/720p/480p + OK.ru + Sendvid) with strict title check
     try {
       let bx2Ep = await anime3rbService.getEpisode(titleRomaji || titleEn, episode).catch(() => null);
       if (!bx2Ep && titleEn && titleEn !== titleRomaji) {
@@ -761,7 +761,7 @@ class EnglishAnimeService {
       }
     } catch (_) {}
 
-    // 2) Fetch Direct MP4 streams from BLACK X Server 3 AnimeHeaven engine (plays in native <video> + AI Arabic Subtitles)
+    // 2) Fetch Direct MP4 streams from Hearbor Server 3 AnimeHeaven engine (plays in native <video> + AI Arabic Subtitles)
     try {
       const ahSources = await this.fetchAnimeHeavenStreams(titleEn, titleRomaji, episode);
       if (ahSources.length > 0) {
@@ -772,7 +772,7 @@ class EnglishAnimeService {
         entries.push({
           id: idNativeHd,
           token: idNativeHd,
-          server: '⚡ BLACK X Direct MP4 HD (مترجم عربي AI)',
+          server: '⚡ Hearbor Direct MP4 HD (مترجم عربي AI)',
           quality: '720p HD',
           version: 'sub',
           lang: 'en->ar',
@@ -791,7 +791,7 @@ class EnglishAnimeService {
         entries.push({
           id: idEmbedClean,
           token: idEmbedClean,
-          server: '🌐 BLACK X Cinema MP4 (مشغل مدمج بالترجمة)',
+          server: '🌐 Hearbor Cinema MP4 (مشغل مدمج بالترجمة)',
           quality: '720p HD',
           version: 'sub',
           lang: 'en->ar',
@@ -812,7 +812,7 @@ class EnglishAnimeService {
           downloads.push({
             id: dlId,
             token: dlId,
-            server: `📥 سيرفر تحميل BLACK X المباشر (${idx === 0 ? '1080p FHD' : '720p HD'})`,
+            server: `📥 سيرفر تحميل Hearbor المباشر (${idx === 0 ? '1080p FHD' : '720p HD'})`,
             quality: idx === 0 ? '1080p FHD' : '720p HD',
             version: 'sub',
             lang: 'en',
@@ -835,7 +835,7 @@ class EnglishAnimeService {
         entries.push({
           id: idAll,
           token: idAll,
-          server: `🚀 BLACK X Archive ${st.quality} (${st.mode === 'dub' ? 'مدبلج' : 'مترجم عربي AI'})`,
+          server: `🚀 Hearbor Archive ${st.quality} (${st.mode === 'dub' ? 'مدبلج' : 'مترجم عربي AI'})`,
           quality: st.quality,
           version: st.mode,
           lang: 'en->ar',
@@ -849,7 +849,7 @@ class EnglishAnimeService {
       });
     } catch (_) {}
 
-    // 3) Cross-link BLACK X Server 1 (witanime) with strict title verification
+    // 3) Cross-link Hearbor Server 1 (witanime) with strict title verification
     try {
       let witaCandidates = await searchShows(titleEn).catch(() => []);
       if (!witaCandidates.length && titleRomaji && titleRomaji !== titleEn) {
@@ -941,7 +941,7 @@ class EnglishAnimeService {
               entries.push({
                 id: entryId,
                 token: entryId,
-                server: idx === 0 ? '🎬 BLACK X Stream HD (مترجم)' : '🌐 BLACK X Cinema HD (احتياطي)',
+                server: idx === 0 ? '🎬 Hearbor Stream HD (مترجم)' : '🌐 Hearbor Cinema HD (احتياطي)',
                 quality: '1080p FHD',
                 version: 'sub',
                 lang: 'ar',
@@ -964,7 +964,7 @@ class EnglishAnimeService {
       {
         id: `dl-en-sub-srt-${malId}-${episode}`,
         token: `dl-en-srt-${malId}-${episode}`,
-        server: '📥 تحميل ملف الترجمة العربية (.SRT) — BLACK X AI',
+        server: '📥 تحميل ملف الترجمة العربية (.SRT) — Hearbor AI',
         quality: 'SRT',
         version: 'sub',
         lang: 'ar',
@@ -973,7 +973,7 @@ class EnglishAnimeService {
       {
         id: `dl-en-sub-vtt-${malId}-${episode}`,
         token: `dl-en-vtt-${malId}-${episode}`,
-        server: '📥 تحميل ملف الترجمة العربية (.VTT) — BLACK X AI',
+        server: '📥 تحميل ملف الترجمة العربية (.VTT) — Hearbor AI',
         quality: 'VTT',
         version: 'sub',
         lang: 'ar',
@@ -991,7 +991,7 @@ class EnglishAnimeService {
       subtitles: [
         {
           lang: 'ar',
-          label: 'العربية (ترجمة فورية BLACK X AI)',
+          label: 'العربية (ترجمة فورية Hearbor AI)',
           vttUrl: subVttUrl,
           srtUrl: subSrtUrl,
           default: true
@@ -1003,7 +1003,7 @@ class EnglishAnimeService {
       aniId,
       episode,
       source: 'english',
-      sourceName: 'سيرفر BLACK X 3'
+      sourceName: 'سيرفر Hearbor 3'
     };
 
     streamSet(cacheKey, payload, 2 * 60 * 60 * 1000);

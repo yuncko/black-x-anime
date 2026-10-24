@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 /**
- * BLACK X Multi-Server Manga & Manhwa Engine (v2.0)
+ * Hearbor Multi-Server Manga & Manhwa Engine (v2.0)
  * ---------------------------------------------------------------------------
- * Exclusively branded under BLACK X with 3 high-availability servers:
- *  - Server 1 (bx1): BLACK X 1 (OlympusStaff / Team X — https://olympustaff.com)
+ * Exclusively branded under Hearbor with 3 high-availability servers:
+ *  - Server 1 (bx1): Hearbor 1 (OlympusStaff / Team X — https://olympustaff.com)
  *    -> #1 Arabic Manhwa, Webtoon & Chinese Manhua engine (200 OK direct CDN)
- *  - Server 2 (bx2): BLACK X 2 (3asq / مانجا العاشق — https://3asq.online)
+ *  - Server 2 (bx2): Hearbor 2 (3asq / مانجا العاشق — https://3asq.online)
  *    -> #1 Arabic Japanese Manga engine (One Piece, Berserk, HxH, Kingdom, JJK...)
- *  - Server 3 (bx3): BLACK X 3 (WeebCentral + MangaDex API v5 — https://weebcentral.com)
+ *  - Server 3 (bx3): Hearbor 3 (WeebCentral + MangaDex API v5 — https://weebcentral.com)
  *    -> #1 Complete Global Manga & Manhwa Official Rip engine (100% catalog)
  */
 
@@ -66,7 +66,7 @@ function rewriteLegacyMangaImageUrl(rawUrl) {
 
 /**
  * Curated cross-server mapping for flagship Manga & Manhwa titles so every card
- * in the library resolves immediately across BLACK X 1, BLACK X 2, and BLACK X 3.
+ * in the library resolves immediately across Hearbor 1, Hearbor 2, and Hearbor 3.
  */
 export const FLAGSHIP_MANGA_MAP = {
   'solo-leveling': {
@@ -365,7 +365,7 @@ function setCache(key, val, ttlMs = 15 * 60 * 1000) {
 
 class MangalikService {
   /* =========================================================================
-   * ENGINE 1: BLACK X 1 — OlympusStaff / Team X (https://olympustaff.com)
+   * ENGINE 1: Hearbor 1 — OlympusStaff / Team X (https://olympustaff.com)
    * ========================================================================= */
 
   async getOlympusCatalog(page = 1) {
@@ -411,12 +411,12 @@ class MangalikService {
           status: statusMatch?.[1]?.trim() || 'مستمر',
           rating: null,
           chapters_count: 85,
-          author: 'سيرفر BLACK X 1 (مترجم للعربية)',
-          description_ar: `اقرأ ${title} مترجماً باللغة العربية بجودة فائقة مباشرة عبر سيرفر BLACK X 1.`,
-          description_en: `Read ${title} in high resolution directly on BLACK X 1.`,
+          author: 'سيرفر Hearbor 1 (مترجم للعربية)',
+          description_ar: `اقرأ ${title} مترجماً باللغة العربية بجودة فائقة مباشرة عبر سيرفر Hearbor 1.`,
+          description_en: `Read ${title} in high resolution directly on Hearbor 1.`,
           genres: [],
           release_year: null,
-          source: 'BLACK X 1',
+          source: 'Hearbor 1',
           server: 'bx1'
         });
       }
@@ -473,10 +473,10 @@ class MangalikService {
             status: 'ONGOING',
             rating: null,
             chapters_count: 100,
-            author: 'سيرفر BLACK X 1 (مترجم)',
-            description_ar: `${title} — متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر BLACK X 1.`,
-            description_en: `${title} — Available on BLACK X 1 Server.`,
-            source: 'BLACK X 1',
+            author: 'سيرفر Hearbor 1 (مترجم)',
+            description_ar: `${title} — متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر Hearbor 1.`,
+            description_en: `${title} — Available on Hearbor 1 Server.`,
+            source: 'Hearbor 1',
             server: 'bx1'
           });
         }
@@ -527,7 +527,7 @@ class MangalikService {
             slug: chStr,
             title: `الفصل ${chStr}`,
             releaseDate: '2026',
-            scanlationGroup: 'سيرفر BLACK X 1 (مترجم)',
+            scanlationGroup: 'سيرفر Hearbor 1 (مترجم)',
             server: 'bx1',
             url: `${OLYMPUS_BASE}/series/${cleanSlug}/${chStr}`
           });
@@ -551,7 +551,7 @@ class MangalikService {
               slug: chStr,
               title: `الفصل ${chStr}`,
               releaseDate: '2026',
-              scanlationGroup: 'سيرفر BLACK X 1 (مترجم)',
+              scanlationGroup: 'سيرفر Hearbor 1 (مترجم)',
               server: 'bx1',
               url: `${OLYMPUS_BASE}/series/${cleanSlug}/${chStr}`
             });
@@ -607,7 +607,7 @@ class MangalikService {
             pageNumber: pages.length + 1,
             url: normalizedUrl,
             directUrl: normalizedUrl,
-            server: 'BLACK X 1'
+            server: 'Hearbor 1'
           });
         }
 
@@ -624,7 +624,7 @@ class MangalikService {
   }
 
   /* =========================================================================
-   * ENGINE 2: BLACK X 2 — 3asq / مانجا العاشق (https://3asq.online)
+   * ENGINE 2: Hearbor 2 — 3asq / مانجا العاشق (https://3asq.online)
    * ========================================================================= */
 
   async get3asqCatalog() {
@@ -667,12 +667,12 @@ class MangalikService {
           status: 'ONGOING',
           rating: null,
           chapters_count: 120,
-          author: 'سيرفر BLACK X 2 (مانجا عربية)',
-          description_ar: `اقرأ مانجا ${title} بالترجمة العربية الكاملة عبر سيرفر BLACK X 2.`,
-          description_en: `Read ${title} Manga in Arabic on BLACK X 2.`,
+          author: 'سيرفر Hearbor 2 (مانجا عربية)',
+          description_ar: `اقرأ مانجا ${title} بالترجمة العربية الكاملة عبر سيرفر Hearbor 2.`,
+          description_en: `Read ${title} Manga in Arabic on Hearbor 2.`,
           genres: [],
           release_year: null,
-          source: 'BLACK X 2',
+          source: 'Hearbor 2',
           server: 'bx2'
         });
       }
@@ -727,10 +727,10 @@ class MangalikService {
             status: 'ONGOING',
             rating: null,
             chapters_count: 100,
-            author: 'سيرفر BLACK X 2 (مترجم)',
-            description_ar: `${title} — متاح بالترجمة العربية المباشرة على سيرفر BLACK X 2.`,
-            description_en: `${title} — Arabic Manga on BLACK X 2.`,
-            source: 'BLACK X 2',
+            author: 'سيرفر Hearbor 2 (مترجم)',
+            description_ar: `${title} — متاح بالترجمة العربية المباشرة على سيرفر Hearbor 2.`,
+            description_en: `${title} — Arabic Manga on Hearbor 2.`,
+            source: 'Hearbor 2',
             server: 'bx2'
           });
         }
@@ -788,7 +788,7 @@ class MangalikService {
           slug: chSlug,
           title: rawTitle ? `الفصل ${rawTitle}` : `الفصل ${chapterNumber}`,
           releaseDate: '2026',
-          scanlationGroup: 'سيرفر BLACK X 2 (مترجم)',
+          scanlationGroup: 'سيرفر Hearbor 2 (مترجم)',
           server: 'bx2',
           url: `${ASQ_BASE}/manga/${cleanSlug}/${chSlug}/`
         });
@@ -832,7 +832,7 @@ class MangalikService {
           pageNumber: pages.length + 1,
           url: imgUrl,
           directUrl: imgUrl,
-          server: 'BLACK X 2'
+          server: 'Hearbor 2'
         });
       }
 
@@ -845,7 +845,7 @@ class MangalikService {
   }
 
   /* =========================================================================
-   * ENGINE 3: BLACK X 3 — WeebCentral + MangaDex API v5 (Global & Arabic HD)
+   * ENGINE 3: Hearbor 3 — WeebCentral + MangaDex API v5 (Global & Arabic HD)
    * ========================================================================= */
 
   async searchWeebCentral(query) {
@@ -898,10 +898,10 @@ class MangalikService {
           status: 'ONGOING',
           rating: null,
           chapters_count: 150,
-          author: 'سيرفر BLACK X 3 (المكتبة العالمية الشاملة)',
-          description_ar: `${title} — متاح بالكامل بدقة أصلية فائقة عبر سيرفر BLACK X 3.`,
-          description_en: `${title} — Full HD Official Rips on BLACK X 3.`,
-          source: 'BLACK X 3',
+          author: 'سيرفر Hearbor 3 (المكتبة العالمية الشاملة)',
+          description_ar: `${title} — متاح بالكامل بدقة أصلية فائقة عبر سيرفر Hearbor 3.`,
+          description_en: `${title} — Full HD Official Rips on Hearbor 3.`,
+          source: 'Hearbor 3',
           server: 'bx3'
         });
       }
@@ -955,7 +955,7 @@ class MangalikService {
           slug: chId,
           title: `الفصل ${chapterNumber} (${rawLabel})`,
           releaseDate: '2026',
-          scanlationGroup: 'سيرفر BLACK X 3 (جودة أصلية)',
+          scanlationGroup: 'سيرفر Hearbor 3 (جودة أصلية)',
           server: 'bx3',
           url: `${WEEBCENTRAL_BASE}/chapters/${chId}`
         });
@@ -1004,7 +1004,7 @@ class MangalikService {
           pageNumber: pages.length + 1,
           url: imgUrl,
           directUrl: imgUrl,
-          server: 'BLACK X 3'
+          server: 'Hearbor 3'
         });
       }
 
@@ -1051,12 +1051,12 @@ class MangalikService {
           status: m.is_completed === 1 ? 'COMPLETED' : 'ONGOING',
           rating: rawRate > 0 ? (rawRate > 10 ? +(rawRate / 10).toFixed(1) : +rawRate.toFixed(1)) : null,
           chapters_count: Number(m.chapters_count || m.last_chapter || 100),
-          author: 'سيرفر BLACK X 1',
-          description_ar: m.summary || m.description || `اقرأ ${title} بالترجمة العربية الكاملة عبر سيرفر BLACK X 1.`,
-          description_en: m.summary || m.description || `Read ${title} in Arabic on BLACK X 1.`,
+          author: 'سيرفر Hearbor 1',
+          description_ar: m.summary || m.description || `اقرأ ${title} بالترجمة العربية الكاملة عبر سيرفر Hearbor 1.`,
+          description_en: m.summary || m.description || `Read ${title} in Arabic on Hearbor 1.`,
           genres,
           release_year: null,
-          source: 'BLACK X 1',
+          source: 'Hearbor 1',
           server: 'bx1'
         };
       });
@@ -1102,11 +1102,11 @@ class MangalikService {
             status: m.is_completed === 1 ? 'COMPLETED' : 'ONGOING',
             rating: null,
             chapters_count: Number(m.chapters_count || 100),
-            author: 'سيرفر BLACK X 1',
-            description_ar: m.summary || m.description || `${title} — متاح بالترجمة العربية عبر سيرفر BLACK X 1.`,
-            description_en: m.summary || m.description || `${title} on BLACK X 1.`,
+            author: 'سيرفر Hearbor 1',
+            description_ar: m.summary || m.description || `${title} — متاح بالترجمة العربية عبر سيرفر Hearbor 1.`,
+            description_en: m.summary || m.description || `${title} on Hearbor 1.`,
             genres,
-            source: 'BLACK X 1',
+            source: 'Hearbor 1',
             server: 'bx1'
           });
         }
@@ -1145,9 +1145,9 @@ class MangalikService {
         status: m.is_completed === 1 ? 'COMPLETED' : 'ONGOING',
         rating: null,
         chapters_count: rawChapters.length || 100,
-        author: 'سيرفر BLACK X 1',
-        description_ar: m.summary || m.description || `اقرأ ${title} بالترجمة العربية عبر سيرفر BLACK X 1.`,
-        description_en: m.summary || m.description || `Read ${title} on BLACK X 1.`,
+        author: 'سيرفر Hearbor 1',
+        description_ar: m.summary || m.description || `اقرأ ${title} بالترجمة العربية عبر سيرفر Hearbor 1.`,
+        description_en: m.summary || m.description || `Read ${title} on Hearbor 1.`,
         genres,
         release_year: null
       };
@@ -1192,7 +1192,7 @@ class MangalikService {
             slug: chId,
             title: chTitle ? `الفصل ${num} — ${chTitle}` : `الفصل ${num}`,
             releaseDate: ch.created_at ? String(ch.created_at).slice(0, 10) : '2026',
-            scanlationGroup: 'سيرفر BLACK X 1',
+            scanlationGroup: 'سيرفر Hearbor 1',
             server: 'bx1',
             url: `${MANGAMELLO_API}/mangas/${cleanId}/chapters/${chId}`
           };
@@ -1239,7 +1239,7 @@ class MangalikService {
           pageNumber: pages.length + 1,
           url: imgUrl,
           directUrl: imgUrl,
-          server: 'BLACK X 1'
+          server: 'Hearbor 1'
         });
       }
 
@@ -1282,12 +1282,12 @@ class MangalikService {
             status: String(p.seriesStatus || 'ONGOING').toUpperCase(),
             rating: Number(p.averageRating) > 0 ? +(Number(p.averageRating) * 2).toFixed(1) : null,
             chapters_count: Array.isArray(p.chapters) ? p.chapters.length : null,
-            author: 'سيرفر BLACK X 3',
-            description_ar: `اقرأ مانهوا ${title} بالترجمة العربية المباشرة عبر سيرفر BLACK X 1.`,
-            description_en: `Read ${title} Manhwa on BLACK X 1.`,
+            author: 'سيرفر Hearbor 3',
+            description_ar: `اقرأ مانهوا ${title} بالترجمة العربية المباشرة عبر سيرفر Hearbor 1.`,
+            description_en: `Read ${title} Manhwa on Hearbor 1.`,
             genres,
             release_year: null,
-            source: 'BLACK X 1',
+            source: 'Hearbor 1',
             server: 'bx1'
           };
         });
@@ -1332,10 +1332,10 @@ class MangalikService {
             status: 'ONGOING',
             rating: null,
             chapters_count: 80,
-            author: 'سيرفر BLACK X 3',
-            description_ar: `${title} — متاح بالترجمة العربية عبر سيرفر BLACK X 1.`,
-            description_en: `${title} on BLACK X 1.`,
-            source: 'BLACK X 1',
+            author: 'سيرفر Hearbor 3',
+            description_ar: `${title} — متاح بالترجمة العربية عبر سيرفر Hearbor 1.`,
+            description_en: `${title} on Hearbor 1.`,
+            source: 'Hearbor 1',
             server: 'bx1'
           });
         }
@@ -1375,7 +1375,7 @@ class MangalikService {
         slug: String(ch.id),
         title: ch.title ? `الفصل ${ch.number} — ${ch.title}` : `الفصل ${ch.number}`,
         releaseDate: ch.createdAt ? String(ch.createdAt).slice(0, 10) : '2026',
-        scanlationGroup: 'سيرفر BLACK X 3',
+        scanlationGroup: 'سيرفر Hearbor 3',
         server: 'bx1',
         url: `${AZORAFLY_API}/chapter?chapterId=${ch.id}`
       }));
@@ -1410,7 +1410,7 @@ class MangalikService {
             pageNumber: i + 1,
             url,
             directUrl: url,
-            server: 'BLACK X 1'
+            server: 'Hearbor 1'
           };
         })
         .filter(Boolean);
@@ -1453,12 +1453,12 @@ class MangalikService {
           status: 'ONGOING',
           rating: parseFloat(s.rating) > 0 ? +parseFloat(s.rating).toFixed(1) : null,
           chapters_count: Number(s.chapters_count || 90),
-          author: 'سيرفر BLACK X 4',
-          description_ar: s.description || `اقرأ ${title} بالترجمة العربية المباشرة عبر سيرفر BLACK X 2.`,
-          description_en: s.description || `Read ${title} on BLACK X 2.`,
+          author: 'سيرفر Hearbor 4',
+          description_ar: s.description || `اقرأ ${title} بالترجمة العربية المباشرة عبر سيرفر Hearbor 2.`,
+          description_en: s.description || `Read ${title} on Hearbor 2.`,
           genres,
           release_year: null,
-          source: 'BLACK X 2',
+          source: 'Hearbor 2',
           server: 'bx2'
         };
       });
@@ -1504,10 +1504,10 @@ class MangalikService {
             status: 'ONGOING',
             rating: null,
             chapters_count: 90,
-            author: 'سيرفر BLACK X 4',
-            description_ar: s.description || `${title} — متاح بالترجمة العربية عبر سيرفر BLACK X 2.`,
-            description_en: s.description || `${title} on BLACK X 2.`,
-            source: 'BLACK X 2',
+            author: 'سيرفر Hearbor 4',
+            description_ar: s.description || `${title} — متاح بالترجمة العربية عبر سيرفر Hearbor 2.`,
+            description_en: s.description || `${title} on Hearbor 2.`,
+            source: 'Hearbor 2',
             server: 'bx2'
           });
         }
@@ -1536,7 +1536,7 @@ class MangalikService {
           slug: String(ch.id),
           title: ch.title ? `الفصل ${ch.chapter || idx + 1} — ${ch.title}` : `الفصل ${ch.chapter || idx + 1}`,
           releaseDate: ch.created_at ? String(ch.created_at).slice(0, 10) : '2026',
-          scanlationGroup: 'سيرفر BLACK X 4',
+          scanlationGroup: 'سيرفر Hearbor 4',
           server: 'bx2',
           url: `${MANGASWAT_API}/chapters/${ch.id}/`
         }))
@@ -1571,7 +1571,7 @@ class MangalikService {
             pageNumber: i + 1,
             url,
             directUrl: url,
-            server: 'BLACK X 2'
+            server: 'Hearbor 2'
           };
         })
         .filter(Boolean);
@@ -1618,12 +1618,12 @@ class MangalikService {
           status: String(s.story_status || 'ONGOING').toUpperCase(),
           rating: parseFloat(s.rating) > 0 ? +(parseFloat(s.rating) * 2).toFixed(1) : null,
           chapters_count: Number(s.chapters_count || 60),
-          author: 'سيرفر BLACK X 2',
-          description_ar: s.summary || `اقرأ ${title} بالترجمة العربية عبر سيرفر BLACK X 2.`,
-          description_en: s.summary || `Read ${titleEn} on BLACK X 2.`,
+          author: 'سيرفر Hearbor 2',
+          description_ar: s.summary || `اقرأ ${title} بالترجمة العربية عبر سيرفر Hearbor 2.`,
+          description_en: s.summary || `Read ${titleEn} on Hearbor 2.`,
           genres: [],
           release_year: null,
-          source: 'BLACK X 2',
+          source: 'Hearbor 2',
           server: 'bx2'
         };
       });
@@ -1723,12 +1723,12 @@ class MangalikService {
           status: m.status === 'FINISHED' ? 'COMPLETED' : 'ONGOING',
           rating: m.averageScore ? +(m.averageScore / 10).toFixed(1) : null,
           chapters_count: m.chapters || null,
-          author: country === 'KR' ? 'مانهوا كورية • BLACK X' : country === 'CN' ? 'مانهاوا صينية • BLACK X' : 'مانجا يابانية • BLACK X',
-          description_ar: cleanDesc || `اقرأ ${titleEn} مباشرة عبر الفهرس العالمي الشامل ومصادر BLACK X.`,
-          description_en: cleanDesc || `Read ${titleEn} on BLACK X Global Master Index.`,
+          author: country === 'KR' ? 'مانهوا كورية • Hearbor' : country === 'CN' ? 'مانهاوا صينية • Hearbor' : 'مانجا يابانية • Hearbor',
+          description_ar: cleanDesc || `اقرأ ${titleEn} مباشرة عبر الفهرس العالمي الشامل ومصادر Hearbor.`,
+          description_en: cleanDesc || `Read ${titleEn} on Hearbor Global Master Index.`,
           genres: Array.isArray(m.genres) ? m.genres : [],
           release_year: m.startDate?.year || 2025,
-          source: 'BLACK X 3',
+          source: 'Hearbor 3',
           server: 'bx3'
         };
       });
@@ -1803,12 +1803,12 @@ class MangalikService {
         status: m.status === 'FINISHED' ? 'COMPLETED' : 'ONGOING',
         rating: m.averageScore ? +(m.averageScore / 10).toFixed(1) : null,
         chapters_count: m.chapters || 120,
-        author: country === 'KR' ? 'مانهوا كورية • BLACK X' : country === 'CN' ? 'مانهاوا صينية • BLACK X' : 'مانجا يابانية • BLACK X',
-        description_ar: cleanDesc || `اقرأ ${titleEn} عبر محرك BLACK X الشامل.`,
-        description_en: cleanDesc || `Read ${titleEn} on BLACK X.`,
+        author: country === 'KR' ? 'مانهوا كورية • Hearbor' : country === 'CN' ? 'مانهاوا صينية • Hearbor' : 'مانجا يابانية • Hearbor',
+        description_ar: cleanDesc || `اقرأ ${titleEn} عبر محرك Hearbor الشامل.`,
+        description_en: cleanDesc || `Read ${titleEn} on Hearbor.`,
         genres: Array.isArray(m.genres) ? m.genres : [],
         release_year: m.startDate?.year || 2025,
-        source: 'BLACK X 3',
+        source: 'Hearbor 3',
         server: 'bx3'
       };
       setCache(cacheKey, detail);
@@ -1855,12 +1855,12 @@ class MangalikService {
           status: 'ONGOING',
           rating: null,
           chapters_count: 80,
-          author: 'سيرفر BLACK X 2',
-          description_ar: row.summary || `اقرأ ${title} بالترجمة العربية عبر سيرفر BLACK X 2.`,
-          description_en: row.summary || `Read ${title} on BLACK X 2.`,
+          author: 'سيرفر Hearbor 2',
+          description_ar: row.summary || `اقرأ ${title} بالترجمة العربية عبر سيرفر Hearbor 2.`,
+          description_en: row.summary || `Read ${title} on Hearbor 2.`,
           genres: [],
           release_year: null,
-          source: 'BLACK X 2',
+          source: 'Hearbor 2',
           server: 'bx2'
         };
       });
@@ -1911,12 +1911,12 @@ class MangalikService {
           status: attrs.status === 'completed' ? 'COMPLETED' : 'ONGOING',
           rating: null,
           chapters_count: Number(attrs.lastChapter) || 100,
-          author: 'سيرفر BLACK X 3 (Global HD)',
-          description_ar: attrs.description?.ar || attrs.description?.en || `اقرأ ${titleAr} عبر سيرفر BLACK X 3.`,
-          description_en: attrs.description?.en || `Read ${titleEn} on BLACK X 3.`,
+          author: 'سيرفر Hearbor 3 (Global HD)',
+          description_ar: attrs.description?.ar || attrs.description?.en || `اقرأ ${titleAr} عبر سيرفر Hearbor 3.`,
+          description_en: attrs.description?.en || `Read ${titleEn} on Hearbor 3.`,
           genres: [],
           release_year: attrs.year || 2025,
-          source: 'BLACK X 3',
+          source: 'Hearbor 3',
           server: 'bx3'
         };
       });
@@ -1963,7 +1963,7 @@ class MangalikService {
             releaseDate: attrs.publishAt ? String(attrs.publishAt).slice(0, 10) : '2026',
             server: 'bx3',
             lang,
-            scanlationGroup: lang === 'ar' ? 'ترجمة عربية • BLACK X 3' : 'الفصل الرسمي • BLACK X 3 Global'
+            scanlationGroup: lang === 'ar' ? 'ترجمة عربية • Hearbor 3' : 'الفصل الرسمي • Hearbor 3 Global'
           });
         }
       }
@@ -2097,7 +2097,7 @@ class MangalikService {
   }
 
   /* =========================================================================
-   * UNIFIED MULTI-SERVER ROUTER (BLACK X 1 + BLACK X 2 + BLACK X 3)
+   * UNIFIED MULTI-SERVER ROUTER (Hearbor 1 + Hearbor 2 + Hearbor 3)
    * ========================================================================= */
 
   /**
@@ -2160,7 +2160,7 @@ class MangalikService {
   }
 
   /**
-   * Unified search across all 8 BLACK X Manga, Manhwa & Manhua engines + AniList Global Master Index (+100,000 works) + Synonym Expansion!
+   * Unified search across all 8 Hearbor Manga, Manhwa & Manhua engines + AniList Global Master Index (+100,000 works) + Synonym Expansion!
    */
   async searchArabicManga(query, serverFilter = 'all') {
     const q = String(query || '').trim();
@@ -2336,15 +2336,15 @@ class MangalikService {
   }
 
   /**
-   * Unified chapter pages fetcher supporting all BLACK X servers:
-   * - `mm:{mangaId}:{chId}` -> BLACK X 1 (MangaMello Plus)
-   * - `az:{chId}` -> BLACK X 1 (Azorafly)
-   * - `sw:{chId}` -> BLACK X 2 (MangaSwat)
-   * - `os:{slug}:{ch}` -> BLACK X 1 (OlympusStaff)
-   * - `asq:{slug}:{ch}` -> BLACK X 2 (3asq)
-   * - `wc:{chId}` -> BLACK X 3 (WeebCentral)
-   * - `md:{chUuid}` -> BLACK X 3 (MangaDex Official v5)
-   * - `{flagshipSlug}:{chNum}` -> Auto-resolves across BLACK X 1 -> BLACK X 2 -> BLACK X 3
+   * Unified chapter pages fetcher supporting all Hearbor servers:
+   * - `mm:{mangaId}:{chId}` -> Hearbor 1 (MangaMello Plus)
+   * - `az:{chId}` -> Hearbor 1 (Azorafly)
+   * - `sw:{chId}` -> Hearbor 2 (MangaSwat)
+   * - `os:{slug}:{ch}` -> Hearbor 1 (OlympusStaff)
+   * - `asq:{slug}:{ch}` -> Hearbor 2 (3asq)
+   * - `wc:{chId}` -> Hearbor 3 (WeebCentral)
+   * - `md:{chUuid}` -> Hearbor 3 (MangaDex Official v5)
+   * - `{flagshipSlug}:{chNum}` -> Auto-resolves across Hearbor 1 -> Hearbor 2 -> Hearbor 3
    */
   async getArabicChapterPages(chapterIdentifier, preferredServer = '') {
     const raw = String(chapterIdentifier || '').trim();
@@ -2468,9 +2468,9 @@ class MangalikService {
         status: 'ONGOING',
         rating: null,
         chapters_count: 150,
-        author: 'سيرفرات BLACK X الرسمية',
-        description_ar: `اقرأ ${f.title_ar} مباشرة بجودة عالية عبر سيرفرات BLACK X 1 و BLACK X 2 و BLACK X 3.`,
-        description_en: `Read ${f.title_en} directly on BLACK X 1, BLACK X 2, and BLACK X 3.`,
+        author: 'سيرفرات Hearbor الرسمية',
+        description_ar: `اقرأ ${f.title_ar} مباشرة بجودة عالية عبر سيرفرات Hearbor 1 و Hearbor 2 و Hearbor 3.`,
+        description_en: `Read ${f.title_en} directly on Hearbor 1, Hearbor 2, and Hearbor 3.`,
         genres: Array.isArray(f.genres) ? f.genres : [],
         release_year: null
       };
@@ -2497,9 +2497,9 @@ class MangalikService {
         status: 'ONGOING',
         rating: null,
         chapters_count: 80,
-        author: 'سيرفر BLACK X 3',
-        description_ar: 'متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر BLACK X 1.',
-        description_en: 'Available on BLACK X 1 Server.',
+        author: 'سيرفر Hearbor 3',
+        description_ar: 'متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر Hearbor 1.',
+        description_en: 'Available on Hearbor 1 Server.',
         genres: [],
         release_year: null
       };
@@ -2524,9 +2524,9 @@ class MangalikService {
             status: 'ONGOING',
             rating: null,
             chapters_count: 90,
-            author: 'سيرفر BLACK X 4',
-            description_ar: s.description || `اقرأ ${s.title} بالترجمة العربية عبر سيرفر BLACK X 2.`,
-            description_en: s.description || `Read ${s.title} on BLACK X 2.`,
+            author: 'سيرفر Hearbor 4',
+            description_ar: s.description || `اقرأ ${s.title} بالترجمة العربية عبر سيرفر Hearbor 2.`,
+            description_en: s.description || `Read ${s.title} on Hearbor 2.`,
             genres: Array.isArray(s.genres) ? s.genres.map((g) => g.name).filter(Boolean) : [],
             release_year: null
           };
@@ -2555,9 +2555,9 @@ class MangalikService {
             status: 'ONGOING',
             rating: null,
             chapters_count: 60,
-            author: 'سيرفر BLACK X 2',
-            description_ar: s.summary || `اقرأ ${s.title} بالترجمة العربية عبر سيرفر BLACK X 2.`,
-            description_en: s.summary || `Read ${s.title} on BLACK X 2.`,
+            author: 'سيرفر Hearbor 2',
+            description_ar: s.summary || `اقرأ ${s.title} بالترجمة العربية عبر سيرفر Hearbor 2.`,
+            description_en: s.summary || `Read ${s.title} on Hearbor 2.`,
             genres: [],
             release_year: null
           };
@@ -2580,9 +2580,9 @@ class MangalikService {
         status: 'ONGOING',
         rating: null,
         chapters_count: 100,
-        author: 'سيرفر BLACK X 1',
-        description_ar: 'متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر BLACK X 1.',
-        description_en: 'Available on BLACK X 1 Server.',
+        author: 'سيرفر Hearbor 1',
+        description_ar: 'متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر Hearbor 1.',
+        description_en: 'Available on Hearbor 1 Server.',
         genres: [],
         release_year: null
       };
@@ -2603,9 +2603,9 @@ class MangalikService {
         status: 'ONGOING',
         rating: null,
         chapters_count: 100,
-        author: 'سيرفر BLACK X 2',
-        description_ar: 'متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر BLACK X 2.',
-        description_en: 'Available on BLACK X 2 Server.',
+        author: 'سيرفر Hearbor 2',
+        description_ar: 'متاح للقراءة المباشرة بالترجمة العربية عبر سيرفر Hearbor 2.',
+        description_en: 'Available on Hearbor 2 Server.',
         genres: [],
         release_year: null
       };
@@ -2640,9 +2640,9 @@ class MangalikService {
             status: attrs.status === 'completed' ? 'COMPLETED' : 'ONGOING',
             rating: null,
             chapters_count: Number(attrs.lastChapter) || 100,
-            author: 'سيرفر BLACK X 3 (Global HD)',
-            description_ar: attrs.description?.ar || attrs.description?.en || `${titleEn} — متاح عبر سيرفر BLACK X 3.`,
-            description_en: attrs.description?.en || `${titleEn} — Available on BLACK X 3.`,
+            author: 'سيرفر Hearbor 3 (Global HD)',
+            description_ar: attrs.description?.ar || attrs.description?.en || `${titleEn} — متاح عبر سيرفر Hearbor 3.`,
+            description_en: attrs.description?.en || `${titleEn} — Available on Hearbor 3.`,
             genres: [],
             release_year: attrs.year || 2025
           };
@@ -2664,9 +2664,9 @@ class MangalikService {
         status: 'ONGOING',
         rating: null,
         chapters_count: 120,
-        author: 'سيرفر BLACK X 3',
-        description_ar: `${title} — متاح بدقة أصلية كاملة عبر سيرفر BLACK X 3.`,
-        description_en: `${title} — Available in Full HD on BLACK X 3.`,
+        author: 'سيرفر Hearbor 3',
+        description_ar: `${title} — متاح بدقة أصلية كاملة عبر سيرفر Hearbor 3.`,
+        description_en: `${title} — Available in Full HD on Hearbor 3.`,
         genres: [],
         release_year: null
       };
@@ -2695,7 +2695,7 @@ class MangalikService {
     const chNum = parseInt(parts[1], 10) || 1;
     return {
       title: `الفصل ${chNum}`,
-      content: `الفصل ${chNum} من أرشيف سيرفرات BLACK X للروايات العربية المترجمة.`
+      content: `الفصل ${chNum} من أرشيف سيرفرات Hearbor للروايات العربية المترجمة.`
     };
   }
 }

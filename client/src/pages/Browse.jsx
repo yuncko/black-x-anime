@@ -64,13 +64,13 @@ export default function Browse() {
   // Active item and chapter for reading in MangaNovelReader
   const [readerItem, setReaderItem] = useState(null);
 
-  // Server tabs configuration (Exclusive BLACK X Branding)
+  // Server tabs configuration (Exclusive Hearbor Branding)
   const serverTabs = [
-    { id: 'all', labelAr: '🌐 جميع سيرفرات BLACK X', labelEn: '🌐 All BLACK X Servers' },
-    { id: 'bx1', labelAr: '⚡ سيرفر BLACK X 1 (مانهوا عربية)', labelEn: '⚡ BLACK X 1 (AR Manhwa)' },
-    { id: 'bx2', labelAr: '📖 سيرفر BLACK X 2 (مانجا عربية)', labelEn: '📖 BLACK X 2 (AR Manga)' },
-    { id: 'bx3', labelAr: '👑 سيرفر BLACK X 3 (الفهرس العالمي)', labelEn: '👑 BLACK X 3 (Global Index)' },
-    { id: 'bx4', labelAr: '🔎 سيرفر BLACK X 4 (بحث فقط)', labelEn: '🔎 BLACK X 4 (Search only)', disabled: !serverFourEnabled }
+    { id: 'all', labelAr: '🌐 جميع سيرفرات Hearbor', labelEn: '🌐 All Hearbor Servers' },
+    { id: 'bx1', labelAr: '⚡ سيرفر Hearbor 1 (مانهوا عربية)', labelEn: '⚡ Hearbor 1 (AR Manhwa)' },
+    { id: 'bx2', labelAr: '📖 سيرفر Hearbor 2 (مانجا عربية)', labelEn: '📖 Hearbor 2 (AR Manga)' },
+    { id: 'bx3', labelAr: '👑 سيرفر Hearbor 3 (الفهرس العالمي)', labelEn: '👑 Hearbor 3 (Global Index)' },
+    { id: 'bx4', labelAr: '🔎 سيرفر Hearbor 4 (بحث فقط)', labelEn: '🔎 Hearbor 4 (Search only)', disabled: !serverFourEnabled }
   ];
 
   // Filter chips configuration (including Korean Manhwa, Japanese Manga, Chinese Manhua)
@@ -121,7 +121,7 @@ export default function Browse() {
       });
       if (!resp.ok) return [];
       const json = await resp.json();
-      // Ecchi / Harem / Isekai are hidden from BLACK X (shared/contentFilter.js).
+      // Ecchi / Harem / Isekai are hidden from Hearbor (shared/contentFilter.js).
       const media = (json?.data?.Page?.media || []).filter((m) => !hasBlockedGenre(m.genres, m.tags));
       return media.map((m) => {
         const titleEn = m.title?.english || m.title?.romaji || m.title?.native || `Manga #${m.id}`;
@@ -146,7 +146,7 @@ export default function Browse() {
           chapters_count: m.chapters || null,
           status: m.status === 'FINISHED' ? 'COMPLETED' : 'ONGOING',
           genres: Array.isArray(m.genres) ? m.genres : [],
-          source: 'BLACK X 3',
+          source: 'Hearbor 3',
           server: 'bx3'
         };
       });
@@ -218,7 +218,7 @@ export default function Browse() {
     loadLibrary(serverFilter);
   }, [loadLibrary, serverFilter]);
 
-  // Live search against all 8 BLACK X engines + AniList Master Global Index
+  // Live search against all 8 Hearbor engines + AniList Master Global Index
   const handleSearch = useCallback(async (e, srvOverride, customQuery) => {
     e?.preventDefault?.();
     const q = (customQuery !== undefined ? customQuery : query).trim();
@@ -255,7 +255,7 @@ export default function Browse() {
         chapters_count: r.chapters_count ?? r.chaptersCount ?? null,
         status: r.status || '',
         genres: r.genres || [],
-        source: r.source || 'BLACK X',
+        source: r.source || 'Hearbor',
         server: r.server || 'bx1'
       }));
 
@@ -402,7 +402,7 @@ export default function Browse() {
               borderRadius: '99px'
             }}
           >
-            ⚡ {lang === 'ar' ? 'المصدر الحصري: سيرفرات BLACK X' : 'Source: BLACK X'}
+            ⚡ {lang === 'ar' ? 'المصدر الحصري: سيرفرات Hearbor' : 'Source: Hearbor'}
           </span>
         </div>
         <p style={{ margin: '0.5rem 0 0', color: 'var(--ink-dim)', fontSize: '0.94rem' }}>
@@ -506,8 +506,8 @@ export default function Browse() {
                     fontWeight: 900
                   }}
                 >
-                  <img src="/blackx-logo.png" alt="BLACK X" style={{ width: '18px', height: '18px', borderRadius: '5px', objectFit: 'cover' }} />
-                  <span>BLACK X original</span>
+                  <img src="/blackx-logo.png" alt="Hearbor" style={{ width: '18px', height: '18px', borderRadius: '5px', objectFit: 'cover' }} />
+                  <span>Hearbor original</span>
                 </span>
                 <span
                   style={{
@@ -669,8 +669,8 @@ export default function Browse() {
         {serverFilter === 'bx4' && (
           <p style={{ margin: '0.6rem 0 0', color: 'var(--ink-dim)', fontSize: '0.8rem' }}>
             {!serverFourEnabled
-              ? (lang === 'ar' ? 'مصدر BLACK X 4 غير مفعّل؛ أضف ANIPROJECT_API_URL إلى إعدادات الخادم.' : 'BLACK X 4 is not configured; set ANIPROJECT_API_URL on the server.')
-              : (lang === 'ar' ? 'BLACK X 4 مصدر للبحث والقراءة بالعنوان؛ لا يوفّر فهرس تصفح أو فصولاً عربية مضمونة.' : 'BLACK X 4 supports title search and reading; it has no browse feed or guaranteed Arabic chapters.')}
+              ? (lang === 'ar' ? 'مصدر Hearbor 4 غير مفعّل؛ أضف ANIPROJECT_API_URL إلى إعدادات الخادم.' : 'Hearbor 4 is not configured; set ANIPROJECT_API_URL on the server.')
+              : (lang === 'ar' ? 'Hearbor 4 مصدر للبحث والقراءة بالعنوان؛ لا يوفّر فهرس تصفح أو فصولاً عربية مضمونة.' : 'Hearbor 4 supports title search and reading; it has no browse feed or guaranteed Arabic chapters.')}
           </p>
         )}
       </div>
@@ -750,7 +750,7 @@ export default function Browse() {
           <EmptyState
             icon="📚"
             title={serverFilter === 'bx4' && !query
-              ? (lang === 'ar' ? 'ابحث عن عنوان مانجا في سيرفر BLACK X 4' : 'Search for a manga title on BLACK X 4')
+              ? (lang === 'ar' ? 'ابحث عن عنوان مانجا في سيرفر Hearbor 4' : 'Search for a manga title on Hearbor 4')
               : (lang === 'ar' ? 'لم يتم العثور على أعمال مطابقة' : 'No titles matched your search')}
           >
             <button
@@ -854,7 +854,7 @@ export default function Browse() {
                   {lang === 'ar' ? item.title_ar : item.title_en}
                 </h3>
 
-                {/* Real author / year only (no invented "BLACK X Manga · 2024"). */}
+                {/* Real author / year only (no invented "Hearbor Manga · 2024"). */}
                 {item.author || item.release_year ? (
                   <div style={{ fontSize: '0.78rem', color: 'var(--ink-dim)', marginBottom: '0.65rem' }}>
                     {[item.author ? `✍️ ${item.author}` : '', item.release_year || ''].filter(Boolean).join(' · ')}
@@ -1005,7 +1005,7 @@ export default function Browse() {
                     : (lang === 'ar' ? 'لا يوجد تقييم متاح' : 'No rating available')}
                 </div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--ink-dim)' }}>
-                  {lang === 'ar' ? 'المصدر:' : 'Source:'} <strong style={{ color: '#38bdf8' }}>سيرفرات BLACK X</strong>
+                  {lang === 'ar' ? 'المصدر:' : 'Source:'} <strong style={{ color: '#38bdf8' }}>سيرفرات Hearbor</strong>
                 </div>
               </div>
 
@@ -1110,7 +1110,7 @@ export default function Browse() {
               {/* Chapters list */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
                 <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800 }}>
-                  📑 {lang === 'ar' ? 'الفصول المتاحة من سيرفرات BLACK X' : 'Chapters available on BLACK X'}
+                  📑 {lang === 'ar' ? 'الفصول المتاحة من سيرفرات Hearbor' : 'Chapters available on Hearbor'}
                 </h4>
                 <span style={{ fontSize: '0.8rem', color: 'var(--ink-dim)' }}>
                   {itemChapters.length} {lang === 'ar' ? 'فصل' : 'chapters'}
@@ -1121,7 +1121,7 @@ export default function Browse() {
                 <div style={{ padding: '2rem', textAlign: 'center' }}>
                   <LiquidLoader />
                   <p style={{ fontSize: '0.85rem', color: 'var(--ink-dim)', marginTop: '0.5rem' }}>
-                    {lang === 'ar' ? 'جلب الفصول المباشرة من سيرفرات BLACK X...' : 'Fetching live chapters from BLACK X...'}
+                    {lang === 'ar' ? 'جلب الفصول المباشرة من سيرفرات Hearbor...' : 'Fetching live chapters from Hearbor...'}
                   </p>
                 </div>
               ) : itemChapters.length === 0 ? (

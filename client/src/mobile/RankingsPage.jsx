@@ -7,8 +7,8 @@ const STATUS_EN = { RELEASING: 'Airing', FINISHED: 'Finished', NOT_YET_RELEASED:
 
 /**
  * «الترتيب» in the app interface (website only, 2026-10-17): /api/anime/rankings — AniList's
- * top-rated titles with their AniList average, plus the BLACK X members' own votes only when
- * someone really voted. A row opens the title on BLACK X (matched by its MAL id).
+ * top-rated titles with their AniList average, plus the Hearbor members' own votes only when
+ * someone really voted. A row opens the title on Hearbor (matched by its MAL id).
  */
 export default function RankingsPage({ isRtl, dataSaver, loadRankings, onOpenRanked }) {
   const [list, setList] = useState(null);
@@ -54,8 +54,8 @@ export default function RankingsPage({ isRtl, dataSaver, loadRankings, onOpenRan
     <>
       <p className="bxp-lead">
         {isRtl
-          ? 'أعلى الأعمال تقييمًا على AniList (متوسط تقييم المشاهدين هناك). تقييم أعضاء BLACK X بيظهر بس لو حد قيّم فعلًا.'
-          : "AniList's top-rated titles (its viewers' average). BLACK X members' score shows only when someone really voted."}
+          ? 'أعلى الأعمال تقييمًا على AniList (متوسط تقييم المشاهدين هناك). تقييم أعضاء Hearbor بيظهر بس لو حد قيّم فعلًا.'
+          : "AniList's top-rated titles (its viewers' average). Hearbor members' score shows only when someone really voted."}
       </p>
       <ol className="bx-rank-list">
         {list.map((m) => {
@@ -100,7 +100,7 @@ export default function RankingsPage({ isRtl, dataSaver, loadRankings, onOpenRan
                     <span>
                       {/* the API sends members' average on AniList's 0–100 scale (8.5 → 85) */}
                       {(Number(m.communityScore) / 10).toFixed(1)}
-                      <small>{isRtl ? `${m.votesCount} صوت على BLACK X` : `${m.votesCount} BLACK X votes`}</small>
+                      <small>{isRtl ? `${m.votesCount} صوت على Hearbor` : `${m.votesCount} Hearbor votes`}</small>
                     </span>
                   ) : null}
                 </span>

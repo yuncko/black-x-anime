@@ -1134,7 +1134,7 @@ export default function ProfileDashboard({ onOpenAuth }) {
         />
       )}
 
-      {/* ================= TAB: 2026 BLACK X Wrapped Card ================= */}
+      {/* ================= TAB: 2026 Hearbor Wrapped Card ================= */}
       {activeTab === 'wrapped' && (
         <WrappedCardPanel
           user={user}
@@ -2020,7 +2020,7 @@ export default function ProfileDashboard({ onOpenAuth }) {
               <div style={{ display: 'flex', gap: '0.65rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
                 <a
                   href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                    `انضم معي إلى منصة BLACK X لمشاهدة وقراءة أحدث الأنمي والمانجا بجودة فائقة! ${referralData?.referralLink || window.location.origin}`
+                    `انضم معي إلى منصة Hearbor لمشاهدة وقراءة أحدث الأنمي والمانجا بجودة فائقة! ${referralData?.referralLink || window.location.origin}`
                   )}`}
                   target="_blank"
                   rel="noreferrer"
@@ -2031,7 +2031,7 @@ export default function ProfileDashboard({ onOpenAuth }) {
                 </a>
                 <a
                   href={`https://t.me/share/url?url=${encodeURIComponent(referralData?.referralLink || window.location.origin)}&text=${encodeURIComponent(
-                    'انضم معي إلى منصة BLACK X واستمتع بمشاهدة أحدث الأنمي مجاناً!'
+                    'انضم معي إلى منصة Hearbor واستمتع بمشاهدة أحدث الأنمي مجاناً!'
                   )}`}
                   target="_blank"
                   rel="noreferrer"
@@ -2181,7 +2181,7 @@ export default function ProfileDashboard({ onOpenAuth }) {
                   className="input"
                   value={footerNotice}
                   onChange={(e) => setFooterNotice(e.target.value)}
-                  placeholder="BLACK X — Interactive Anime Platform"
+                  placeholder="Hearbor — Interactive Anime Platform"
                   required
                 />
               </div>

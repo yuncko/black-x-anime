@@ -1,12 +1,12 @@
 /**
- * Ecchi, Harem and Isekai are hidden from the whole of BLACK X (owner's decisions, 2026-10-16:
+ * Ecchi, Harem and Isekai are hidden from the whole of Hearbor (owner's decisions, 2026-10-16:
  * the APK first, then the website on phones and computers). The rules are shared with the app
  * and the website pages (shared/contentFilter.js); this module applies them to every list the
  * website API returns, so no page can forget it:
  *
- * - by genre: anything carrying a hidden genre/tag (BLACK X 1 tags, AniList genres/tags, the
+ * - by genre: anything carrying a hidden genre/tag (Hearbor 1 tags, AniList genres/tags, the
  *   genres other servers report);
- * - by identity: BLACK X 1's hidden titles (fetched from Algolia, cached) are also recognised by
+ * - by identity: Hearbor 1's hidden titles (fetched from Algolia, cached) are also recognised by
  *   slug/objectID — saved lists carry no genres — and by exact title on the other servers, whose
  *   genres are often placeholders.
  *
@@ -62,7 +62,7 @@ async function load() {
     }
   } catch (err) {
     failedAt = Date.now();
-    console.warn('[hiddenTitles] could not load the hidden BLACK X 1 titles:', err?.message || err);
+    console.warn('[hiddenTitles] could not load the hidden Hearbor 1 titles:', err?.message || err);
   } finally {
     loading = null;
   }
@@ -95,7 +95,7 @@ function matchesIdentity(item, index) {
   const slug = String(item.slug || '');
   if (slug && index.slugs.has(slug)) return true;
   if (item.objectID != null && index.ids.has(String(item.objectID))) return true;
-  // BLACK X 1 records carry their real tags (checked by genre); titles are only matched for the
+  // Hearbor 1 records carry their real tags (checked by genre); titles are only matched for the
   // other servers and for saved entries, which have no reliable genres.
   if (Array.isArray(item.tagsAr) && item.tagsAr.length) return false;
   for (const name of [item.titleRomaji, item.title, item.titleEn, item.name, item.title_romaji, item.title_english, item.title_en, item.englishTitle]) {

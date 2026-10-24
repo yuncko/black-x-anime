@@ -2,7 +2,7 @@
   "name": "blackx-apk-touch-test",
   "private": true,
   "type": "module",
-  "description": "Real-touch regression suite for the BLACK X APK UI (run ./run.sh; installs into /tmp, never into the repo)",
+  "description": "Real-touch regression suite for the Hearbor APK UI (run ./run.sh; installs into /tmp, never into the repo)",
   "dependencies": {
     "@sparticuz/chromium": "153.0.0",
     "puppeteer-core": "25.14.0"

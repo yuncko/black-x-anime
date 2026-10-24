@@ -81,7 +81,7 @@ export default function Watch({ onOpenAuth }) {
         if (requestId === sourceLoadIdRef.current) setSourcesLoading(false);
       });
 
-    // BLACK X 4 already includes upstream-supplied download links in the
+    // Hearbor 4 already includes upstream-supplied download links in the
     // episode response; do not fetch the same provider episode a second time.
     if (!isAniProject) {
       api.get(`/api/stream/download-sources/${slug}/${episode}`)
@@ -265,11 +265,11 @@ export default function Watch({ onOpenAuth }) {
       </div>
     );
   }
-  // Ecchi / Harem / Isekai are hidden from BLACK X (shared/contentFilter.js; the API marks them).
+  // Ecchi / Harem / Isekai are hidden from Hearbor (shared/contentFilter.js; the API marks them).
   if (show && isHiddenAnime(show)) {
     return (
       <div className="glass" style={{ padding: '2.5rem' }}>
-        <EmptyState icon="✕" title={lang === 'ar' ? 'العمل ده مش متاح على BLACK X' : 'This title is not available on BLACK X'}>
+        <EmptyState icon="✕" title={lang === 'ar' ? 'العمل ده مش متاح على Hearbor' : 'This title is not available on Hearbor'}>
           <button type="button" className="btn btn--ghost" onClick={() => navigate('/')}>{t('common.back')}</button>
         </EmptyState>
       </div>
@@ -347,8 +347,8 @@ export default function Watch({ onOpenAuth }) {
           {isAniProject && (
             <div className="glass" style={{ marginTop: '0.85rem', padding: '0.8rem 1rem', color: 'rgba(255,255,255,0.8)' }}>
               {lang === 'ar'
-                ? '🔎 سيرفر BLACK X 4 — جودة البث والترجمة حسب الخادم المصدر؛ إذا تعذر التشغيل، تحقق من إعدادات CORS أو ANIPROJECT_MEDIA_HOSTS.'
-                : '🔎 BLACK X 4 — quality and subtitles depend on the upstream server. If playback fails, check CORS or ANIPROJECT_MEDIA_HOSTS.'}
+                ? '🔎 سيرفر Hearbor 4 — جودة البث والترجمة حسب الخادم المصدر؛ إذا تعذر التشغيل، تحقق من إعدادات CORS أو ANIPROJECT_MEDIA_HOSTS.'
+                : '🔎 Hearbor 4 — quality and subtitles depend on the upstream server. If playback fails, check CORS or ANIPROJECT_MEDIA_HOSTS.'}
             </div>
           )}
 
@@ -359,7 +359,7 @@ export default function Watch({ onOpenAuth }) {
                 <Link to={`/show/${slug}${srcSuffix}`} style={{ color: '#ffffff', fontWeight: 800 }}>{title}</Link>
                 {show?.titleAr && lang !== 'ar' && <span> · {show.titleAr}</span>}
                 <span style={{ fontSize: '0.72rem', padding: '0.16rem 0.65rem', borderRadius: '999px', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.28)', color: '#ffffff', fontWeight: 900 }}>
-                  {show?.sourceName || (sourceParam === 'aniproject' ? 'سيرفر BLACK X 4' : sourceParam === 'english' ? '🌐 سيرفر BLACK X 3' : sourceParam === 'anime3rb' ? '⚡ سيرفر BLACK X 2' : '👑 سيرفر BLACK X 1')}
+                  {show?.sourceName || (sourceParam === 'aniproject' ? 'سيرفر Hearbor 4' : sourceParam === 'english' ? '🌐 سيرفر Hearbor 3' : sourceParam === 'anime3rb' ? '⚡ سيرفر Hearbor 2' : '👑 سيرفر Hearbor 1')}
                 </span>
               </div>
               <h1 className="watch-meta__title">
@@ -431,7 +431,7 @@ export default function Watch({ onOpenAuth }) {
                 {episodeData.downloads.filter((dl) => dl.downloadUrl).map((dl) => (
                   <a key={dl.id} className="btn btn--ghost btn--sm" href={dl.downloadUrl}
                     target="_blank" rel="noopener noreferrer">
-                    📥 {dl.server || 'BLACK X 4'}{dl.quality && dl.quality !== 'Download' ? ` · ${dl.quality}` : ''}
+                    📥 {dl.server || 'Hearbor 4'}{dl.quality && dl.quality !== 'Download' ? ` · ${dl.quality}` : ''}
                   </a>
                 ))}
               </div>
@@ -515,7 +515,7 @@ export default function Watch({ onOpenAuth }) {
                   <div className="wit-sec-header__right">
                     <span className="wit-sec-header__bar" />
                     <h3 className="wit-sec-header__title" style={{ fontSize: '1rem' }}>
-                      <span>📥</span> {lang === 'ar' ? 'جدول تحميل الحلقة المباشر (BLACK X)' : 'Direct Episode Download Table (BLACK X)'}
+                      <span>📥</span> {lang === 'ar' ? 'جدول تحميل الحلقة المباشر (Hearbor)' : 'Direct Episode Download Table (Hearbor)'}
                     </h3>
                   </div>
                   <button

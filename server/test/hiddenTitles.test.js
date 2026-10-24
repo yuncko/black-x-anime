@@ -1,5 +1,5 @@
 // Ecchi / Harem / Isekai hidden from the website API (server/src/lib/hiddenTitles.js) and the
-// rules shared with the app (shared/contentFilter.js). No network: the hidden BLACK X 1 titles
+// rules shared with the app (shared/contentFilter.js). No network: the hidden Hearbor 1 titles
 // are injected with setHiddenIndexForTests().
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -60,7 +60,7 @@ test('title keys ignore punctuation and refuse very short names', () => {
   assert.equal(titleKey('Air'), '');
 });
 
-test('website lists: by genre, by BLACK X 1 identity, by exact title on other servers', async () => {
+test('website lists: by genre, by Hearbor 1 identity, by exact title on other servers', async () => {
   setHiddenIndexForTests(HIDDEN);
   const list = [
     { slug: 'aw-mushoku-tensei', title: 'whatever' }, // saved entry: no genres, known slug
@@ -71,7 +71,7 @@ test('website lists: by genre, by BLACK X 1 identity, by exact title on other se
     { slug: 'aw-naruto', title: 'Naruto', tagsAr: ['اكشن'] },
     { slug: 'aw-some-isekai', title: 'Some Isekai', tagsAr: ['عالم مختلف'] },
     { slug: 'en-9', titleEn: 'Plain Show', genres: ['Ecchi'] },
-    { slug: 'aw-overlord-movie', title: 'Overlord IV', tagsAr: ['اكشن'] } // BLACK X 1 record: judged by its own tags
+    { slug: 'aw-overlord-movie', title: 'Overlord IV', tagsAr: ['اكشن'] } // Hearbor 1 record: judged by its own tags
   ];
   const kept = await filterAnimeList(list);
   assert.deepEqual(kept.map((i) => i.slug), ['a3rb-xK', 'aw-naruto', 'aw-overlord-movie']);

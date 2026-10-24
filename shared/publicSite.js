@@ -1,5 +1,5 @@
 /**
- * Where the BLACK X website lives — one place for every absolute link to it.
+ * Where the Hearbor website lives — one place for every absolute link to it.
  *
  * Since 2026-10-17 the site runs on Google AI Studio (Cloud Run) at black-x-anime.ai.studio:
  * Vercel paused the old black-x-anime.me deployment (Hobby limits). The website itself always

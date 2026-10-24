@@ -1,4 +1,4 @@
-# BLACK X ⚡ — Anime Streaming Platform
+# Hearbor ⚡ — Anime Streaming Platform
 
 A bilingual (English / العربية) **anime streaming platform** with a Liquid-Glass UI:
 custom video player, live catalog + streams from **witanime.site**, AniList discovery,
@@ -20,12 +20,12 @@ favorites (watchlist) and continue-watching — all persisted per user.
 - 🔐 **Auth** — JWT httpOnly cookies, demo accounts below
 - 📡 **AniList GraphQL** — trending/season discovery with live metadata (never hardcoded)
 
-## Optional BLACK X 4 — AniProject v3 anime + manga source
+## Optional Hearbor 4 — AniProject v3 anime + manga source
 
 [**AniProject v3.0.0**](https://github.com/ErickLimaS/anime-website/releases/tag/v3.0.0)
 provides **application source code**, not a content API at the release URL. Its
 backend calls a separately hosted Consumet API (Zoro anime / MangaDex manga)
-and requires Redis. BLACK X integrates with that **backend** when you provide
+and requires Redis. Hearbor integrates with that **backend** when you provide
 its URL; it does not embed the upstream Next.js frontend, copy its code/assets,
 or depend on a public demo website.
 
@@ -33,26 +33,26 @@ or depend on a public demo website.
    (including its Redis and Consumet settings). Check its non-commercial
    [CC BY-NC-SA 4.0 license](https://github.com/ErickLimaS/anime-website/blob/v3.0.0/LICENSE.md)
    and the rights/terms of the underlying media before deployment.
-2. Set `ANIPROJECT_API_URL=https://your-aniproject-backend.example` in **BLACK X's
+2. Set `ANIPROJECT_API_URL=https://your-aniproject-backend.example` in **Hearbor's
    server** environment (Vercel → Project → Settings → Environment Variables),
    then redeploy. Never set it to the GitHub release, the frontend URL, or a
    Consumet URL. For local development only, `http://localhost:<port>` is accepted.
 3. Optionally set `ANIPROJECT_MEDIA_HOSTS=cdn.example.com,media.example.net` to
-   allowlist *only* the actual media CDN hosts for BLACK X's video/HLS proxy.
+   allowlist *only* the actual media CDN hosts for Hearbor's video/HLS proxy.
    Without it, browser-direct playback is tried; HLS then depends on upstream
    CORS. Add every playlist/segment host that needs proxying. An entry also
    permits its subdomains: only list domains whose subdomains you trust. Do not
    use `*`, scheme prefixes, private addresses, or untrusted domains.
 
-With the backend configured, BLACK X 4 appears in the bilingual server selector
+With the backend configured, Hearbor 4 appears in the bilingual server selector
 and **all-source searches**. Anime search → show → episodes → playback (HLS via
 hls.js, MP4 via the existing player) and manga search → chapters → reader work
 through the existing pages. The backend offers **search only** for these
 providers: no latest feed, browsable catalog, verified counts, guaranteed
 Arabic translation, or guaranteed working video/download link is claimed.
-BLACK X 4 does not inherit the other servers' VIP release delay or fabricated
+Hearbor 4 does not inherit the other servers' VIP release delay or fabricated
 quality badges; download links appear only when supplied by the upstream.
-MangaDex UUID chapters fall back to BLACK X's existing MangaDex at-home adapter
+MangaDex UUID chapters fall back to Hearbor's existing MangaDex at-home adapter
 if AniProject v3 returns an empty page list. Source 4 is hidden/disabled until
 configured; the other sources remain available if its backend goes down.
 
@@ -185,7 +185,7 @@ without data, sign-in or video.
 ```bash
 git init -b main
 git add .
-git commit -m "BLACK X — anime streaming platform"
+git commit -m "Hearbor — anime streaming platform"
 git remote add origin https://github.com/<you>/black-x.git
 git push -u origin main
 ```

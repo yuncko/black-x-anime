@@ -1,5 +1,5 @@
 /**
- * Latest BLACK X Mobile APK release.
+ * Latest Hearbor Mobile APK release.
  *
  * Shared by the server (GET /api/app/config tells installed apps about it) and the
  * APK itself (client/src/mobile/bxServers.js reads its own version from here), so a
@@ -15,7 +15,7 @@ import { PUBLIC_SITE_ORIGIN } from './publicSite.js';
 export const APK_RELEASE = Object.freeze({
   version: '19.0',
   minSupported: '15.0',
-  url: `${PUBLIC_SITE_ORIGIN}/BLACK-X-Mobile-120Hz.apk`,
+  url: `${PUBLIC_SITE_ORIGIN}/HEARBOR-Mobile-120Hz.apk`,
   publishedAt: '2026-10-18',
   notesAr: Object.freeze([
     'واجهة جديدة بالكامل مستوحاة من Nuvio — تصميم عصري موحّد على كل الشاشات',

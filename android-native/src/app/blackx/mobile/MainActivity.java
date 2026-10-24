@@ -661,9 +661,9 @@ public class MainActivity extends BridgeActivity {
                         Class<?> chanCls = Class.forName("android.app.NotificationChannel");
                         Constructor<?> chanCtor = chanCls.getConstructor(String.class, CharSequence.class, int.class);
                         // IMPORTANCE_HIGH = 4 (Heads-Up + Sound)
-                        Object channel = chanCtor.newInstance(channelId, "BLACK X Episode Alerts", 4);
+                        Object channel = chanCtor.newInstance(channelId, "Hearbor Episode Alerts", 4);
                         Method setDesc = chanCls.getMethod("setDescription", String.class);
-                        setDesc.invoke(channel, "إشعارات نزول حلقات الأنمي والفصول الجديدة على BLACK X");
+                        setDesc.invoke(channel, "إشعارات نزول حلقات الأنمي والفصول الجديدة على Hearbor");
                         Method createChan = nm.getClass().getMethod("createNotificationChannel", chanCls);
                         createChan.invoke(nm, channel);
                     }
@@ -691,7 +691,7 @@ public class MainActivity extends BridgeActivity {
                     } catch (Exception ignored) {}
 
                     builderCls.getMethod("setSmallIcon", int.class).invoke(builder, iconRes);
-                    builderCls.getMethod("setContentTitle", CharSequence.class).invoke(builder, title != null ? title : "BLACK X");
+                    builderCls.getMethod("setContentTitle", CharSequence.class).invoke(builder, title != null ? title : "Hearbor");
                     builderCls.getMethod("setContentText", CharSequence.class).invoke(builder, body != null ? body : "");
                     builderCls.getMethod("setAutoCancel", boolean.class).invoke(builder, true);
 

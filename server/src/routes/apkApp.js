@@ -1,5 +1,5 @@
 /**
- * /api/app/* — server API for the BLACK X APK (v16+).
+ * /api/app/* — server API for the Hearbor APK (v16+).
  *
  * Everything that used to be read or written straight from the phone into the
  * public Firestore `settings` collection goes through here: app config (VIP
@@ -344,7 +344,7 @@ router.post('/requests', async (req, res) => {
     id: randomId('req'),
     type,
     text,
-    author: clip(session?.data?.displayName || session?.data?.username || 'زائر BLACK X', 80),
+    author: clip(session?.data?.displayName || session?.data?.username || 'زائر Hearbor', 80),
     username: clip(session?.data?.username || '', 40),
     createdAt: nowIso()
   };

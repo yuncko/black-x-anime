@@ -1,9 +1,9 @@
 /**
- * BLACK X i18n dictionaries — English & Arabic (streaming platform edition).
+ * Hearbor i18n dictionaries — English & Arabic (streaming platform edition).
  */
 export const translations = {
   en: {
-    'app.name': 'BLACK X',
+    'app.name': 'Hearbor',
     'app.tagline': 'Anime Streaming Platform',
     'app.taglineLong': 'Stream every episode. Track your shows. Own the night.',
     'app.dir': 'ltr',
@@ -102,7 +102,7 @@ export const translations = {
     'common.optional': 'Optional',
 
     'auth.welcomeBack': 'Welcome back',
-    'auth.loginTitle': 'Log in to BLACK X',
+    'auth.loginTitle': 'Log in to Hearbor',
     'auth.registerTitle': 'Create your account',
     'auth.subtitle': 'Your watchlist. Your rules.',
     'auth.username': 'Username',
@@ -116,7 +116,7 @@ export const translations = {
     'auth.noAccount': 'New here?',
     'auth.haveAccount': 'Already have an account?',
     'auth.loginSuccess': 'Welcome back, {{name}}!',
-    'auth.registerSuccess': 'Account created. Welcome to BLACK X!',
+    'auth.registerSuccess': 'Account created. Welcome to Hearbor!',
     'auth.errGeneric': 'Something went wrong. Try again.',
 
     'dashboard.heroBadge': 'Now streaming',
@@ -124,11 +124,11 @@ export const translations = {
     'dashboard.heroCta2': 'Browse library',
     'hero.searchPlaceholder': 'Search anime by title, genre, characters…',
     'hero.searchAction': 'Search',
-    'search.allSources': 'All BLACK X servers',
-    'search.sourceAniList': 'BLACK X database',
+    'search.allSources': 'All Hearbor servers',
+    'search.sourceAniList': 'Hearbor database',
     'search.sourceStreaming': 'Streaming catalog',
     'search.resultsCount': 'Found {{n}} anime results',
-    'search.searchingExternal': 'Searching BLACK X anime catalog…',
+    'search.searchingExternal': 'Searching Hearbor anime catalog…',
     'search.clear': 'Clear search',
     'search.dynamicResultsTitle': 'Live search results',
     'hero.trendingTags': 'Popular searches:',
@@ -141,10 +141,10 @@ export const translations = {
     'dashboard.continue': 'Continue watching',
     'dashboard.continueSub': 'Pick up right where you left off',
     'dashboard.latest': 'Latest episodes',
-    'dashboard.latestSub': 'Fresh drops — live from BLACK X',
+    'dashboard.latestSub': 'Fresh drops — live from Hearbor',
     'dashboard.favorites': 'Your favorites',
     'dashboard.trending': 'Trending now',
-    'dashboard.trendingSub': 'Live metadata from BLACK X',
+    'dashboard.trendingSub': 'Live metadata from Hearbor',
     'dashboard.emptyContinue': 'Nothing in progress yet — start watching something.',
     'dashboard.emptyFavorites': 'No favorites yet — tap the ♥ on any show.',
     'dashboard.loginPrompt': 'Log in to build your list and keep your progress.',
@@ -263,7 +263,7 @@ export const translations = {
     'mylist.progress': '{{percent}}% watched',
 
     'browse.title': 'Browse & Search',
-    'browse.subtitle': 'Find any anime — powered by the live BLACK X Cloud catalog.',
+    'browse.subtitle': 'Find any anime — powered by the live Hearbor Cloud catalog.',
     'browse.searchPh': 'Search for an anime…',
     'browse.results': 'Results for “{{q}}”',
     'browse.latest': 'Latest episodes',
@@ -271,8 +271,8 @@ export const translations = {
     'browse.sourceNote': 'High-Speed Cloud Stream',
     'browse.series': 'Series',
 
-    'footer.tagline': 'Built for the fandom · Ultra-Fast Streaming · Powered by BLACK X · Bilingual by design',
-    'footer.rights': 'BLACK X — demo project',
+    'footer.tagline': 'Built for the fandom · Ultra-Fast Streaming · Powered by Hearbor · Bilingual by design',
+    'footer.rights': 'Hearbor — demo project',
 
     'nav.profile': 'Profile & Settings',
     'nav.devConsole': 'Developer Console',
@@ -341,7 +341,7 @@ export const translations = {
   },
 
   ar: {
-    'app.name': 'BLACK X',
+    'app.name': 'Hearbor',
     'app.tagline': 'منصة بث الأنمي',
     'app.taglineLong': 'شاهد كل حلقة. تابع أعمالك. امتلك الليل.',
     'app.dir': 'rtl',
@@ -440,7 +440,7 @@ export const translations = {
     'common.optional': 'اختياري',
 
     'auth.welcomeBack': 'مرحباً بعودتك',
-    'auth.loginTitle': 'سجّل الدخول إلى BLACK X',
+    'auth.loginTitle': 'سجّل الدخول إلى Hearbor',
     'auth.registerTitle': 'أنشئ حسابك',
     'auth.subtitle': 'قائمتك. قواعدك.',
     'auth.username': 'اسم المستخدم',
@@ -454,7 +454,7 @@ export const translations = {
     'auth.noAccount': 'جديد هنا؟',
     'auth.haveAccount': 'لديك حساب بالفعل؟',
     'auth.loginSuccess': 'مرحباً بعودتك، {{name}}!',
-    'auth.registerSuccess': 'تم إنشاء الحساب. مرحباً بك في BLACK X!',
+    'auth.registerSuccess': 'تم إنشاء الحساب. مرحباً بك في Hearbor!',
     'auth.errGeneric': 'حدث خطأ ما. حاول مرة أخرى.',
 
     'dashboard.heroBadge': 'يُبثّ الآن',
@@ -462,11 +462,11 @@ export const translations = {
     'dashboard.heroCta2': 'تصفّح المكتبة',
     'hero.searchPlaceholder': 'ابحث عن الأنمي بالاسم، التصنيف، أو الشخصيات…',
     'hero.searchAction': 'بحث',
-    'search.allSources': 'كل سيرفرات BLACK X',
-    'search.sourceAniList': 'قاعدة بيانات BLACK X',
+    'search.allSources': 'كل سيرفرات Hearbor',
+    'search.sourceAniList': 'قاعدة بيانات Hearbor',
     'search.sourceStreaming': 'حلقات البث المباشر',
     'search.resultsCount': 'تم العثور على {{n}} نتيجة',
-    'search.searchingExternal': 'جارٍ البحث في سيرفرات BLACK X…',
+    'search.searchingExternal': 'جارٍ البحث في سيرفرات Hearbor…',
     'search.clear': 'مسح البحث',
     'search.dynamicResultsTitle': 'نتائج البحث المباشرة',
     'hero.trendingTags': 'عمليات بحث شائعة:',
@@ -479,10 +479,10 @@ export const translations = {
     'dashboard.continue': 'تابع المشاهدة',
     'dashboard.continueSub': 'أكمل من حيث توقفت',
     'dashboard.latest': 'أحدث الحلقات',
-    'dashboard.latestSub': 'حلقات جديدة — مباشرة من سيرفرات BLACK X',
+    'dashboard.latestSub': 'حلقات جديدة — مباشرة من سيرفرات Hearbor',
     'dashboard.favorites': 'المفضلة لديك',
     'dashboard.trending': 'الرائج الآن',
-    'dashboard.trendingSub': 'بيانات حية من BLACK X',
+    'dashboard.trendingSub': 'بيانات حية من Hearbor',
     'dashboard.emptyContinue': 'لا شيء قيد المشاهدة بعد — ابدأ بشيء ما.',
     'dashboard.emptyFavorites': 'لا مفضلات بعد — اضغط ♥ على أي مسلسل.',
     'dashboard.loginPrompt': 'سجّل الدخول لبناء قائمتك وحفظ تقدّمك.',
@@ -508,7 +508,7 @@ export const translations = {
     'rankings.filterAll': 'كل التصنيفات',
     'rankings.syncActive': 'المزامنة المباشرة الفورية مع Firestore نشطة عبر كل الأجهزة',
 
-    'community.title': 'مجتمع BLACK X',
+    'community.title': 'مجتمع Hearbor',
     'community.sub': 'مساحتك للتفاعل ومشاركة النظريات، المراجعات، والتواصل مع عشاق الأنمي',
     'community.whatsOnYourMind': 'بماذا تفكر؟ شاركنا رأيك، نظريتك عن الحلقة، أو توصيتك...',
     'community.post': 'نشر',
@@ -601,7 +601,7 @@ export const translations = {
     'mylist.progress': 'تمت مشاهدة {{percent}}٪',
 
     'browse.title': 'استكشاف وبحث',
-    'browse.subtitle': 'اعثر على أي أنمي — من مكتبة BLACK X السحابية المباشرة.',
+    'browse.subtitle': 'اعثر على أي أنمي — من مكتبة Hearbor السحابية المباشرة.',
     'browse.searchPh': 'ابحث عن أنمي…',
     'browse.results': 'نتائج البحث عن «{{q}}»',
     'browse.latest': 'أحدث الحلقات',
@@ -610,7 +610,7 @@ export const translations = {
     'browse.series': 'مسلسل',
 
     'footer.tagline': 'صُنع للفاندوم · بث فائق السرعة · بيانات حصرية · ثنائي اللغة بالتصميم',
-    'footer.rights': 'BLACK X — مشروع تجريبي',
+    'footer.rights': 'Hearbor — مشروع تجريبي',
 
     'nav.profile': 'الملف الشخصي والإعدادات',
     'nav.devConsole': 'لوحة المطور',

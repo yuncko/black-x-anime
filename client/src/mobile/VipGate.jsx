@@ -41,7 +41,7 @@ export default function VipGate({
         <div style={{ textAlign: 'center', marginBottom: '1.1rem' }}>
           <img
             src="/blackx-logo.png"
-            alt="BLACK X"
+            alt="Hearbor"
             style={{
               width: '64px',
               height: '64px',
@@ -66,10 +66,10 @@ export default function VipGate({
               marginBottom: '0.45rem'
             }}
           >
-            <BxIcon name="crown" className="bx-ico-lead" />BLACK X VIP PREMIERE ACCESS
+            <BxIcon name="crown" className="bx-ico-lead" />Hearbor VIP PREMIERE ACCESS
           </span>
           <h1 style={{ margin: '0 0 0.35rem', fontSize: '1.375rem', fontWeight: 800 }}>
-            {isRtl ? 'اشترك في باقات BLACK X VIP للمتابعة' : 'BLACK X VIP Subscription Required'}
+            {isRtl ? 'اشترك في باقات Hearbor VIP للمتابعة' : 'Hearbor VIP Subscription Required'}
           </h1>
           <p style={{ margin: 0, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.68)', lineHeight: 1.55 }}>
             {isRtl
@@ -130,7 +130,7 @@ export default function VipGate({
           </div>
         </form>
 
-        {/* The 2 Official BLACK X VIP Plans (Matches Website 100%) */}
+        {/* The 2 Official Hearbor VIP Plans (Matches Website 100%) */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.8rem', marginBottom: '1rem' }}>
           {/* Plan 1: Monarch VIP 199 EGP */}
           <div
@@ -160,7 +160,7 @@ export default function VipGate({
               </span>
             </div>
             <ul style={{ margin: '0 0 0.75rem', paddingInlineStart: '1.1rem', fontSize: '0.9375rem', color: 'rgba(255,255,255,0.82)', lineHeight: 1.6 }}>
-              <li>{isRtl ? 'فتح جميع سيرفرات BLACK X المتاحة على الموقع' : 'Every BLACK X server available on the website'}</li>
+              <li>{isRtl ? 'فتح جميع سيرفرات Hearbor المتاحة على الموقع' : 'Every Hearbor server available on the website'}</li>
               <li>{isRtl ? 'فتح مكتبة المانجا والمانهوا كاملة بشاشة كاملة وتحميل مباشر' : 'Full Manga & Manhwa library + Direct Download'}</li>
               <li>{isRtl ? 'تعمل على الموقع الرسمي وتطبيق الهاتف بنفس الحساب' : 'Works on both Website and Mobile APK'}</li>
             </ul>
@@ -208,7 +208,7 @@ export default function VipGate({
 
             <a
               href={`https://wa.me/201094965378?text=${encodeURIComponent(
-                'مرحباً إدارة BLACK X، قمت بتحويل 199 ج.م على فودافون كاش 01094965378 للاشتراك في باقة الملك MONARCH VIP وأريد استلام كود التفعيل الفوري.'
+                'مرحباً إدارة Hearbor، قمت بتحويل 199 ج.م على فودافون كاش 01094965378 للاشتراك في باقة الملك MONARCH VIP وأريد استلام كود التفعيل الفوري.'
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -256,12 +256,12 @@ export default function VipGate({
             </div>
             <p style={{ margin: '0 0 0.55rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.72)' }}>
               {isRtl
-                ? 'مشاهدة جميع الأنميات والمانهوا بجودة 1080p بدون إعلانات عبر سيرفرات BLACK X.'
-                : 'Full 1080p Anime & Manhwa streaming across BLACK X servers.'}
+                ? 'مشاهدة جميع الأنميات والمانهوا بجودة 1080p بدون إعلانات عبر سيرفرات Hearbor.'
+                : 'Full 1080p Anime & Manhwa streaming across Hearbor servers.'}
             </p>
             <a
               href={`https://wa.me/201094965378?text=${encodeURIComponent(
-                'مرحباً إدارة BLACK X، قمت بتحويل 99 ج.م على فودافون كاش 01094965378 للاشتراك في الباقة الأساسية BASIC VIP وأريد استلام كود التفعيل.'
+                'مرحباً إدارة Hearbor، قمت بتحويل 99 ج.م على فودافون كاش 01094965378 للاشتراك في الباقة الأساسية BASIC VIP وأريد استلام كود التفعيل.'
               )}`}
               target="_blank"
               rel="noopener noreferrer"

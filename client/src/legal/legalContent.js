@@ -34,18 +34,18 @@ export const LEGAL_DOCS = {
     titleAr: 'سياسة الخصوصية',
     titleEn: 'Privacy policy',
     introAr:
-      `الصفحة دي بتشرح البيانات اللي BLACK X (الموقع ${SITE} وتطبيق الأندرويد) بيحتفظ بيها، وليه، ومين بيشوفها، وإزاي تتحكم فيها.`,
+      `الصفحة دي بتشرح البيانات اللي Hearbor (الموقع ${SITE} وتطبيق الأندرويد) بيحتفظ بيها، وليه، ومين بيشوفها، وإزاي تتحكم فيها.`,
     introEn:
-      `This page explains what data BLACK X (the website ${SITE} and the Android app) keeps, why, who can see it and how you control it.`,
+      `This page explains what data Hearbor (the website ${SITE} and the Android app) keeps, why, who can see it and how you control it.`,
     sections: [
       {
         hAr: 'من غير حساب',
         hEn: 'Without an account',
         ar: [
-          'تقدر تستخدم BLACK X من غير حساب. ساعتها إعداداتك وقائمتك وسجل مشاهدتك بيتحفظوا على جهازك بس (في تخزين المتصفح أو التطبيق)، وبيتمسحوا لو مسحت بيانات المتصفح أو التطبيق.'
+          'تقدر تستخدم Hearbor من غير حساب. ساعتها إعداداتك وقائمتك وسجل مشاهدتك بيتحفظوا على جهازك بس (في تخزين المتصفح أو التطبيق)، وبيتمسحوا لو مسحت بيانات المتصفح أو التطبيق.'
         ],
         en: [
-          'You can use BLACK X without an account. Your settings, list and watch history then stay on your device only (browser or app storage) and are gone when you clear that storage.'
+          'You can use Hearbor without an account. Your settings, list and watch history then stay on your device only (browser or app storage) and are gone when you clear that storage.'
         ]
       },
       {
@@ -70,10 +70,10 @@ export const LEGAL_DOCS = {
         hAr: 'اللي بتنشره بيبان للناس',
         hEn: 'What you post is public',
         ar: [
-          'البوستات والردود والإعجابات في المجتمع، وتعليقات الحلقات، والتقييمات والمراجعات بتظهر لكل زوار BLACK X ومعاها اسمك الظاهر. رسايل حفلة المشاهدة بتظهر للي في الغرفة. ماتكتبش فيها أي بيانات شخصية.'
+          'البوستات والردود والإعجابات في المجتمع، وتعليقات الحلقات، والتقييمات والمراجعات بتظهر لكل زوار Hearbor ومعاها اسمك الظاهر. رسايل حفلة المشاهدة بتظهر للي في الغرفة. ماتكتبش فيها أي بيانات شخصية.'
         ],
         en: [
-          'Community posts, replies and likes, episode comments, ratings and reviews are visible to every BLACK X visitor together with your display name. Watch-party messages are visible to the people in the room. Do not put personal information in them.'
+          'Community posts, replies and likes, episode comments, ratings and reviews are visible to every Hearbor visitor together with your display name. Watch-party messages are visible to the people in the room. Do not put personal information in them.'
         ]
       },
       {
@@ -110,7 +110,7 @@ export const LEGAL_DOCS = {
           'Google Firebase: تخزين الحسابات ومحتوى المجتمع، وتسجيل الدخول بجوجل.',
           'Algolia: البحث في الأنمي؛ اللي بتكتبه في البحث بيتبعت لـ Algolia.',
           'مصادر بيانات الأنمي (زي AniList): البوسترات والمعلومات ممكن تتحمل من سيرفراتهم مباشرة.',
-          'سيرفرات الفيديو: الحلقات بتشتغل من سيرفرات تشغيل خارجية مش تبع BLACK X. وانت بتتفرج ممكن جهازك يتصل بيها مباشرة، وبعضها ممكن يعرض إعلانات أو يستخدم الكوكيز حسب سياسته هو.',
+          'سيرفرات الفيديو: الحلقات بتشتغل من سيرفرات تشغيل خارجية مش تبع Hearbor. وانت بتتفرج ممكن جهازك يتصل بيها مباشرة، وبعضها ممكن يعرض إعلانات أو يستخدم الكوكيز حسب سياسته هو.',
           'Google Fonts (على الموقع بس): الخطوط بتتحمل من جوجل.'
         ],
         en: [
@@ -118,15 +118,15 @@ export const LEGAL_DOCS = {
           'Google Firebase stores accounts and community content, and runs Google sign-in.',
           'Algolia powers anime search; what you type in search is sent to Algolia.',
           'Anime databases (such as AniList): posters and details may load straight from their servers.',
-          'Video servers: episodes play from external servers that BLACK X does not run. While you watch, your device may connect to them directly, and some may show ads or use cookies under their own policies.',
+          'Video servers: episodes play from external servers that Hearbor does not run. While you watch, your device may connect to them directly, and some may show ads or use cookies under their own policies.',
           'Google Fonts (website only): fonts are loaded from Google.'
         ]
       },
       {
         hAr: 'اللي مش بنعمله',
         hEn: 'What we do not do',
-        ar: ['BLACK X نفسه مش بيعرض إعلانات، ومفيهوش أدوات تتبّع أو تحليلات إعلانية، ومش بنبيع بياناتك لحد.'],
-        en: ['BLACK X itself shows no ads, has no tracking or advertising analytics, and does not sell your data.']
+        ar: ['Hearbor نفسه مش بيعرض إعلانات، ومفيهوش أدوات تتبّع أو تحليلات إعلانية، ومش بنبيع بياناتك لحد.'],
+        en: ['Hearbor itself shows no ads, has no tracking or advertising analytics, and does not sell your data.']
       },
       {
         hAr: 'تحكّمك في بياناتك',
@@ -162,18 +162,18 @@ export const LEGAL_DOCS = {
     path: '/terms',
     titleAr: 'شروط الاستخدام',
     titleEn: 'Terms of use',
-    introAr: 'باستخدامك BLACK X (الموقع والتطبيق) انت موافق على الشروط دي.',
-    introEn: 'By using BLACK X (the website and the app) you agree to these terms.',
+    introAr: 'باستخدامك Hearbor (الموقع والتطبيق) انت موافق على الشروط دي.',
+    introEn: 'By using Hearbor (the website and the app) you agree to these terms.',
     sections: [
       {
         hAr: 'الخدمة',
         hEn: 'The service',
         ar: [
-          'BLACK X بيجمعلك معلومات الأنمي والمانجا ومواعيدها وروابط المشاهدة والقراءة من مصادر خارجية، ومعاها مجتمع للنقاش.',
+          'Hearbor بيجمعلك معلومات الأنمي والمانجا ومواعيدها وروابط المشاهدة والقراءة من مصادر خارجية، ومعاها مجتمع للنقاش.',
           'الخدمة بتتقدم زي ما هي، وممكن تقف أو تتغير أو تبطّأ في أي وقت، مثلاً لما سيرفر خارجي يقع.'
         ],
         en: [
-          'BLACK X gathers anime and manga information, schedules, and watch and read links from external sources, with a community for discussion.',
+          'Hearbor gathers anime and manga information, schedules, and watch and read links from external sources, with a community for discussion.',
           'The service is provided as is and may stop, change or slow down at any time, for example when an external server is down.'
         ]
       },
@@ -214,24 +214,24 @@ export const LEGAL_DOCS = {
         hEn: 'Rights',
         ar: [
           'أسماء الأعمال والصور والعلامات التجارية ملك أصحابها.',
-          'لو انت صاحب حقوق في محتوى ظاهر على BLACK X وعاوزه يتشال، ابعتلنا من «اطلب أنمي أو مانهوا» ← «بلاغ» بتفاصيل المحتوى ورابطه، وهنراجع الطلب.'
+          'لو انت صاحب حقوق في محتوى ظاهر على Hearbor وعاوزه يتشال، ابعتلنا من «اطلب أنمي أو مانهوا» ← «بلاغ» بتفاصيل المحتوى ورابطه، وهنراجع الطلب.'
         ],
         en: [
           'Titles, images and trademarks belong to their owners.',
-          'If you hold rights to content shown on BLACK X and want it removed, send the details and the link through “Request a title” → “Report” and we will review the request.'
+          'If you hold rights to content shown on Hearbor and want it removed, send the details and the link through “Request a title” → “Report” and we will review the request.'
         ]
       },
       {
         hAr: 'المواقع الخارجية',
         hEn: 'External sites',
-        ar: ['مشغلات الفيديو والروابط الخارجية مش تبع BLACK X، ومحتواها وإعلاناتها مسؤولية أصحابها.'],
-        en: ['Video players and external links are not run by BLACK X; their content and ads are their owners’ responsibility.']
+        ar: ['مشغلات الفيديو والروابط الخارجية مش تبع Hearbor، ومحتواها وإعلاناتها مسؤولية أصحابها.'],
+        en: ['Video players and external links are not run by Hearbor; their content and ads are their owners’ responsibility.']
       },
       {
         hAr: 'حدود المسؤولية',
         hEn: 'Liability',
-        ar: ['في حدود اللي يسمح بيه القانون، BLACK X مش مسؤول عن أي ضرر ناتج عن استخدام الخدمة أو عن توقفها.'],
-        en: ['To the extent the law allows, BLACK X is not liable for any damage caused by using the service or by it being unavailable.']
+        ar: ['في حدود اللي يسمح بيه القانون، Hearbor مش مسؤول عن أي ضرر ناتج عن استخدام الخدمة أو عن توقفها.'],
+        en: ['To the extent the law allows, Hearbor is not liable for any damage caused by using the service or by it being unavailable.']
       },
       {
         hAr: 'التعديلات والتواصل',
@@ -241,7 +241,7 @@ export const LEGAL_DOCS = {
           'للتواصل: «اطلب أنمي أو مانهوا» ← «بلاغ» في صفحة حسابي.'
         ],
         en: [
-          'These terms may change; the date at the top shows the last change, and continuing to use BLACK X means you accept it.',
+          'These terms may change; the date at the top shows the last change, and continuing to use Hearbor means you accept it.',
           'Contact: “Request a title” → “Report” on your profile page.'
         ]
       }

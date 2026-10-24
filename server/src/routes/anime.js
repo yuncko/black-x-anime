@@ -12,7 +12,7 @@ const router = Router();
 router.get('/rankings', async (req, res) => {
   try {
     const list = await fetchTopRanked(15);
-    // The ranking is AniList's (its average score, 0–100). BLACK X members' own votes are added
+    // The ranking is AniList's (its average score, 0–100). Hearbor members' own votes are added
     // as they are: their real count and average, nothing when nobody voted yet. No invented
     // vote totals or star breakdowns. Votes: settings/ranking_votes (services/rankingVotes.js);
     // when Firestore cannot be read the list still comes, without member votes.

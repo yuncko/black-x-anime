@@ -12,7 +12,7 @@ const TAP_SLOP = 12;
 const stop = (e) => e.stopPropagation();
 
 /**
- * BLACK X player controls (replaces the native <video controls>):
+ * Hearbor player controls (replaces the native <video controls>):
  * centre play/pause with visible -10 s / +10 s, a seek bar with the real intro/outro
  * marks, time, next episode and full screen. One tap shows/hides the controls (they hide
  * ~3 s into playback and stay while paused); a double tap on the left/right third seeks

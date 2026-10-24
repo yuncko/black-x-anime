@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  BLACK X — OrnamentEngine · framework-agnostic Three.js 3D avatar frames
+ *  Hearbor — OrnamentEngine · framework-agnostic Three.js 3D avatar frames
  * ============================================================================
  *  Zero React dependency on purpose: the same class powers the React wrappers
  *  and the standalone HTML demo.

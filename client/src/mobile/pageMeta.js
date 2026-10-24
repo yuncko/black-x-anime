@@ -5,7 +5,7 @@
  * Pure `pageMetaFor` (unit-tested) + `applyPageMeta` (DOM).
  */
 
-const SITE = 'BLACK X';
+const SITE = 'Hearbor';
 export const DEFAULT_DESCRIPTION = {
   ar: 'تابع الأنمي والمانجا بالعربي: مواعيد الحلقات، قائمتك وسجل مشاهدتك، ومجتمع للنقاش.',
   en: 'Follow anime and manga in Arabic and English: episode schedules, your list and history, and a community.'

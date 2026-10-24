@@ -8,7 +8,7 @@
  * simply has no time: nothing is guessed or derived from the catalogue's weekday tag.
  *
  * The time is the Japanese broadcast, shown in the phone's own time zone; the subtitled
- * episode reaches the BLACK X servers some time after it (the schedule says so).
+ * episode reaches the Hearbor servers some time after it (the schedule says so).
  */
 import { bxRequestJson } from './bxServers.js';
 import { dayIdOf } from './scheduleDays.js';

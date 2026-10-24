@@ -25,7 +25,7 @@ async function mangadexFetch(path, params = {}) {
 
   const res = await fetch(url.toString(), {
     headers: {
-      'User-Agent': 'BLACK-X/2.0 (Arabic Manga Engine - contact: dev@black-x.app)',
+      'User-Agent': 'HEARBOR/2.0 (Arabic Manga Engine - contact: dev@black-x.app)',
       'Accept': 'application/json'
     },
     signal: AbortSignal.timeout(10000)

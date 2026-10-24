@@ -10,7 +10,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 JAVA="${JAVA:-java}"
 APKTOOL_JAR="${APKTOOL_JAR:?set APKTOOL_JAR to apktool.jar (apktool 2.9+)}"
-BASE_APK="${BASE_APK:-$ROOT/client/public/BLACK-X-Mobile-120Hz.apk}"
+BASE_APK="${BASE_APK:-$ROOT/client/public/HEARBOR-Mobile-120Hz.apk}"
 VERSION_CODE="${VERSION_CODE:-31}"
 VERSION_NAME="${VERSION_NAME:-18.0}"
 WORK="${WORK:-/tmp/bx-apk-native}"

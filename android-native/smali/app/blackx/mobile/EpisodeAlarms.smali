@@ -2,13 +2,13 @@
 .super Landroid/content/BroadcastReceiver;
 .source "EpisodeAlarms.java"
 
-# Air-time reminders that reach the phone while BLACK X is closed (APK v18.0, 2026-10-17).
+# Air-time reminders that reach the phone while Hearbor is closed (APK v18.0, 2026-10-17).
 # Java version for reading: android-native/src/app/blackx/mobile/EpisodeAlarms.java.
 # The web code (client/src/mobile/nativeAlarms.js) sends the whole list through
 # MainActivity.scheduleEpisodeAlarms(json) = [{"id":int,"title":str,"body":str,"at":epochMs}];
 # it replaces every alarm, is saved in SharedPreferences and armed again after a reboot or an
 # app update (BOOT_COMPLETED / MY_PACKAGE_REPLACED). An alarm intent carries only its id: the
-# text shown is looked up in the saved list, so another app cannot make BLACK X show its text.
+# text shown is looked up in the saved list, so another app cannot make Hearbor show its text.
 
 
 # static fields
@@ -362,7 +362,7 @@
 
     const-string v5, "title"
 
-    const-string v6, "BLACK X"
+    const-string v6, "Hearbor"
 
     invoke-virtual {v4, v5, v6}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
@@ -416,7 +416,7 @@
 
     const-string v4, "blackx_episodes_channel"
 
-    const-string v5, "BLACK X Episode Alerts"
+    const-string v5, "Hearbor Episode Alerts"
 
     const/4 v6, 0x4
 
@@ -458,7 +458,7 @@
 
     invoke-virtual {v3, v4}, Landroid/app/Notification$Builder;->setAutoCancel(Z)Landroid/app/Notification$Builder;
 
-    # a tap opens BLACK X
+    # a tap opens Hearbor
     invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
 
     move-result-object v4

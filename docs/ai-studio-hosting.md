@@ -1,4 +1,4 @@
-# BLACK X على Google AI Studio — الخطوات بالعربي
+# Hearbor على Google AI Studio — الخطوات بالعربي
 
 الموقع من 17 أكتوبر 2026 شغال على **https://black-x-anime.ai.studio** (Google AI Studio بينشره على
 Cloud Run). black-x-anime.me كان على Vercel واتوقف («This deployment is temporarily paused»).
@@ -43,7 +43,7 @@ Cloud Run). black-x-anime.me كان على Vercel واتوقف («This deploymen
 - نسخ التطبيق لحد v18.0 بتكلّم black-x-anime.me (المتوقف): الدخول والمزامنة والتحديث واقفين فيها،
   وماينفعش يوصلها إشعار تحديث. لازم الناس تنزّل v18.1 بنفسها — من الموقع الجديد أو من لينك الدرايف.
 - v18.1 بيكلّم black-x-anime.ai.studio. لو العنوان اتغيّر تاني، لازم نسخة APK جديدة.
-- اتأكد إن `https://black-x-anime.ai.studio/BLACK-X-Mobile-120Hz.apk` بينزّل الملف (حوالي 4.6 ميجا).
+- اتأكد إن `https://black-x-anime.ai.studio/HEARBOR-Mobile-120Hz.apk` بينزّل الملف (حوالي 4.6 ميجا).
   لو لأ، AI Studio ممكن يكون ساب الملف الكبير وهو بيستورد الريبو — ابعت لينك الدرايف لحد ما يتحل.
 
 ## 5. الحدود
@@ -54,7 +54,7 @@ Cloud، ولو قرّب يخلص فكّر في خطة مدفوعة قبل ما �
 
 ---
 
-# BLACK X on Google AI Studio (English summary)
+# Hearbor on Google AI Studio (English summary)
 
 - Live site since 2026-10-17: `https://black-x-anime.ai.studio` (AI Studio → Cloud Run). The Vercel
   deployment behind black-x-anime.me is paused.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Native changes of the BLACK X APK without a Gradle project (APK v18.0, 2026-10-17).
+"""Native changes of the Hearbor APK without a Gradle project (APK v18.0, 2026-10-17).
 
 There is no Android SDK / D8 in this repository's toolbox, so the native additions are written
 in smali (android-native/smali/) and assembled by apktool. Only two entries of the APK change:

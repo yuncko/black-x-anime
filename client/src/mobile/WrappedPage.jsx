@@ -28,10 +28,10 @@ async function drawCard({ stats, name, isRtl }) {
   g.textAlign = 'center';
   g.fillStyle = '#ffffff';
   g.font = font(900, 54);
-  g.fillText('BLACK X', W / 2, 140);
+  g.fillText('Hearbor', W / 2, 140);
   g.font = font(700, 40);
   g.fillStyle = 'rgba(255,255,255,0.7)';
-  g.fillText(isRtl ? `سنتك على BLACK X ${stats.year}` : `Your ${stats.year} on BLACK X`, W / 2, 205);
+  g.fillText(isRtl ? `سنتك على Hearbor ${stats.year}` : `Your ${stats.year} on Hearbor`, W / 2, 205);
   if (name) {
     g.fillStyle = '#ffffff';
     g.font = font(800, 46);
@@ -109,7 +109,7 @@ export default function WrappedPage({ isRtl, user, watchHistory, mangaHistory, f
       if (!blob) throw new Error('canvas');
       const file = new File([blob], `black-x-${year}.png`, { type: 'image/png' });
       if (mode === 'share' && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'BLACK X', text: isRtl ? `سنتي على BLACK X ${year}` : `My ${year} on BLACK X` });
+        await navigator.share({ files: [file], title: 'Hearbor', text: isRtl ? `سنتي على Hearbor ${year}` : `My ${year} on Hearbor` });
       } else {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -153,8 +153,8 @@ export default function WrappedPage({ isRtl, user, watchHistory, mangaHistory, f
   return (
     <div className="bx-wrapped">
       <section className="bx-wrapped-hero">
-        <span>BLACK X</span>
-        <h2>{isRtl ? `سنتك على BLACK X ${year}` : `Your ${year} on BLACK X`}</h2>
+        <span>Hearbor</span>
+        <h2>{isRtl ? `سنتك على Hearbor ${year}` : `Your ${year} on Hearbor`}</h2>
         {name ? <p dir="auto">{name}</p> : null}
       </section>
       <div className="bx-wrapped-grid">

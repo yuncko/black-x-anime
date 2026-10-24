@@ -82,16 +82,16 @@ test('episode manifest -> playable APK servers (website labels, no iframe-only h
         { id: 'vip', isMonarchExclusive: true, directUrl: 'https://x/vip.mp4' },
         {
           id: 'aw-pd-1080p-0',
-          server: '👑 BLACK X 1 — PixelDrain Ultra (1080p)',
+          server: '👑 Hearbor 1 — PixelDrain Ultra (1080p)',
           quality: 'FHD 1080p',
           serverCode: 'PD',
           embedUrl: '/api/stream/mp4-player?url=https%3A%2F%2Fpixeldrain.com%2Fapi%2Ffile%2Fabc',
           directUrl: 'https://pixeldrain.com/api/file/abc'
         },
-        { id: 'a3rb-hd', server: '⚡ BLACK X Direct 720p HD', quality: '720p HD', embedUrl: '/api/stream/mp4-player?url=https%3A%2F%2Fdl.example%2Fe1.mp4' },
-        { id: 'a3rb-mega', server: '☁️ BLACK X Cloud 2 (FHD)', embedUrl: 'https://mega.nz/embed/xyz', directUrl: null },
-        { id: 'en-hls', server: 'BLACK X 3', directUrl: '/api/stream/hls-proxy?url=https%3A%2F%2Fcdn%2Fa.m3u8' },
-        { id: 'wita-1', server: 'BLACK X 1 — Stream', token: 't' }
+        { id: 'a3rb-hd', server: '⚡ Hearbor Direct 720p HD', quality: '720p HD', embedUrl: '/api/stream/mp4-player?url=https%3A%2F%2Fdl.example%2Fe1.mp4' },
+        { id: 'a3rb-mega', server: '☁️ Hearbor Cloud 2 (FHD)', embedUrl: 'https://mega.nz/embed/xyz', directUrl: null },
+        { id: 'en-hls', server: 'Hearbor 3', directUrl: '/api/stream/hls-proxy?url=https%3A%2F%2Fcdn%2Fa.m3u8' },
+        { id: 'wita-1', server: 'Hearbor 1 — Stream', token: 't' }
       ],
       resolved: {}
     },
@@ -102,7 +102,7 @@ test('episode manifest -> playable APK servers (website labels, no iframe-only h
     ['aw-pd-1080p-0', 'a3rb-hd', 'wita-1']
   );
   assert.equal(servers[0].directResolvedUrl, 'https://pixeldrain.dev/api/file/abc');
-  assert.equal(servers[0].label, '👑 BLACK X 1 — PixelDrain Ultra (1080p)');
+  assert.equal(servers[0].label, '👑 Hearbor 1 — PixelDrain Ultra (1080p)');
   assert.equal(servers[1].directResolvedUrl, 'https://dl.example/e1.mp4');
   assert.equal(servers[2].needsResolve, true);
   assert.equal(servers[2].slug, 'aw-x');
@@ -123,7 +123,7 @@ test('library item -> manga card without invented values', () => {
     type: 'MANHWA',
     poster: 'https://img/solo.png',
     status: 'COMPLETED',
-    source: 'BLACK X 1',
+    source: 'Hearbor 1',
     availableServers: ['bx1', 'bx2', 'bx3']
   });
   assert.equal(hit.objectID, 'bx:solo-leveling');
@@ -168,7 +168,7 @@ test('chapters fall back from the library route to /api/manga/:id/chapters', asy
       if (url.startsWith('/api/manga/asq%3Akaoru/chapters?server=bx2')) {
         return {
           chapters: [{ chapterId: 'asq:kaoru:160', chapterNumber: '160', server: 'bx2' }],
-          availableServers: [{ id: 'bx2', name: 'سيرفر BLACK X 2 (مانجا عربية)', labelEn: 'BLACK X 2 (AR Manga)' }],
+          availableServers: [{ id: 'bx2', name: 'سيرفر Hearbor 2 (مانجا عربية)', labelEn: 'Hearbor 2 (AR Manga)' }],
           activeServer: 'bx2'
         };
       }
@@ -207,7 +207,7 @@ test('library list = website library + AniList master index (deduped), search is
   await withFetch(
     (url) => {
       if (url.startsWith('/api/content/library?type=ALL&server=all&page=1')) {
-        return { items: [{ id: 'solo-leveling', title_en: 'Solo Leveling', title_ar: 'سولو', type: 'MANHWA', source: 'BLACK X 1' }] };
+        return { items: [{ id: 'solo-leveling', title_en: 'Solo Leveling', title_ar: 'سولو', type: 'MANHWA', source: 'Hearbor 1' }] };
       }
       if (url === 'https://graphql.anilist.co') {
         return {

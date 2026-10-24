@@ -80,8 +80,8 @@ export const WEB_PERKS = [
     icon: 'trophy',
     ar: 'الترتيب وملخصك السنوي',
     en: 'Rankings and your year',
-    subAr: 'أعلى الأعمال تقييمًا، وسنتك على BLACK X بأرقامك الحقيقية في صورة تشاركها.',
-    subEn: 'The top-rated titles, and your year on BLACK X with your real numbers as an image.'
+    subAr: 'أعلى الأعمال تقييمًا، وسنتك على Hearbor بأرقامك الحقيقية في صورة تشاركها.',
+    subEn: 'The top-rated titles, and your year on Hearbor with your real numbers as an image.'
   },
   {
     icon: 'monitor',
@@ -92,7 +92,7 @@ export const WEB_PERKS = [
   }
 ];
 
-export default function PlatformPerks({ variant, isRtl, apkUrl = '/BLACK-X-Mobile-120Hz.apk', siteUrl = PUBLIC_SITE_ORIGIN, onToast }) {
+export default function PlatformPerks({ variant, isRtl, apkUrl = '/HEARBOR-Mobile-120Hz.apk', siteUrl = PUBLIC_SITE_ORIGIN, onToast }) {
   const siteHost = String(siteUrl).replace(/^https?:\/\//, '').replace(/\/+$/, '');
   const apk = variant === 'apk';
   const perks = apk ? APK_PERKS : WEB_PERKS;

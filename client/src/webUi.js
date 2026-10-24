@@ -2,7 +2,7 @@
  * Which interface the website shows.
  *
  * Owner's decision of 2026-10-17 (it replaces the 2026-10-16 phone/computer split): every
- * device gets the BLACK X app interface itself (client/src/mobile, the same code the APK runs),
+ * device gets the Hearbor app interface itself (client/src/mobile, the same code the APK runs),
  * laid out for wide screens on computers, so every app update reaches phones, computers and
  * the APK together. The classic website pages (client/src/App.jsx) stay one tap away for
  * whoever wants them (rankings, watch party, …).

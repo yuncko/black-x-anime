@@ -1,4 +1,4 @@
-# Security Specification for BLACK X Anime Tracker
+# Security Specification for Hearbor Anime Tracker
 
 ## 1. Data Invariants
 - Users can only read and write their own profile (`/users/{userId}` where `userId == request.auth.uid`).

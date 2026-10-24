@@ -1,4 +1,4 @@
-// BLACK X — Prisma schema (PostgreSQL)
+// Hearbor — Prisma schema (PostgreSQL)
 // Anime/Manga social network & streaming platform backend.
 // Generate client:  npx prisma generate
 // Push to database: npx prisma db push   (or `npm run db:migrate`)

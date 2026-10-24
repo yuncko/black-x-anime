@@ -1,5 +1,5 @@
 /**
- * Strict title check for linking one show across BLACK X servers.
+ * Strict title check for linking one show across Hearbor servers.
  *
  * The general isTitleMatch() (server/src/witanime.js) accepts two thirds of the
  * query words, which is fine for search filtering but not for attaching another
@@ -63,8 +63,8 @@ function significantWords(value) {
 }
 
 /**
- * True when `query` (e.g. words from a BLACK X 1 slug) names the same show as
- * any of `candidateTitles` (e.g. a BLACK X 2 catalogue entry).
+ * True when `query` (e.g. words from a Hearbor 1 slug) names the same show as
+ * any of `candidateTitles` (e.g. a Hearbor 2 catalogue entry).
  */
 export function isStrictCrossSourceMatch(query, ...candidateTitles) {
   const qNorm = normalizeCrossTitle(query);

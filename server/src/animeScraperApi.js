@@ -509,7 +509,7 @@ export async function scraperRandomAnime(count = 24) {
       status: raw.status || 'يعرض الان',
       story: raw.story || '',
       source: 'witanime',
-      sourceLabel: 'سيرفر BLACK X 1'
+      sourceLabel: 'سيرفر Hearbor 1'
     });
   };
 

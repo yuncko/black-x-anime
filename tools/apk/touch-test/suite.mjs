@@ -1,4 +1,4 @@
-// BLACK X APK — real-touch regression suite (v17 UI), run against assets/public of the built APK.
+// Hearbor APK — real-touch regression suite (v17 UI), run against assets/public of the built APK.
 // Use ./run.sh; `ONLY=nav,player ./run.sh` runs some scenarios. One browser per scenario.
 import { startServer, launch, openApp, check, sleep, swipe, tapEl, boxOf, waitVt, doubleTap, text, summary, TODAY, LOCAL, APK_RELEASE } from './lib.mjs';
 
@@ -542,7 +542,7 @@ scenario('player', async (browser) => {
 
   await tapEl(page, '.bx-detail-cta');
   let s = await waitVideo(page, (v) => v.rs >= 2 && v.t > 1, 20000);
-  check(G, 'episode plays the BLACK X source', Boolean(s && s.src.includes('test.webm')), s ? s.src : 'no video');
+  check(G, 'episode plays the Hearbor source', Boolean(s && s.src.includes('test.webm')), s ? s.src : 'no video');
   check(G, 'resumes at the saved second (~600 s)', Boolean(s && s.t >= 585 && s.t <= 640), s ? `t=${s.t}` : '');
   const t1 = s?.t || 0;
   await sleep(1600);
@@ -984,7 +984,7 @@ scenario('profile', async (browser) => {
   await tapBack();
 
   // VIP as a guest: sign in first (v17.0 showed a code box that could not work)
-  await openRow('BLACK X VIP');
+  await openRow('Hearbor VIP');
   const vip = await page.evaluate(() => ({ input: Boolean(document.querySelector('main .bxp-code')), text: document.querySelector('main')?.innerText.replace(/\s+/g, ' ') || '' }));
   check(G, 'guest VIP page asks to sign in instead of showing a code box', !vip.input && vip.text.includes('سجّل دخولك'), vip.text.slice(0, 100));
   await tapEl(page, 'main .bxp-empty .bx-btn');
@@ -1075,7 +1075,7 @@ scenario('profile', async (browser) => {
   await tapEl(page, '.bx-avatar-btn', { scroll: false });
   await settle(700);
   check(G, 'an old account without a session sees the "sign in once more" note', Boolean(await page.$('main .bxp-note')));
-  await openRow('BLACK X VIP');
+  await openRow('Hearbor VIP');
   await tapEl(page, 'main .bxp-empty .bx-btn');
   await settle(900);
   at = await info();
@@ -1160,7 +1160,7 @@ scenario('bundle', async (browser) => {
     list.length === 3 && list.every((a) => a.at > now && a.id > 0) && ['Test Anime 1', 'Test Anime 10', 'Test Anime 11'].every((t) => list.some((a) => a.title === `ميعاد ${t}`)),
     list.map((a) => `${a.title} +${Math.round((a.at - now) / 60000)}m`).join(' | ') || 'no call'
   );
-  check(G, '…the text: the Japanese air time, and that it reaches BLACK X once subtitled', list.length > 0 && list.every((a) => /بتتعرض دلوقتي في اليابان\. هتنزل على BLACK X لما تتترجم\./.test(a.body)), list[0]?.body || '');
+  check(G, '…the text: the Japanese air time, and that it reaches Hearbor once subtitled', list.length > 0 && list.every((a) => /بتتعرض دلوقتي في اليابان\. هتنزل على Hearbor لما تتترجم\./.test(a.body)), list[0]?.body || '');
   check(G, '…never an empty list (that would wipe the phone\'s reminders)', calls.length > 0 && calls.every((c) => JSON.parse(c[0]).length > 0), `${calls.length} calls`);
 
   await tapEl(page, '.bx-topbar [aria-label="القائمة"], [aria-label="القائمة"]', { scroll: false });

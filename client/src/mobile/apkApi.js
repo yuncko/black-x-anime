@@ -1,5 +1,5 @@
 /**
- * BLACK X APK -> website server API (/api/app/*), v16+.
+ * Hearbor APK -> website server API (/api/app/*), v16+.
  *
  * Accounts, account sync, VIP, requests and the developer tools used to write
  * straight into a public Firestore collection from the phone. They now go

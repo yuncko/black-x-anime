@@ -116,7 +116,7 @@ const SHOP_ITEMS = [
     titleTextEn: 'S-Rank Global Hunter ⚡',
     nameAr: 'لقب: صائد الرتبة S العالمي ⚡',
     nameEn: 'Title: S-Rank Global Hunter ⚡',
-    descAr: 'لقب خاص بنخبة مشاهدي الأنمي وقراء المانجا في BLACK X',
+    descAr: 'لقب خاص بنخبة مشاهدي الأنمي وقراء المانجا في Hearbor',
     descEn: 'Elite S-Rank Hunter badge for top anime & manga enthusiasts',
     price: 250,
     rarity: 'TITLE',
@@ -475,7 +475,7 @@ export function OrnamentShop({
 }
 
 /**
- * BLACK X Wrapped 2026 — Shareable & Downloadable Annual/Monthly Anime & Manga Summary Card
+ * Hearbor Wrapped 2026 — Shareable & Downloadable Annual/Monthly Anime & Manga Summary Card
  */
 /**
  * «ملخص 2026» of the classic profile, 2026-10-17.
@@ -492,11 +492,11 @@ export function WrappedCardPanel() {
   const ar = lang === 'ar';
   return (
     <div className="glass" style={{ padding: '2rem', borderRadius: '24px', border: '1px solid rgba(255, 255, 255, 0.18)' }}>
-      <h3 style={{ margin: '0 0 0.65rem', fontSize: '1.35rem', fontWeight: 900 }}>{ar ? '✨ ملخصك السنوي' : '✨ Your year on BLACK X'}</h3>
+      <h3 style={{ margin: '0 0 0.65rem', fontSize: '1.35rem', fontWeight: 900 }}>{ar ? '✨ ملخصك السنوي' : '✨ Your year on Hearbor'}</h3>
       <p style={{ color: 'var(--ink-dim)', fontSize: '0.94rem', lineHeight: 1.7, marginBottom: '1.25rem' }}>
         {ar
-          ? 'ملخص سنتك بقى في واجهة BLACK X الجديدة: وقت المشاهدة، الحلقات اللي كمّلتها، أكتر أعمال وتصنيفات اتفرجت عليها — بأرقامك الحقيقية بس، وتقدر تنزّله صورة أو تشاركه.'
-          : 'Your yearly summary is now in the new BLACK X interface: time watched, episodes finished, your top titles and genres — only your real numbers, as an image to download or share.'}
+          ? 'ملخص سنتك بقى في واجهة Hearbor الجديدة: وقت المشاهدة، الحلقات اللي كمّلتها، أكتر أعمال وتصنيفات اتفرجت عليها — بأرقامك الحقيقية بس، وتقدر تنزّله صورة أو تشاركه.'
+          : 'Your yearly summary is now in the new Hearbor interface: time watched, episodes finished, your top titles and genres — only your real numbers, as an image to download or share.'}
       </p>
       <button type="button" className="btn btn--primary" onClick={() => window.location.assign('/profile/wrapped?ui=app')}>
         {ar ? 'افتح ملخصك' : 'Open your year'}

@@ -45,7 +45,7 @@ export function shortStack(stack, lines = 6) {
     .slice(0, 1200);
 }
 
-/** True for errors that say nothing about BLACK X's code. */
+/** True for errors that say nothing about Hearbor's code. */
 export function shouldIgnoreError(message, stack = '', source = '') {
   const msg = String(message || '');
   if (!msg.trim()) return true;

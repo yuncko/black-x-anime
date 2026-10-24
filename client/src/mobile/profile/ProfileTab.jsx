@@ -14,7 +14,7 @@ import { PUBLIC_SITE_HOST } from '../../../../shared/publicSite.js';
 import './profile.css';
 
 /**
- * Profile hub of the app ("You" / "My BLACK X"), APK v17.
+ * Profile hub of the app ("You" / "My Hearbor"), APK v17.
  *
  * One root page — identity header, stats, history / my-list rails and grouped rows — and a
  * stack of focused sub-pages (library, history, settings, privacy …) pushed on top of it.
@@ -32,7 +32,7 @@ export const PROFILE_PAGES = {
   offline: { ar: 'محفوظ بدون نت', en: 'Saved offline' },
   snapshots: { ar: 'لقطاتي', en: 'Snapshots' },
   edit: { ar: 'تعديل الملف', en: 'Edit profile' },
-  vip: { ar: 'BLACK X VIP', en: 'BLACK X VIP' },
+  vip: { ar: 'Hearbor VIP', en: 'Hearbor VIP' },
   titles: { ar: 'اللقب', en: 'Title' },
   settings: { ar: 'الإعدادات', en: 'Settings' },
   splash: { ar: 'شاشة البداية', en: 'Splash screen' },
@@ -65,7 +65,7 @@ export const PROFILE_TITLES = [
   { id: 'حكيم المانهوا', en: 'Manhwa Sage', icon: 'book', need: 'read', goal: 2 },
   { id: 'جامع المفضلات', en: 'Collector', icon: 'bookmark', need: 'fav', goal: 3 },
   { id: 'عراف الأرينا', en: 'Arena Oracle', icon: 'sparkles', need: 'xp' },
-  { id: 'نجم BLACK X', en: 'BLACK X Star', icon: 'star', need: 'vip' }
+  { id: 'نجم Hearbor', en: 'Hearbor Star', icon: 'star', need: 'vip' }
 ];
 
 export function profileTitleLabel(id, isRtl) {
@@ -380,7 +380,7 @@ function RootPage(props) {
       ) : (
         <header className="bxp-hero is-guest">
           <Avatar user={null} />
-          <h2 className="bxp-name">{isRtl ? 'سجّل دخولك في BLACK X' : 'Sign in to BLACK X'}</h2>
+          <h2 className="bxp-name">{isRtl ? 'سجّل دخولك في Hearbor' : 'Sign in to Hearbor'}</h2>
           <p className="bxp-bio">
             {isRtl
               ? 'قائمتك وسجل مشاهدتك هيتحفظوا على حسابك ويتزامنوا مع الموقع.'
@@ -451,7 +451,7 @@ function RootPage(props) {
       </Group>
 
       <Group title={isRtl ? 'العضوية' : 'Membership'}>
-        <Row icon="crown" label="BLACK X VIP" value={tierLabel} onClick={() => onOpenPage('vip')} />
+        <Row icon="crown" label="Hearbor VIP" value={tierLabel} onClick={() => onOpenPage('vip')} />
         {user ? (
           <Row
             icon="medal"
@@ -465,7 +465,7 @@ function RootPage(props) {
       {app.web ? (
         <Group title={isRtl ? 'على الموقع' : 'On the website'}>
           <Row icon="trophy" label={isRtl ? 'الترتيب' : 'Rankings'} sub={isRtl ? 'أعلى الأعمال تقييمًا' : 'The top-rated titles'} onClick={() => onOpenPage('rankings')} />
-          <Row icon="sparkles" label={isRtl ? 'ملخصك' : 'Your year'} sub={isRtl ? 'سنتك على BLACK X بأرقامك الحقيقية' : 'Your year on BLACK X, real numbers'} onClick={() => onOpenPage('wrapped')} />
+          <Row icon="sparkles" label={isRtl ? 'ملخصك' : 'Your year'} sub={isRtl ? 'سنتك على Hearbor بأرقامك الحقيقية' : 'Your year on Hearbor, real numbers'} onClick={() => onOpenPage('wrapped')} />
         </Group>
       ) : null}
 
@@ -525,7 +525,7 @@ function RootPage(props) {
         )}
       </Group>
 
-      <Group title={isRtl ? 'عن BLACK X' : 'About'}>
+      <Group title={isRtl ? 'عن Hearbor' : 'About'}>
         <Row icon="file" label={isRtl ? 'سياسة الخصوصية' : 'Privacy policy'} onClick={() => onOpenPage('policy')} />
         <Row icon="scroll" label={isRtl ? 'شروط الاستخدام' : 'Terms of use'} onClick={() => onOpenPage('terms')} />
       </Group>
@@ -545,7 +545,7 @@ function RootPage(props) {
       ) : null}
 
       <p className="bxp-foot">
-        <span dir="ltr">{app.web ? `BLACK X · ${typeof window !== 'undefined' && window.location.host ? window.location.host : PUBLIC_SITE_HOST}` : `BLACK X · v${app.version}`}</span>
+        <span dir="ltr">{app.web ? `Hearbor · ${typeof window !== 'undefined' && window.location.host ? window.location.host : PUBLIC_SITE_HOST}` : `Hearbor · v${app.version}`}</span>
         {app.catalogTotal > 0 ? (
           <>
             {' · '}
@@ -803,7 +803,7 @@ function VipPage({ isRtl, account, vip, onOpenPage }) {
         <span className="bxp-vip-ico" aria-hidden="true">
           <BxIcon name="crown" size="1.5em" />
         </span>
-        <strong>BLACK X VIP</strong>
+        <strong>Hearbor VIP</strong>
         <span className="bxp-vip-tier">{vipLabel(vipTier, isDeveloper, isRtl)}</span>
         <span className="bxp-vip-sub">
           {isVip
@@ -932,7 +932,7 @@ function SignInPage({ isRtl, auth, onOpenPage }) {
         {auth.busy ? <BxIcon name="loader" /> : null}
         {register ? (isRtl ? 'إنشاء الحساب' : 'Create account') : isRtl ? 'دخول' : 'Sign in'}
       </button>
-      <p className="bxp-hint">{isRtl ? 'نفس حسابك على موقع BLACK X — قائمتك وسجلك بيتزامنوا بين الاتنين.' : 'The same account as the BLACK X website — your list and history sync between both.'}</p>
+      <p className="bxp-hint">{isRtl ? 'نفس حسابك على موقع Hearbor — قائمتك وسجلك بيتزامنوا بين الاتنين.' : 'The same account as the Hearbor website — your list and history sync between both.'}</p>
       <p className="bxp-hint bxp-consent">
         {isRtl ? 'لما تدخل أو تعمل حساب تبقى موافق على ' : 'By signing in or creating an account you agree to the '}
         <button type="button" className="bxp-link" onClick={() => onOpenPage('terms')}>

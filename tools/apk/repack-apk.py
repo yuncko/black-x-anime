@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the BLACK X APK with a fresh web bundle (no Android SDK needed).
+"""Rebuild the Hearbor APK with a fresh web bundle (no Android SDK needed).
 
 The APK is a Capacitor shell whose UI lives in `assets/public/`. This script
 copies every entry of the current APK except the web bundle and the old

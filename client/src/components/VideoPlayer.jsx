@@ -24,10 +24,10 @@ const isDirectCdnPlayable = (url) => {
 };
 
 // Keep upstream host/provider names out of the player UI. Preserve only the
-// BLACK X server tier when it is already part of the branded label.
+// Hearbor server tier when it is already part of the branded label.
 const brandedServerName = (entry) => {
   const match = String(entry?.server || '').match(/\bBLACK\s*X\s*(?:SERVER\s*)?([1-4])\b/i);
-  return match?.[1] ? `BLACK X ${match[1]}` : 'BLACK X';
+  return match?.[1] ? `Hearbor ${match[1]}` : 'Hearbor';
 };
 
 const hasCustomPlayerSource = (entry, resolved = {}) => {
@@ -51,7 +51,7 @@ const proxied = (url, forceProxy = false) => {
 };
 
 /**
- * BLACK X custom player — liquid glass chrome over an HTML5 <video>,
+ * Hearbor custom player — liquid glass chrome over an HTML5 <video>,
  * with an embed fallback frame for servers without direct files.
  *
  * `entries`   — manifest servers (id, token, server, quality, version, lang)
@@ -152,7 +152,7 @@ export default function VideoPlayer({
 
   // AniProject returns HLS manifests. Play public/CORS-enabled manifests in
   // this player; when ANIPROJECT_MEDIA_HOSTS is set, the source URL is instead
-  // our same-origin allowlisted HLS proxy. Both retain the BLACK X seek/UI.
+  // our same-origin allowlisted HLS proxy. Both retain the Hearbor seek/UI.
   useEffect(() => {
     const video = videoRef.current;
     if (!browserHls || !video || embedMode) return undefined;
@@ -186,7 +186,7 @@ export default function VideoPlayer({
     };
   }, [browserHls, embedMode, effectiveDirectUrl, active?.id, lang]);
 
-  // Prefer a direct file/custom player so the BLACK X controls work and the
+  // Prefer a direct file/custom player so the Hearbor controls work and the
   // upstream host's branded iframe is only used when no direct source exists.
   useEffect(() => {
     if (!activeId && entries.length) {
@@ -435,7 +435,7 @@ export default function VideoPlayer({
   const controlsVisible = showControls || !playing;
   // In fullscreen the video fills the screen and the controls float over it
   // (auto-hiding). Embedded players keep their own controls visible, so their
-  // BLACK X bar stays below the frame instead of covering them.
+  // Hearbor bar stays below the frame instead of covering them.
   const overlayControls = isFullscreen && !embedMode;
 
   const handleTouchStart = () => {
@@ -950,7 +950,7 @@ export default function VideoPlayer({
         </div>
       </div>
 
-      {/* BLACK X source selector — upstream provider names stay private.
+      {/* Hearbor source selector — upstream provider names stay private.
           Hidden in fullscreen (the control bar has a compact server picker). */}
       {entries.length > 0 && !isFullscreen && (
         <div className="wit-servers-box">

@@ -1,7 +1,7 @@
 {
-  "name": "black-x",
+  "name": "hearbor",
   "version": "1.0.0",
-  "description": "BLACK X — anime & manga tracker, schedules and community (bilingual EN/AR)",
+  "description": "Hearbor — anime & manga tracker, schedules and community (bilingual FR/AR)",
   "type": "module",
   "private": true,
   "engines": {

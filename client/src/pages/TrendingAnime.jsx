@@ -235,7 +235,7 @@ export default function TrendingAnime() {
             isDirectStream: true,
             isMalOnly: false,
             source: s.source || (String(s.slug).startsWith('a3rb-') ? 'anime3rb' : 'witanime'),
-            sourceLabel: s.sourceLabel || (s.source === 'aniproject' ? 'سيرفر BLACK X 4' : s.source === 'anime3rb' ? 'سيرفر BLACK X 2' : s.source === 'english' ? 'سيرفر BLACK X 3' : 'سيرفر BLACK X 1')
+            sourceLabel: s.sourceLabel || (s.source === 'aniproject' ? 'سيرفر Hearbor 4' : s.source === 'anime3rb' ? 'سيرفر Hearbor 2' : s.source === 'english' ? 'سيرفر Hearbor 3' : 'سيرفر Hearbor 1')
           });
         }
 
@@ -264,7 +264,7 @@ export default function TrendingAnime() {
             isDirectStream: false,
             isMalOnly: true,
             source: 'blackx-index',
-            sourceLabel: '📋 فهرس BLACK X'
+            sourceLabel: '📋 فهرس Hearbor'
           });
         }
 
@@ -307,14 +307,14 @@ export default function TrendingAnime() {
         genres: [],
         isDirectStream: true,
         source: 'witanime',
-        sourceLabel: 'سيرفر BLACK X 1'
+        sourceLabel: 'سيرفر Hearbor 1'
       }));
     }
 
     const list = [];
     const seen = new Set();
 
-    // 1. Add catalog items for all BLACK X servers
+    // 1. Add catalog items for all Hearbor servers
     for (const cat of catalogList) {
       const catSource = cat.source || (cat.anime3rbId ? 'anime3rb' : 'witanime');
       if (selectedSource !== 'all' && selectedSource !== catSource) continue;
@@ -322,9 +322,9 @@ export default function TrendingAnime() {
       if (!seen.has(key)) {
         seen.add(key);
         const sourceLabel = cat.sourceLabel || (
-          catSource === 'english' ? 'سيرفر BLACK X 3' :
-          catSource === 'anime3rb' ? 'سيرفر BLACK X 2' :
-          'سيرفر BLACK X 1'
+          catSource === 'english' ? 'سيرفر Hearbor 3' :
+          catSource === 'anime3rb' ? 'سيرفر Hearbor 2' :
+          'سيرفر Hearbor 1'
         );
         list.push({
           id: `cat-${catSource}-${cat.slug}`,
@@ -351,9 +351,9 @@ export default function TrendingAnime() {
       if (!seen.has(key)) {
         seen.add(key);
         const sourceLabel = item.sourceLabel || (
-          itemSrc === 'english' ? 'سيرفر BLACK X 3' :
-          itemSrc === 'anime3rb' ? 'سيرفر BLACK X 2' :
-          'سيرفر BLACK X 1'
+          itemSrc === 'english' ? 'سيرفر Hearbor 3' :
+          itemSrc === 'anime3rb' ? 'سيرفر Hearbor 2' :
+          'سيرفر Hearbor 1'
         );
         list.push({
           id: `lat-${itemSrc}-${item.slug}`,
@@ -400,7 +400,7 @@ export default function TrendingAnime() {
           isDirectStream: Boolean(matchedStream?.slug),
           isMalOnly: !matchedStream?.slug,
           source: matchedStream?.slug ? 'witanime' : 'blackx-index',
-          sourceLabel: matchedStream?.slug ? 'سيرفر BLACK X 1' : '📋 فهرس BLACK X'
+          sourceLabel: matchedStream?.slug ? 'سيرفر Hearbor 1' : '📋 فهرس Hearbor'
         });
       }
 
@@ -423,7 +423,7 @@ export default function TrendingAnime() {
           isMalOnly: false,
           isRandomPick: true,
           source: 'witanime',
-          sourceLabel: '🎲 أنمي مقترح BLACK X'
+          sourceLabel: '🎲 أنمي مقترح Hearbor'
         });
       }
     }
@@ -472,8 +472,8 @@ export default function TrendingAnime() {
         if (matched.source === 'english') {
           pushToast(
             lang === 'ar'
-              ? `🌐 جاري فتح "${item.titleAr || item.titleEn}" عبر سيرفر BLACK X 3 مع الترجمة العربية الفورية AI!`
-              : `🌐 Opening "${item.titleEn}" via BLACK X Server 3 with Instant Arabic AI Subtitles!`,
+              ? `🌐 جاري فتح "${item.titleAr || item.titleEn}" عبر سيرفر Hearbor 3 مع الترجمة العربية الفورية AI!`
+              : `🌐 Opening "${item.titleEn}" via Hearbor Server 3 with Instant Arabic AI Subtitles!`,
             'success'
           );
         }
@@ -492,8 +492,8 @@ export default function TrendingAnime() {
       });
       pushToast(
         lang === 'ar'
-          ? `📋 الأنمي "${item.titleAr || item.titleEn}" غير متوفر له حلقات بث مباشر حالياً على سيرفرات BLACK X.`
-          : `📋 "${item.titleEn}" is not currently available on BLACK X streaming servers.`,
+          ? `📋 الأنمي "${item.titleAr || item.titleEn}" غير متوفر له حلقات بث مباشر حالياً على سيرفرات Hearbor.`
+          : `📋 "${item.titleEn}" is not currently available on Hearbor streaming servers.`,
         'info'
       );
     } catch {
@@ -561,11 +561,11 @@ export default function TrendingAnime() {
             >
               <img
                 src="/blackx-logo.png"
-                alt="BLACK X"
+                alt="Hearbor"
                 style={{ width: '22px', height: '22px', borderRadius: '6px', objectFit: 'cover' }}
               />
               <span>
-                BLACK X{' '}
+                Hearbor{' '}
                 <span style={{ fontWeight: 500, opacity: 0.78 }}>
                   {animeTotal ? `original • ${formatCount(animeTotal)} ANIME` : 'original'}
                 </span>
@@ -594,8 +594,8 @@ export default function TrendingAnime() {
                 title: lang === 'ar' ? `🎬 حلقة جديدة متوفرة الآن: ${sample.titleAr}` : `🎬 New Episode Live: ${sample.titleEn}`,
                 body:
                   lang === 'ar'
-                    ? 'الحلقة الجديدة متاحة الآن للمشاهدة الفورية لمشتركي VIP بجودة FHD 1080p على BLACK X!'
-                    : 'The new episode is now streaming in FHD 1080p on BLACK X!',
+                    ? 'الحلقة الجديدة متاحة الآن للمشاهدة الفورية لمشتركي VIP بجودة FHD 1080p على Hearbor!'
+                    : 'The new episode is now streaming in FHD 1080p on Hearbor!',
                 icon: sample.poster || '/blackx-logo.png',
                 url: sample.slug ? `/show/${sample.slug}` : '/trending'
               });
@@ -650,8 +650,8 @@ export default function TrendingAnime() {
                   ? '👑 امتيازات VIP مفعّلة لك: الحلقات الرسمية تنزل لك فور صدورها في نفس اليوم + مشاهدة وتحميل بجودة FHD 1080p!'
                   : '👑 VIP Active: Same-day official episodes + FHD 1080p streaming & downloads unlocked!')
               : (lang === 'ar'
-                  ? '⏳ نظام العرض الرسمي: الحلقات الجديدة تنزل لمشتركي VIP في يوم صدورها • سيرفرات FHD 1080p متاحة عبر BLACK X.'
-                  : '⏳ Official Release Policy: New episodes drop on release day for VIP • FHD 1080p on BLACK X.')}
+                  ? '⏳ نظام العرض الرسمي: الحلقات الجديدة تنزل لمشتركي VIP في يوم صدورها • سيرفرات FHD 1080p متاحة عبر Hearbor.'
+                  : '⏳ Official Release Policy: New episodes drop on release day for VIP • FHD 1080p on Hearbor.')}
           </span>
           {!isVip && (
             <button
@@ -677,11 +677,11 @@ export default function TrendingAnime() {
       <div className="glass" style={{ padding: '0.85rem', borderRadius: '16px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '0.7rem' }}>
           {[
-            { id: 'all', ar: 'جميع سيرفرات BLACK X', en: 'All BLACK X Servers' },
-            { id: 'witanime', ar: 'BLACK X 1', en: 'BLACK X 1' },
-            { id: 'anime3rb', ar: 'BLACK X 2', en: 'BLACK X 2' },
-            { id: 'english', ar: 'BLACK X 3', en: 'BLACK X 3' },
-            { id: 'aniproject', ar: 'BLACK X 4 (بحث فقط)', en: 'BLACK X 4 (Search only)', disabled: !serverFourEnabled }
+            { id: 'all', ar: 'جميع سيرفرات Hearbor', en: 'All Hearbor Servers' },
+            { id: 'witanime', ar: 'Hearbor 1', en: 'Hearbor 1' },
+            { id: 'anime3rb', ar: 'Hearbor 2', en: 'Hearbor 2' },
+            { id: 'english', ar: 'Hearbor 3', en: 'Hearbor 3' },
+            { id: 'aniproject', ar: 'Hearbor 4 (بحث فقط)', en: 'Hearbor 4 (Search only)', disabled: !serverFourEnabled }
           ].map((option) => (
             <button
               key={option.id}
@@ -729,7 +729,7 @@ export default function TrendingAnime() {
         {selectedSource === 'aniproject' && (
           <p style={{ margin: '0.6rem 0 0', color: 'var(--ink-dim)', fontSize: '0.8rem' }}>
             {!serverFourEnabled
-              ? (lang === 'ar' ? 'مصدر BLACK X 4 غير مفعّل؛ أضف ANIPROJECT_API_URL إلى إعدادات الخادم.' : 'BLACK X 4 is not configured; set ANIPROJECT_API_URL on the server.')
+              ? (lang === 'ar' ? 'مصدر Hearbor 4 غير مفعّل؛ أضف ANIPROJECT_API_URL إلى إعدادات الخادم.' : 'Hearbor 4 is not configured; set ANIPROJECT_API_URL on the server.')
               : (lang === 'ar' ? 'هذا المصدر يدعم البحث بالعنوان، ولا يقدّم أحدث الحلقات أو فهرساً كاملاً.' : 'This source supports title search, not a latest-episode or full-catalog feed.')}
           </p>
         )}
@@ -789,7 +789,7 @@ export default function TrendingAnime() {
           <EmptyState
             icon="🎬"
             title={selectedSource === 'aniproject' && !query
-              ? (lang === 'ar' ? 'ابحث عن عنوان أنمي في سيرفر BLACK X 4' : 'Search for an anime title on BLACK X 4')
+              ? (lang === 'ar' ? 'ابحث عن عنوان أنمي في سيرفر Hearbor 4' : 'Search for an anime title on Hearbor 4')
               : (lang === 'ar' ? 'لا توجد أنميات مطابقة لبحثك حالياً' : 'No matching anime found')}
             sub={selectedSource === 'aniproject'
               ? (lang === 'ar' ? 'هذا المصدر لا يوفّر قائمة تصفح؛ استخدم مربع البحث بالأعلى.' : 'This source has no browse feed; use the search box above.')
@@ -857,7 +857,7 @@ export default function TrendingAnime() {
                           fontWeight: 900
                         }}
                       >
-                        🚫 {lang === 'ar' ? 'غير متوفر • BLACK X' : 'Unavailable • BLACK X'}
+                        🚫 {lang === 'ar' ? 'غير متوفر • Hearbor' : 'Unavailable • Hearbor'}
                       </span>
                     ) : isMalOnly ? (
                       <span
@@ -871,17 +871,17 @@ export default function TrendingAnime() {
                           fontWeight: 900
                         }}
                       >
-                        📋 {lang === 'ar' ? 'فهرس BLACK X' : 'BLACK X Index'}
+                        📋 {lang === 'ar' ? 'فهرس Hearbor' : 'Hearbor Index'}
                       </span>
                     ) : item.source === 'aniproject' ? (
                       <span style={{ padding: '0.2rem 0.55rem', borderRadius: '8px', background: '#111', border: '1px solid #aaa', color: '#fff', fontSize: '0.68rem', fontWeight: 900 }}>
-                        BLACK X 4
+                        Hearbor 4
                       </span>
                     ) : (
                       // The real server name. (It said «👑 FHD 1080p VIP» on every title: the card does
                       // not know the qualities, and streaming is the same for VIP and free accounts.)
                       <span style={{ padding: '0.2rem 0.55rem', borderRadius: '8px', background: '#111', border: '1px solid #aaa', color: '#fff', fontSize: '0.68rem', fontWeight: 900 }}>
-                        {String(item.sourceLabel || '').replace(/^سيرفر\s+/, '') || 'BLACK X'}
+                        {String(item.sourceLabel || '').replace(/^سيرفر\s+/, '') || 'Hearbor'}
                       </span>
                     )}
                     <span
@@ -984,16 +984,16 @@ export default function TrendingAnime() {
                         }}
                       >
                         {isVerifiedUnavailable
-                          ? (lang === 'ar' ? '🚫 غير متوفر (BLACK X)' : '🚫 Unavailable (BLACK X)')
+                          ? (lang === 'ar' ? '🚫 غير متوفر (Hearbor)' : '🚫 Unavailable (Hearbor)')
                           : isMalOnly
-                          ? (lang === 'ar' ? '📋 فهرس BLACK X' : '📋 BLACK X Index')
+                          ? (lang === 'ar' ? '📋 فهرس Hearbor' : '📋 Hearbor Index')
                           : item.source === 'anime3rb'
-                          ? '⚡ سيرفر BLACK X 2'
+                          ? '⚡ سيرفر Hearbor 2'
                           : item.source === 'english'
-                          ? '🌐 سيرفر BLACK X 3'
+                          ? '🌐 سيرفر Hearbor 3'
                           : item.source === 'aniproject'
-                          ? 'سيرفر BLACK X 4'
-                          : '👑 سيرفر BLACK X 1'}
+                          ? 'سيرفر Hearbor 4'
+                          : '👑 سيرفر Hearbor 1'}
                       </span>
                       {item.episodes && (
                         <span style={{ fontSize: '0.72rem', color: 'var(--ink-dim)', fontWeight: 800 }}>
@@ -1015,9 +1015,9 @@ export default function TrendingAnime() {
                     {isResolving
                       ? (lang === 'ar' ? '⏳ جارٍ فحص السيرفرات...' : '⏳ Checking Servers...')
                       : isVerifiedUnavailable
-                      ? (lang === 'ar' ? '🚫 غير متوفر • فهرس BLACK X' : '🚫 Unavailable • BLACK X')
+                      ? (lang === 'ar' ? '🚫 غير متوفر • فهرس Hearbor' : '🚫 Unavailable • Hearbor')
                       : isMalOnly
-                      ? (lang === 'ar' ? '🔍 فحص التوفر (BLACK X)' : '🔍 Check Stream (BLACK X)')
+                      ? (lang === 'ar' ? '🔍 فحص التوفر (Hearbor)' : '🔍 Check Stream (Hearbor)')
                       : (lang === 'ar' ? '▶ مشاهدة الحلقات' : '▶ Watch Episodes')}
                   </button>
                 </div>

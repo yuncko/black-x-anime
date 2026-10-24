@@ -77,7 +77,7 @@ function resolveInitialMode(requestedMode) {
 }
 
 /**
- * BLACK X — 5-Engine 120Hz Motion Graphics Suite (Pure Monochrome #000000 & #FFFFFF)
+ * Hearbor — 5-Engine 120Hz Motion Graphics Suite (Pure Monochrome #000000 & #FFFFFF)
  * Engines:
  *  1. vortex  — Shadow Vortex Singularity (بوابة الظلال والجزيئات)
  *  2. katana  — Katana X-Slash (ضربة سيف الكاتانا الأسطورية)
@@ -959,7 +959,7 @@ export default function BlackXSplashVortex({
           </svg>
           <img
             src="/blackx-logo.png"
-            alt="BLACK X"
+            alt="Hearbor"
             style={{
               position: 'relative',
               zIndex: 2,
@@ -991,7 +991,7 @@ export default function BlackXSplashVortex({
               transition: 'letter-spacing 0.72s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
-            BLACK X
+            Hearbor
           </div>
 
           <div

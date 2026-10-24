@@ -110,10 +110,10 @@ export default function Navbar({ onOpenAuth }) {
               {mobileDrawerOpen ? '✕' : '☰'}
             </button>
 
-            <NavLink to="/" className="wit-brand sloth-brand" aria-label="BLACK X">
+            <NavLink to="/" className="wit-brand sloth-brand" aria-label="Hearbor">
               <img
                 src="/blackx-logo.png"
-                alt="BLACK X"
+                alt="Hearbor"
                 style={{
                   width: '38px',
                   height: '38px',
@@ -127,7 +127,7 @@ export default function Navbar({ onOpenAuth }) {
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                   <span className="wit-brand__text" style={{ fontWeight: 900, fontSize: '1.08rem', letterSpacing: '0.02em' }}>
-                    BLACK X
+                    Hearbor
                   </span>
                   <span style={{ fontSize: '0.74rem', fontWeight: 600, color: 'rgba(255,255,255,0.72)' }}>
                     original
@@ -241,7 +241,7 @@ export default function Navbar({ onOpenAuth }) {
                       size={40}
                     />
                     {isDev ? (
-                      <span className="avatar-badge avatar-badge--dev" title="👑 مطور BLACK X">👑</span>
+                      <span className="avatar-badge avatar-badge--dev" title="👑 مطور Hearbor">👑</span>
                     ) : hasVerified ? (
                       <span className="avatar-badge avatar-badge--verified" title="✔ حساب موثّق">
                         <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
@@ -256,7 +256,7 @@ export default function Navbar({ onOpenAuth }) {
                     <div className="user-menu__header">
                       <div className="user-menu__name">{user.displayName}</div>
                       <div className="user-menu__role">
-                        {isDev ? '👑 مطور BLACK X' : `@${user.username || 'user'}`}
+                        {isDev ? '👑 مطور Hearbor' : `@${user.username || 'user'}`}
                       </div>
                       <UserBadges badges={user.badges} size="sm" />
                     </div>
@@ -309,7 +309,7 @@ export default function Navbar({ onOpenAuth }) {
                 className="wit-mobile-search-input"
                 value={navSearch}
                 onChange={(e) => setNavSearch(e.target.value)}
-                placeholder={lang === 'ar' ? 'ابحث عن أي أنمي أو فيلم في سيرفرات BLACK X...' : 'Search any anime or movie on BLACK X...'}
+                placeholder={lang === 'ar' ? 'ابحث عن أي أنمي أو فيلم في سيرفرات Hearbor...' : 'Search any anime or movie on Hearbor...'}
               />
               <button type="submit" className="wit-mobile-search-submit">
                 {lang === 'ar' ? 'بحث' : 'Search'}
@@ -326,7 +326,7 @@ export default function Navbar({ onOpenAuth }) {
             <div className="wit-mobile-drawer__head">
               <div className="wit-brand">
                 <span className="wit-brand__box">X</span>
-                <span className="wit-brand__text">BLACK X</span>
+                <span className="wit-brand__text">Hearbor</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <LanguageToggle />
@@ -359,7 +359,7 @@ export default function Navbar({ onOpenAuth }) {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 900, color: '#fff', fontSize: '0.92rem' }}>{user.displayName}</div>
                   <div style={{ fontSize: '0.75rem', color: '#a1a1aa' }}>
-                    {isDev ? '👑 مطور BLACK X' : `@${user.username || 'user'}`}
+                    {isDev ? '👑 مطور Hearbor' : `@${user.username || 'user'}`}
                   </div>
                 </div>
                 <span style={{ color: '#a1a1aa', fontSize: '0.85rem' }}>←</span>

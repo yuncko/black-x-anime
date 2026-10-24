@@ -1,5 +1,5 @@
 // Which interface the website shows (client/src/webUi.js). Owner's decision of 2026-10-17:
-// every device gets the BLACK X app interface; the classic pages are a remembered choice
+// every device gets the Hearbor app interface; the classic pages are a remembered choice
 // (`?ui=site`), and a "site" choice saved under the old phone/computer split is ignored.
 import test from 'node:test';
 import assert from 'node:assert/strict';

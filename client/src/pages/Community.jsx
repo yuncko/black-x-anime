@@ -734,7 +734,7 @@ export default function Community({ onOpenAuth }) {
                             </UserHoverCard>
                             {isPostDev && (
                               <span className="fb-dev-badge" title="Verified Developer">
-                                👑 {lang === 'ar' ? 'مطور BLACK X' : 'Developer'}
+                                👑 {lang === 'ar' ? 'مطور Hearbor' : 'Developer'}
                               </span>
                             )}
                             <UserBadges badges={isAuthor ? (user?.badges || ['blue_verified']) : (post.author_role === 'developer' ? ['gold_vip', 'blue_verified'] : ['blue_verified'])} size="sm" />

@@ -6,7 +6,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$HERE/../../.." && pwd)"
 WORK="${WORK:-/tmp/bx-touch}"
-APK="${APK:-$ROOT/client/public/BLACK-X-Mobile-120Hz.apk}"
+APK="${APK:-$ROOT/client/public/HEARBOR-Mobile-120Hz.apk}"
 
 mkdir -p "$WORK"
 cp "$HERE/lib.mjs" "$HERE/suite.mjs" "$HERE/package.json" "$WORK/"

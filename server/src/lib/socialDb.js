@@ -131,14 +131,14 @@ CREATE TABLE IF NOT EXISTS social_library_items (
     ins.run('First Steps', '/assets/badge1.png', 10);
     ins.run('Marathon Watcher', '/assets/badge2.png', 120);
     ins.run('Binge Lord', '/assets/badge3.png', 600);
-    ins.run('Legend of BLACK X', '/assets/badge4.png', 1500);
+    ins.run('Legend of Hearbor', '/assets/badge4.png', 1500);
     ins.run('VIP Basic', '/assets/badge_vip.png', 0);
   }
 
   // Clean up legacy fabricated items or old dead mangalik.net image links
   db.exec("DELETE FROM social_library_items WHERE id LIKE 'manga_%' OR id LIKE 'manhwa_%' OR id LIKE 'novel_%' OR id LIKE 'book_%' OR type IN ('NOVEL', 'BOOK') OR poster LIKE '%mangalik.net%'");
 
-  // Seed authentic trending Manga & Manhwa catalog powered by BLACK X 1 / 2 / 3
+  // Seed authentic trending Manga & Manhwa catalog powered by Hearbor 1 / 2 / 3
   const libCount = db.prepare('SELECT COUNT(*) AS c FROM social_library_items').get()?.c || 0;
   if (libCount < 20) {
     const insLib = db.prepare(`

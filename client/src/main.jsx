@@ -32,7 +32,7 @@ function showBootError(err) {
   root.render(
     <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#000', color: '#fff', fontFamily: 'system-ui, sans-serif', textAlign: 'center', padding: '1.5rem' }}>
       <div>
-        <p style={{ margin: '0 0 1rem' }}>BLACK X — تعذّر تحميل الصفحة / The page could not load</p>
+        <p style={{ margin: '0 0 1rem' }}>Hearbor — تعذّر تحميل الصفحة / The page could not load</p>
         <button type="button" onClick={() => window.location.reload()} style={{ minHeight: 44, padding: '0.7rem 1.4rem', borderRadius: 12, border: 0, background: '#fff', color: '#000', fontWeight: 700 }}>
           إعادة المحاولة / Retry
         </button>
